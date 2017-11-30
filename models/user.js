@@ -25,6 +25,17 @@ const userSchema = new mongoose.Schema({
       type:String,
     },
 
+    curPrice:{
+    type:String,
+    },
+
+    showSP_Price:{
+    type:Boolean
+    },
+    useDiscount:{
+    type:Boolean
+    },
+
   passwordHash: {
     type: String,
     required: true

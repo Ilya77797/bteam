@@ -33,6 +33,9 @@ html
                             form(action="/logout:main" method="POST" id="loginForm")
                                 h3 Добро пожаловать, #{name}
                                 button(type="submit") Выйти
+                                a#settings(href='#') Настройки
+                            form(action="/userSettings" method="POST" id="Change")
+                                a#settings(href='#') Сохранить
                     else
                         div.loginForm
                             form(action="/login:main" method="POST" id="loginForm")

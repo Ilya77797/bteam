@@ -34,6 +34,9 @@ html
                             form(action="/logout:korz" method="POST" id="loginForm")
                                 h3 Добро пожаловать, #{name}
                                 button(type="submit") Выйти
+                                a#settings(href='#') Настройки
+                            form(action="/userSettings" method="POST" id="Change")
+                                a#settings(href='#') Сохранить
                     else
                         div.loginForm
                             form(action="/login:korz" method="POST" id="loginForm")

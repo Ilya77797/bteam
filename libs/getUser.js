@@ -11,7 +11,11 @@ async function getUser(ctx) {
     var UserN={
         name:user[0].displayName,
         price:user[0].visiblePrice,
-        discount:user[0]. discount
+        discount:user[0].discount,
+        curPrice:user[0].curPrice,
+        show:user[0].showSP_Price,
+        useDiscount:user[0].useDiscount,
+        _id:user[0]._id
     };
     return UserN;
 }

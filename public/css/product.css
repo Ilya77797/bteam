@@ -337,13 +337,17 @@
     transition: opacity, transform .2s ease-out;
     transform: translateY(2em);
     opacity: 0;
+    text-align: center;
 }
 
 
 .product:hover .product-preview {
     transform: translateY(0);
-    opacity: 1;
+    opacity: 1 !important;
+
 }
+
+
 
 
 /* NAME AND DESCRIPTION */
@@ -645,7 +649,7 @@ small.spPrice{
 }
 
 .table-layout .product-price {
-    display: block !important;
+    display: inline !important;
     margin-bottom: .3em !important;
 }
 
@@ -703,7 +707,9 @@ small.spPrice{
     margin-right: 3%;
     box-sizing: border-box;
     width: 100%;
+
     cursor:pointer;
+
 }
 
 .corzina:hover{
@@ -766,11 +772,12 @@ small.spPrice{
         display: inline-block;
         width: 5%;
         height: 5%;
+        align-self: center;
     }
 
     .wrapImg{
         align-self:center;
-        width:10% !important;
+        width:10% /*!important*/;
         margin-right: 1%;
     }
 
@@ -798,7 +805,7 @@ small.spPrice{
     }
 
     .table-layout  .product-price{
-        width: 70%;
+        width: 20%;
     }
 
   .loginForm{
@@ -853,6 +860,7 @@ small.spPrice{
     .mobile{
         display: inline-block;
         width: 10%;
+        align-self: center;
     }
     .mobDisplay{
         display: inline;
@@ -974,12 +982,14 @@ small.spPrice{
         display: inline-block;
         width: 5%;
         height: 5%;
+        align-self: center;
     }
 
         .wrapImg{
             align-self:center;
-            width:5% !important;
+            width:5% /*!important*/;
             margin-right: 1%;
+
         }
 
     .corzina{
@@ -1053,6 +1063,12 @@ small.spPrice{
     .categor-item img:hover{
         transform: scale(1.5);
 
+    }
+
+    .wrapImg{
+        align-self:center;
+        width:3%;
+        margin-right: 1%;
     }
 }
 @media only screen and (max-width: 650px){
@@ -1151,7 +1167,6 @@ small.spPrice{
 }
 .wrapImg{
     align-self:center;
-    width:3%;
     margin-right: 1%;
 }
 
@@ -1169,5 +1184,41 @@ small.spPrice{
 
 }
 
+#settings{
+    margin-left: 5px;
+}
+
+#Change{
+    display: none;
+    position: relative;
+ /*   background-color: white;
+    border: 2px solid grey;
+    transform: translate(0,200px);
+    -webkit-transform: translate(0,20px);
+    -o-transform: translate(0,350px);
+    -moz-transform: translate(0,350px);
+    z-index: 1000;*/
+}
+
+.crossedPrice{
+    text-decoration: line-through;
+    color: red;
+    margin-right: 10px;
+}
+
+.ZakazAmount{
+    display:inline;
+}
+
+.twoPrices span{
+    width:auto !important;
+}
+
+#PriceTotalInCart{
+    display: none;
+
+
+
+}
 
 

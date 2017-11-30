@@ -1,5 +1,9 @@
 window.addEventListener('DOMContentLoaded', function() {
+    var wasTriggered=false;// Был ли запрос за настройками на сервер
     var startPoint={};
+    var userSettings={
+        curPrice:{}
+    };
     var historyCat={//объект для работы с текущими категориями
         div:null,
         pointers:[]
@@ -14,6 +18,7 @@ window.addEventListener('DOMContentLoaded', function() {
     addEvents();
     SearchData(false,true);
     getCats();
+    setShowingTotalPrice();
    /* var catForm=document.getElementById('catSearch');
     var e=new Event('submit');
     catForm.dispatchEvent(e);*/
@@ -146,7 +151,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-     function renderData(mass,f) {
+     function renderData(mass,f, hasSubcats) {
 
         var ul=document.getElementById('PR');
         ul.classList.remove('awaitSearch');
@@ -178,25 +183,49 @@ window.addEventListener('DOMContentLoaded', function() {
                     return ;
 
                 }
-
-
-                products.forEach((item)=>{
-                    var li=createElements(item, login, User);
-                    try{
-                        let mass=getCookie('orderId').split(';');
-                        var index=-1;
-                        mass.forEach((str,i)=>{
-                            if(str.includes(item._id))
-                                index=i;
-                        });
-                        if(index!=-1)
-                            addToCartList(li);
+                if(products[0]=='no')
+                {
+                    var li=document.createElement('li');
+                    li.textContent='Выберете подкатегорию';
+                    li.style.textAlign = "center";
+                    ul.appendChild(li);
+                    try {
+                        document.getElementById('light-pagination').firstElementChild.remove();
                     }
                     catch (e){
 
                     }
 
+
+                    if(!hasSubcats){
+                        li.textContent='В этой категории пока ничего нет';
+                    }
+
+                    return ;
+                }
+
+
+                products.forEach((item)=>{
+                    var isOrdered=false;
+                    try{
+                        let mass=getCookie('orderId').split(';');
+                        var index=-1;
+
+                        mass.forEach((str,i)=>{
+                            if(str.includes(item._id))
+                                index=i;
+                        });
+                        if(index!=-1)
+                           isOrdered=true
+                    }
+                    catch (e){
+
+                    }
+
+                    var li=createElements(item, login, User, isOrdered);
+
                     ul.appendChild(li);
+
                 });
 
                 if(!f){//Запрос не по номеру страницы
@@ -262,7 +291,7 @@ function getCats() {
     }
 }
 
-    function SearchData(f,isMain) {
+    function SearchData(f,isMain, hasSubcats) {
         var ul=document.getElementById('PR');
         ul.classList.add('awaitSearch');
         var li=document.createElement('li');
@@ -303,7 +332,7 @@ function getCats() {
             if (xhr.readyState != 4) return;
 
             if (xhr.status == 200) {
-                renderData(JSON.parse(xhr.response),f);
+                renderData(JSON.parse(xhr.response),f, hasSubcats);
             }
 
 
@@ -330,6 +359,14 @@ function getCats() {
                 e.preventDefault()
             });
         });*/
+
+      //For settings
+        document.getElementsByClassName('loginForm')[0].addEventListener('click',changeSettings );
+        document.getElementsByClassName('loginForm')[0].addEventListener('submit',clearAllCookies );
+
+
+
+
 
         //for Select
         var select=document.getElementById('chooseSort');
@@ -377,7 +414,7 @@ function getCats() {
 */
 
         var PR=document.getElementById('PR');
-        PR.addEventListener('click',openNewWindow);
+        PR.addEventListener('click',openNewWindow);//also delete from Cart
 
         var topMenu=document.getElementsByClassName('topMenu')[0];
         topMenu.addEventListener('click', topMenuFetch);
@@ -554,7 +591,10 @@ function getPointerFromHistoryCat(name) {
 
     function onclick(e) {
         //working with subcats
-        if(e.target.nodeName=="IMG"){//Свернуть/развернуть категории
+        e.stopPropagation();
+        var hasSubcats=false;
+        if(e.target.nodeName=="IMG"||e.target.nodeName=="A"&& e.target.parentNode.getElementsByTagName('IMG').length>0){//Свернуть/развернуть категории
+
             let parent=e.target.parentNode;
             var histCat=parent;
             changeDisplay('none', parent.parentNode, 100);//Скрыть все категории
@@ -563,9 +603,31 @@ function getPointerFromHistoryCat(name) {
                 curentSubcat(parent);//Добавть класс для текущей категории
             renderHistoryCat(histCat);
             document.getElementsByClassName('subcatHistory')[0].style.display='block';//changing flex to block
+            hasSubcats=true;
+            if(e.target.nodeName='IMG')
+                searchDatabyCat(e.target.previousSibling, hasSubcats);
 
 
-            return
+
+        }
+        var IMG=e.target.getElementsByTagName('IMG');
+        if(e.target.classList.contains('categor-item')&&!e.target.classList.contains('subcatHistory')){
+
+            if(IMG.length>0){
+                changeDisplay('none', e.target.parentNode, 100);//Скрыть все категории
+                changeDisplay('flex',e.target,1, true);//Сделать видимыми нужные категории
+                if(e.target.id!='categor')
+                    curentSubcat(e.target);//Добавть класс для текущей категории
+                renderHistoryCat(e.target);
+                document.getElementsByClassName('subcatHistory')[0].style.display='block';//changing flex to block
+                hasSubcats=true;
+            }
+            var a=Array.from(e.target.getElementsByTagName('A'))[0];
+            searchDatabyCat(a, hasSubcats);
+
+
+
+
         }
 
         if(e.target.nodeName!='A')
@@ -577,10 +639,10 @@ function getPointerFromHistoryCat(name) {
             var newVisibleCat=getPointerFromHistoryCat(e.target.dataset.info);
             if(newVisibleCat=={}) return;
             changeCurentCat(newVisibleCat);//Изменить текущую категорию и отрисовать это
-
+            hasSubcats=true;
         }
 
-        searchDatabyCat(e);
+        searchDatabyCat(e.target, hasSubcats);
     }
 
     function changeCurentCat(newVisibleCat) {
@@ -616,14 +678,14 @@ function getPointerFromHistoryCat(name) {
 
     }
 
-    function searchDatabyCat(e){
+    function searchDatabyCat(target, hasSubcats){
 
-        var catNode=e.target;
+        var catNode=target;
        currentCat=catNode.cloneNode(true);
-       changeActiveCat(e.target.parentNode);
-       SearchData(false,true);
+       changeActiveCat(target.parentNode);
+       SearchData(false,true, hasSubcats);
        var isMobile=getComputedStyle(document.getElementsByClassName('mobile')[0]);
-       if(isMobile.display!='none'&&!e.target.parentNode.classList.contains('subcatHistory')){
+       if(isMobile.display!='none'&&!target.parentNode.classList.contains('subcatHistory')){
            var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
            var ul=document.getElementById('PR');
            var pg=document.getElementById('light-pagination');
@@ -674,7 +736,8 @@ function getPointerFromHistoryCat(name) {
             SearchData(true,false);
     }
 
-    function createElements(item, login, User) {
+    function createElements(item, login, User, isOrdered) {
+        var addSpan=false;
         var li=document.createElement('li') //0
         li.classList.add('product-wrapper');
 
@@ -696,13 +759,44 @@ function getPointerFromHistoryCat(name) {
         divPrPr.classList.add('product-preview');
 
 
+
             if(item.price!="0.00"){
                 var span=document.createElement('span');//5
                 span.classList.add('button');
                 span.classList.add('to-cart');
+                span.classList.add('first');
                 span.setAttribute('data-info', item._id);
                 span.textContent="В корзину";
                 divPrPr.appendChild(span);
+
+                var buttonP=document.createElement('button');
+                buttonP.textContent='+';
+                var buttonM=document.createElement('button');
+                buttonM.textContent='-';
+
+                var inputZakaz=document.createElement('input');
+                inputZakaz.setAttribute('placeholder',`${item.minOrder} ${item.measure}`);
+                inputZakaz.setAttribute('id',`inputZ${item._id}`);
+
+                var zakazContainer=document.createElement('div');
+                zakazContainer.classList.add('ZakazAmount');
+                zakazContainer.classList.add('first');
+                zakazContainer.appendChild(buttonM);
+                zakazContainer.appendChild(inputZakaz);
+                zakazContainer.appendChild(buttonP);
+                divPrPr.appendChild(zakazContainer);
+
+                //Events for buttons
+                buttonM.addEventListener('click', decrementAmount.bind(item) );
+
+                buttonP.addEventListener('click', incrementAmount.bind(item));
+
+                inputZakaz.addEventListener('ch', changeZakaz.bind(item));
+
+                inputZakaz.addEventListener('keyup', checkKey.bind(item));
+
+
+
             }
 
 
@@ -797,15 +891,22 @@ function getPointerFromHistoryCat(name) {
         spanPrPrice.classList.add('product-price');
         spanPrPrice.classList.add('fix');//Чтобы b, small=float:left только в корзине
 
+        var spanPrPrice2=document.createElement('span');//4
+        spanPrPrice2.classList.add('product-price');
+        spanPrPrice2.classList.add('fix');//Чтобы b, small=float:left только в корзине
+
         if(login){
 
+            userSettings.show=User.show;
+            userSettings.useDiscount=User.useDiscount;
+            userSettings.discount=User.discount;
+
             var small = document.createElement('small');//5
+
             if (item.status[2] != '1') {
 
-                var select = document.createElement('select');
-                select.setAttribute('id', `select${item._id}`);
-                spanPrPrice.classList.add('selectPrice');
-                if (User.price.length == 0) {
+                userSettings.curPrice[item._id]={};
+                if (User.price.length == 0||User.show==false||User.curPrice=='0') {
                     var b = document.createElement('b');//5
                     b.textContent = item.price;
 
@@ -814,22 +915,61 @@ function getPointerFromHistoryCat(name) {
                     spanPrPrice.appendChild(b);
                     spanPrPrice.appendChild(small);
 
+                    userSettings.curPrice[item._id].price=item.price;
+
                 }
-                else {
-                    var option = document.createElement('option');
-                    option.textContent = "Доступные цены";
-                    option.disabled = true;
-                    select.appendChild(option);
-                    User.price.forEach((price, i) => {
-                        var option = document.createElement('option');
-                        var priceName = `specialPrice${i + 1}`;
-                        option.textContent = item[priceName];
-                        select.appendChild(option);
-                    });
-                    spanPrPrice.appendChild(select);
+                else if(User.show==true) {
+                    var b = document.createElement('b');//5
+                    spanPrPrice.classList.add('crossedPrice');
+                    b.textContent = item.price;
+
+                    var small = document.createElement('small');//5
+                    small.textContent = 'руб';
+                    spanPrPrice.appendChild(b);
+                    spanPrPrice.appendChild(small);
+
+
+                    var b2 = document.createElement('b');//5
+                    b2.textContent = item[`specialPrice${User.curPrice}`];
+
+                    userSettings.curPrice[item._id].price=item[`specialPrice${User.curPrice}`];
+
+                    var small2 = document.createElement('small');//5
+                    small2.textContent = 'руб';
+                    spanPrPrice2.appendChild(b2);
+                    spanPrPrice2.appendChild(small2);
+
+                    addSpan=true;
+
                 }
 
             }
+            else{
+                var b = document.createElement('b');
+                b.innerHTML='&nbsp';
+                spanPrPrice.appendChild(b);
+            }
+
+
+        /*
+
+         var select = document.createElement('select');
+         select.setAttribute('id', `select${item._id}`);
+         spanPrPrice.classList.add('selectPrice');
+
+        var option = document.createElement('option');
+            option.textContent = "Доступные цены";
+            option.disabled = true;
+            select.appendChild(option);
+            User.price.forEach((price, i) => {
+                var option = document.createElement('option');
+                var priceName = `specialPrice${i + 1}`;
+                option.textContent = item[priceName];
+                select.appendChild(option);
+            });
+            spanPrPrice.appendChild(select);*/
+
+
            /* var small=document.createElement('small');//5
             if(item.status[2]!='1')
                 small.textContent=`${item.price} руб /${item.specialPrice1} руб /${item.specialPrice2} руб /${item.specialPrice3} руб/${item.specialPrice4} руб`;
@@ -837,29 +977,66 @@ function getPointerFromHistoryCat(name) {
                 small.innerHTML="<br> <br>";
             spanPrPrice.appendChild(small);*/
         }
-        else{
+        else {
+            userSettings.curPrice[item._id]={};
+            userSettings.curPrice[item._id].price=item.price;
             var b=document.createElement('b');//5
-            b.textContent=item.price;
-
             var small=document.createElement('small');//5
-            small.textContent='руб';
+            if(item.status[2] != '1'){
+                b.textContent=item.price;
+                small.textContent='руб';
+            }
+            else {
+                b.innerHTML='&nbsp';
+                small.textContent=' ';
+            }
+
             spanPrPrice.appendChild(b);
             spanPrPrice.appendChild(small);
         }
-       /* var divPrButWrap=document.createElement('div');//2
-        divPrButWrap.classList.add('product-buttons-wrap');
 
-        var divButtons=document.createElement('div');//3
-        divButtons.classList.add('buttons');
+        if(isOrdered){
+            zakazContainer.style.display='none';
+            span.style.display='none';
 
-        var spanToCart=document.createElement('span');//3
-        spanToCart.classList.add('button');
-        spanToCart.classList.add('to-cart');
+            var div=document.createElement('div');
+            div.classList.add('vKorzine');
+            div.classList.add('second');
+            div.textContent='В корзине';
+            divPrPr.appendChild(div);
+            divPrPr.style.opacity=1;
+            divPrPr.style.bottom='11%';
 
-        var spanIconTocart=document.createElement('span');//4
-        spanIconTocart.classList.add('icon');
-        spanIconTocart.classList.add('icon-cart');
-        spanIconTocart.textContent='В корзину';*/
+            var aDelete=document.createElement('a');
+            aDelete.classList.add('aDelFromKorzinaMain');
+            aDelete.setAttribute('data-info',item._id);
+            aDelete.classList.add('second');
+            aDelete.setAttribute('href','#');
+            aDelete.textContent='Удалить';
+            aDelete.setAttribute('data-li',li);
+            divPrPr.appendChild(aDelete);
+
+            userSettings.curPrice[item._id].amount=getAmountFromCookies(item._id);
+
+
+
+
+        }
+
+        /* var divPrButWrap=document.createElement('div');//2
+         divPrButWrap.classList.add('product-buttons-wrap');
+
+         var divButtons=document.createElement('div');//3
+         divButtons.classList.add('buttons');
+
+         var spanToCart=document.createElement('span');//3
+         spanToCart.classList.add('button');
+         spanToCart.classList.add('to-cart');
+
+         var spanIconTocart=document.createElement('span');//4
+         spanIconTocart.classList.add('icon');
+         spanIconTocart.classList.add('icon-cart');
+         spanIconTocart.textContent='В корзину';*/
 
         /*appending*/
         li.appendChild(a);
@@ -879,7 +1056,10 @@ function getPointerFromHistoryCat(name) {
                     divPrDetails.appendChild(divPrAvail);
                         divPrAvail.appendChild(imgIcon);
                         divPrAvail.appendChild(spanIcon);
-                    divPrDetails.appendChild(spanPrPrice);
+                        divPrDetails.appendChild(spanPrPrice);
+                        if(addSpan)
+                            divPrDetails.appendChild(spanPrPrice2);
+
 
 
             /*a.appendChild(divPrButWrap);
@@ -891,22 +1071,38 @@ function getPointerFromHistoryCat(name) {
     }
 
     function openNewWindow(e) {
-        var reg=new RegExp('^http');
-        if(e.target.nodeName=='A'&&e.target.href.match(reg))
+
+        if(e.target.nodeName=='A'&&e.target.href.includes('http')&&!e.target.href.includes('#'))
         {
             e.preventDefault();
             window.open(e.target.href, '_blank');
         }
         else if(e.target.classList.contains('button')&&e.target.classList.contains('to-cart')){//Добавление товара в корзину
+            var amount=document.getElementById(`inputZ${e.target.dataset.info}`).value;
+            if(amount=='')
+                amount=0;
             var cookies=getCookie('orderId');
-            if(cookies==undefined||cookies=="")
-                setCookie('orderId',`${e.target.dataset.info}-0`);
-            else
-                setCookie('orderId',cookies+';'+`${e.target.dataset.info}-0`);
+            try{
+                amount=parseInt(amount);
+                if(cookies==undefined||cookies=="")
+                    setCookie('orderId',`${e.target.dataset.info}-${amount}`);
+                else
+                    setCookie('orderId',cookies+';'+`${e.target.dataset.info}-${amount}`);
+            }
+            catch (ev){
+                if(cookies==undefined||cookies=="")
+                    setCookie('orderId',`${e.target.dataset.info}-0`);
+                else
+                    setCookie('orderId',cookies+';'+`${e.target.dataset.info}-0`);
+            }
+
+
             var li=e.target;
             while(li.nodeName!='LI')
                 li=li.parentNode;
-            addToCartList(li);
+            addToCartList(li, e.target.dataset.info);
+
+            changeShowingTotalPrice(setTotalPriceCookie(e.target, amount));
         }
         else if(e.target.classList.contains('textDescription')){
             if(e.target.style.overflow=="hidden"){
@@ -917,19 +1113,39 @@ function getPointerFromHistoryCat(name) {
             }
 
         }
+        else if(e.target.nodeName=='A'&&e.target.textContent=='Удалить'){
+            deleteFromKorzina(e.target);
+            changeShowingTotalPrice(deletePriceFromCookiePrice(e.target.dataset.info));
+        }
 
     }
     
-    function addToCartList(li) {//Добавление к товару класса, говорящего о том, что он находится в корзине
+    function addToCartList(li, id) {//Добавление к товару класса, говорящего о том, что он находится в корзине
         var preview=li.getElementsByClassName('product-preview')[0];
-        while (preview.firstChild)
-            preview.removeChild(preview.firstChild);
+        Show_Hide_prPreview(preview);
+        var isSecond=Array.from(preview.getElementsByClassName('second')).length;
+        if(isSecond>0)
+            return
         var div=document.createElement('div');
         div.classList.add('vKorzine');
+        div.classList.add('second');
         div.textContent='В корзине';
         preview.appendChild(div);
         preview.style.opacity=1;
         preview.style.bottom='11%';
+
+        var aDelete=document.createElement('a');
+        aDelete.classList.add('aDelFromKorzinaMain');
+        aDelete.setAttribute('data-info',id);
+        aDelete.classList.add('second');
+        aDelete.setAttribute('href','#');
+        aDelete.textContent='Удалить';
+        aDelete.setAttribute('data-li',li);
+        preview.appendChild(aDelete);
+
+        userSettings.curPrice[id].amount=getAmountFromCookies(id);
+        var a=userSettings.curPrice[id].amount;
+
 
 
     }
@@ -963,8 +1179,13 @@ function getPointerFromHistoryCat(name) {
             }
 
         }
-        else{//Переход в корзину в новой вкладке
-            reg=new  RegExp('corzina');
+        else{//Переход в корзину
+            if(e.target.classList.contains('wrapImg'))
+                window.location=e.target.href;
+            else if(e.target.parentNode.classList.contains('wrapImg'))
+                window.location=e.target.parentNode.href;
+
+           /* reg=new  RegExp('corzina');
             var target=e.target;
             if(e.target.nodeName=='IMG')
                 target=e.target.parentNode;
@@ -972,7 +1193,7 @@ function getPointerFromHistoryCat(name) {
             if(target&&target.href.match(reg)){///Переход в корзину
                 //window.open(target.href, '_blank');
                window.location=target.href;
-            }
+            }*/
         }
 
 
@@ -1016,5 +1237,426 @@ function getPointerFromHistoryCat(name) {
     }
 
 
+
+    function changeSettings(e) {
+        var a=e.target;
+        if(a.nodeName=='A'&&a.textContent=='Настройки'){
+            if(!wasTriggered){
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/userSettings', true);
+                xhr.send('');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState != 4) return;
+
+                    if (xhr.status == 200) {
+                        var USER=JSON.parse(xhr.response);
+
+                        try{
+                            var a=document.getElementById('check').textContent;
+                        }
+                        catch (e){
+                            var divChange= document.getElementById('Change');
+                            var loginForm=document.getElementById('loginForm');
+                            var checkBox=document.createElement('input');
+                            checkBox.setAttribute('type','checkbox');
+                            checkBox.setAttribute('id','check');
+                            if(!USER.show)
+                                checkBox.setAttribute('checked', 'true');
+                            var label=document.createElement('label');
+                            label.setAttribute('for','check');
+                            label.textContent='Скрыть Вашу цену';
+
+                            var div=document.createElement('div');
+                            div.style.display='inline';
+                            div.appendChild(checkBox);
+                            div.appendChild(label);
+
+                            if(USER.discount!="0.0"){
+                                var checkDiscount=document.createElement('input');
+                                checkDiscount.setAttribute('type','checkbox');
+                                checkDiscount.setAttribute('id','checkDiscount');
+
+                                var labelDisc=document.createElement('label');
+                                labelDisc.setAttribute('for','checkDiscount');
+                                labelDisc.textContent=`Применить скидку в ${USER.discount}%`;
+
+                                if(USER.useDiscount){
+                                    checkDiscount.setAttribute('checked', 'true');
+                                }
+
+                                div.appendChild(checkDiscount);
+                                div.appendChild(labelDisc);
+
+                            }
+
+                            var select=document.createElement('select');
+                            select.setAttribute('id','selectPrice');
+                            divChange.insertBefore(select, divChange.firstChild);
+                            divChange.insertBefore(div,divChange.firstChild.nextSibling);
+                            var opt=document.createElement('option');
+                            opt.textContent='0';
+                            select.appendChild(opt);
+                            USER.price.forEach((item)=>{
+                                var opt=document.createElement('option');
+                                opt.textContent=`${item}`;
+                                if(item==USER.curPrice){
+                                    opt.setAttribute('selected', 'true');
+                                }
+                                select.appendChild(opt);
+                            });
+                        }
+                        var divChange= document.getElementById('Change');
+                        var loginForm=document.getElementById('loginForm');
+                        $(loginForm).slideToggle(300);
+                        $(divChange).slideToggle(300);
+                        wasTriggered=true;
+
+                    }
+                }
+            }
+            else {
+                var divChange= document.getElementById('Change');
+                var loginForm=document.getElementById('loginForm');
+                $(loginForm).slideToggle(300);
+                $(divChange).slideToggle(300);
+
+
+            }
+
+        }
+        else if(a.nodeName=='A'&&a.textContent=='Сохранить'){
+            var form=document.getElementById('Change');
+            var selectedPrice=document.getElementById('selectPrice').options[document.getElementById('selectPrice').selectedIndex].value;
+            var check1=document.getElementById('check').checked;
+            var check2=document.getElementById('checkDiscount').checked;
+            var req={
+                curPrice:selectedPrice,
+                showSP_Price:!check1,
+                useDiscount:check2
+            };
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/userSettings', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(req));
+            a.textContent='Сохранение...'
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState != 4) return;
+
+                if (xhr.status == 200) {
+                    var divChange= document.getElementById('Change');
+                    var loginForm=document.getElementById('loginForm');
+                    $(loginForm).slideToggle(300);
+                    $(divChange).slideToggle(300);
+                    a.textContent='Сохранить';
+
+                }
+
+
+            }
+
+
+
+        }
+
+    }
+
+
+    function changeZakaz(e) {
+
+        var value=checkInput(e.target, this);
+        if(value==null)
+            return;
+
+        if(value<this.minOrder){
+            alert('Заказ должен быть кратен минимальной упаковке!');
+            return;
+        }
+        else
+            e.target.value=value;
+
+
+    }
+
+    function incrementAmount (e) {
+        e.preventDefault();
+        let input=document.getElementById(`inputZ${this._id}`);
+        if(input.value==''){
+            input.value=this.minOrder;
+            var event = new Event('ch');
+            input.dispatchEvent(event);
+            return
+        }
+
+
+        var value=checkInput(input,this);
+        if(value==null)
+            return;
+
+
+
+        input.value=value+parseInt(this.minOrder);
+        var event = new Event('ch');
+
+        input.dispatchEvent(event);
+
+
+
+
+    }
+
+    function decrementAmount(e) {
+        e.preventDefault();
+        let input=document.getElementById(`inputZ${this._id}`);
+        if(input.value==''){
+            input.value=this.minOrder;
+
+        }
+
+
+
+        var value=checkInput(input,this);
+        if(value==null)
+            return;
+
+
+
+        if(value>this.minOrder&&value-this.minOrder>0){
+            input.value=value-this.minOrder;
+            var event = new Event('ch');
+            input.dispatchEvent(event);
+        }
+
+        else{
+            input.value='0';
+            alert(`Минимальный заказ для этого товара: ${this.minOrder}`);
+
+        }
+
+
+
+    }
+
+    function checkKey(e) {
+        var ip=document.getElementById(`inputZ${this._id}`);
+        if(e.keyCode==8&&ip.value==""){
+
+            return
+        }
+        else {
+            var event = new Event('ch');
+
+            ip.dispatchEvent(event);
+        }
+
+    }
+
+    function checkInput(input, item) {
+        var value=parseInt(input.value);
+
+        if(isNaN(value)){
+            input.value=item.minOrder;
+            alert('Введите целое число');
+            return null
+        }
+        var ost=value % item.minOrder;
+        if(ost ==0)
+            return value;
+        else
+            return value-ost-(-item.minOrder)
+
+    }
+
+    function deleteFromKorzina(delHref){ /////!!!!!!!!
+        var id=delHref.dataset.info;
+        var cookie=getCookie('orderId').split(';');
+        var index=cookie.forEach((str,i)=>{
+            if(str.includes(id)){
+               cookie.splice(i,1);
+               return
+            }
+        });
+
+
+
+        setCookie('orderId', cookie.join(';'));
+
+        Show_Hide_prPreview(delHref.parentNode);
+
+
+
+
+    }
+
+    function Show_Hide_prPreview(preview) {
+
+        var elementsFirst=Array.from(preview.getElementsByClassName('first'));
+        var elementsSecond=Array.from(preview.getElementsByClassName('second'));
+
+
+        elementsFirst.forEach((elem)=>{
+            $(elem).slideToggle(300);
+
+
+        });
+
+        elementsSecond.forEach((elem)=>{
+            $(elem).slideToggle(300);
+
+        });
+        if(elementsSecond.length==0)
+            return
+        var styleSecond=getComputedStyle(elementsSecond[0]);
+        if(styleSecond.display!='none')
+            preview.style.opacity='0';
+        else
+            preview.style.opacity='1';
+
+    }
+    
+    function setTotalPriceCookie(a, amount) {
+        var id=a.dataset.info;
+        userSettings.curPrice[id].amount=amount;
+
+
+        var cookiePrice=getCookie('Price');
+        var priceForItem=getPriceForItemMultAmount(id);
+        try{
+            var priceInCookies=parseFloat(cookiePrice)+priceForItem;
+            if(priceInCookies==''||isNaN(priceInCookies))
+                throw Error;
+        }
+        catch (err){
+            var priceInCookies=priceForItem;
+        }
+
+        setCookie('Price',priceInCookies);
+
+        return priceInCookies;
+
+
+    }
+
+    function getPriceForItemMultAmount(id) {
+        var amount=userSettings.curPrice[id].amount;
+        if(amount==''||amount==undefined)
+            amount=0;
+        else
+            try {
+                amount=parseInt(amount);
+
+            }
+            catch(err){
+            amount=0;
+            }
+
+        var discount=0;
+        if(userSettings.useDiscount)
+            discount=parseFloat(userSettings.discount);
+
+        var price=userSettings.curPrice[id].price;
+
+        var priceForItem=Math.round((amount*price-amount*price*discount/100)*1000)/1000;
+
+        return priceForItem;
+
+    }
+
+    function deletePriceFromCookiePrice(id){
+        var cookiePrice=getCookie('Price');
+
+        var priceForItem=getPriceForItemMultAmount(id);
+        try{
+            var priceInCookies=parseFloat(cookiePrice)-priceForItem;
+            if(priceInCookies==''||isNaN(priceInCookies))
+                throw Error;
+        }
+        catch (err){
+            var priceInCookies='';
+        }
+
+        if(priceInCookies<0)
+            priceInCookies='';
+
+        setCookie('Price',priceInCookies);
+
+        return priceInCookies;
+
+    }
+
+    function changeShowingTotalPrice(price) {
+        var totalPriceCart=document.getElementById(`PriceTotalInCart`);
+
+        var corzina=document.getElementsByClassName('corzina')[0];
+        corzina.style.display='none';
+        document.getElementsByClassName('wrapImg')[0].style.width='auto';
+        if(totalPriceCart==undefined){
+            var totalPriceCart=document.createElement('span');
+            totalPriceCart.setAttribute('id','PriceTotalInCart');
+            document.getElementsByClassName('wrapImg')[0].appendChild(totalPriceCart);
+            totalPriceCart.style.display='inline';
+
+        }
+        totalPriceCart.style.display='inline';
+
+        if(price==''){
+            var corzina=document.getElementsByClassName('corzina')[0];
+            corzina.style.display='inline-block';
+            totalPriceCart.style.display='none';
+            document.getElementsByClassName('wrapImg')[0].style.width='';
+
+        }
+
+        totalPriceCart.textContent=price;
+    }
+
+    function setShowingTotalPrice() {
+        var cookiePrice=getCookie('Price');
+        try{
+            var priceInCookies=parseFloat(cookiePrice);
+            if(priceInCookies==''||isNaN(priceInCookies))
+                throw Error;
+        }
+        catch (err){
+            var priceInCookies='';
+        }
+        changeShowingTotalPrice(priceInCookies);
+    }
+
+    function getAmountFromCookies(id) {
+        var cookies=Array.from(getCookie('orderId').split(';'));
+        var amount=0;
+        cookies.forEach((item)=>{
+            if(item.includes(id))
+                amount=item.split('-')[1]
+        });
+        return amount;
+    }
+
+    function clearAllCookies() {
+        setCookie('Price','');
+        setCookie('orderId','');
+    }
+
+
+
 });
 
+
+/*
+var discount=0;
+try {
+    if(this.discount!==undefined)
+        discount=parseFloat(this.discount);
+}
+catch (e){
+
+}
+if(select==undefined)
+    var price=this.price;
+else
+    price=select.options[select.selectedIndex].value;
+
+
+
+*/

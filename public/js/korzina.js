@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', function() {
+    var wasTriggered=false;// Был ли запрос за настройками на сервер
     getOrderedProducts();
     addEvents();
     $("#phone").mask("8(999) 999-9999");
@@ -106,14 +107,6 @@ window.addEventListener('DOMContentLoaded', function() {
                 a.addEventListener('click',Order);
                 div.appendChild(span);
 
-                if(login){
-                    var discount=document.createElement('span');
-                    discount.textContent=`Ваша персональная скидка: ${User.discount} %`;
-                    discount.setAttribute('data-disc',User.discount);
-                    discount.setAttribute('id','DISCOUNT');
-                    discount.style.display="block";
-                    div.appendChild(discount);
-                }
                 div.appendChild(a);
 
                 products.forEach((item)=>{
@@ -131,25 +124,42 @@ window.addEventListener('DOMContentLoaded', function() {
                     var inputs=Array.from(document.getElementsByTagName('input')).filter((item)=>{
                         return item.id.includes('inputZ')
                     });
-                    var flag=false;
-                    try {
-                        var discount=document.getElementById('DISCOUNT').dataset.disc;
-                        flag=true;
+
+                var discount=0;
+
+                    if(User==undefined){
+                        var useSPPrice=false;
                     }
-                    catch (e){
+                    else {
+                        var useSPPrice=User.show;
+                        if(User.useDiscount)
+                            discount=User.discount;
 
                     }
+
+
+
 
                     inputs.forEach((item)=>{
                         let id=item.id.substring(item.id.indexOf('Z')+1);
-                        var price='0';
-                        if(!flag){
-                            price=document.getElementById(`BPRICE${id}`).textContent;
-                            discount=0;
+                        var price=0;
+                        if(!useSPPrice){
+                            try {
+                                price=parseFloat(document.getElementById(`BO${id}`).textContent);
+                            }
+                            catch (err){
+
+                            }
+
                         }
                         else{
-                            let select=document.getElementById(`select${id}`);
-                            price=select.options[select.options.length-1].text;
+                            try {
+                                price=parseFloat(document.getElementById(`BSP${id}`).textContent);
+                            }
+                            catch (err){
+
+                            }
+
                         }
 
                         item.value=res[id];
@@ -166,6 +176,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     function createElements(item, login, User) {
+        var addSpan=false;
         var li=document.createElement('li') //0
         li.classList.add('product-wrapper');
 
@@ -299,56 +310,88 @@ window.addEventListener('DOMContentLoaded', function() {
         spanPrPrice.classList.add('product-price');
         spanPrPrice.textContent='';
 
+        var spanPrPrice2=document.createElement('span');//4
+        spanPrPrice2.classList.add('product-price');
+        spanPrPrice2.classList.add('fix');//Чтобы b, small=float:left только в корзине
+
+        var spanPriceInclude=document.createElement('span');
+        spanPriceInclude.appendChild(spanPrPrice);
+        spanPriceInclude.classList.add('fix');
+
+
         if(login) {
-            item.discount=User.discount;
-            var small = document.createElement('small');//5
+           // var small1 = document.createElement('small');//5
+            if(User.useDiscount==true){
+                item.discount=User.discount
+
+            }
+
             if (item.status[2] != '1') {
 
-            var select = document.createElement('select');
-            select.setAttribute('id',`select${item._id}`);
-            spanPrPrice.classList.add('selectPrice');
-            if(User.price.length==0){
-                var b=document.createElement('b');//5
-                b.setAttribute('id',`BPRICE${item._id}`);
-                b.textContent=item.price;
 
-                var small=document.createElement('small');//5
-                small.textContent='руб';
-                spanPrPrice.appendChild(b);
-                spanPrPrice.appendChild(small);
+                if (User.price.length == 0||User.show==false||User.curPrice=='0') {
+                    var b1 = document.createElement('b');//5
+                    b1.textContent = item.price;
+                    b1.setAttribute('id',`BO${item._id}`);
 
-            }
-            else {
-                var option = document.createElement('option');
-                option.textContent="Выберете цену";
-                option.disabled=true;
-                select.appendChild(option);
-                User.price.forEach((price, i) => {
-                    var option = document.createElement('option');
-                    var priceName = `specialPrice${i+1}`;
-                    option.textContent = item[priceName];
-                    select.appendChild(option);
-                });
-                spanPrPrice.appendChild(select);
-            }
+                    var small1 = document.createElement('small');//5
+                    small1.textContent = 'руб';
+                    spanPrPrice.appendChild(b1);
+                    spanPrPrice.appendChild(small1);
+
+
+                }
+                else if(User.show==true) {
+                    var b1 = document.createElement('b');//5
+                    spanPrPrice.classList.add('crossedPrice');
+                    b1.textContent = item.price;
+                    b1.setAttribute('id',`BO${item._id}`);
+
+                    var small1 = document.createElement('small');//5
+                    small1.textContent = 'руб';
+                    spanPrPrice.appendChild(b1);
+                    spanPrPrice.appendChild(small1);
+
+
+                    var b2 = document.createElement('b');//5
+                    b2.setAttribute('id',`BSP${item._id}`)
+                    b2.textContent = item[`specialPrice${User.curPrice}`];
+
+                    var small2 = document.createElement('small');//5
+                    small2.textContent = 'руб';
+                    spanPrPrice2.appendChild(b2);
+                    spanPrPrice2.appendChild(small2);
+
+                    spanPriceInclude.appendChild(spanPrPrice2);
+                    spanPriceInclude.classList.add('twoPrices');
+
+                }
 
             }
             else{
-                small.innerHTML="<br> <br>";
-                spanPrPrice.appendChild(small);
+                var b1 = document.createElement('b');
+                b1.innerHTML='&nbsp';
+                spanPrPrice.appendChild(b1);
             }
 
         }
-        else{
-            var b=document.createElement('b');//5
-            b.setAttribute('id',`BPRICE${item._id}`);
-            b.textContent=item.price;
+        else {
+            var b1=document.createElement('b');//5
+            var small1=document.createElement('small');//5
+            if(item.status[2] != '1'){
+                b1.textContent=item.price;
+                b1.setAttribute('id',`BO${item._id}`);
+                small1.textContent='руб';
+            }
+            else {
+                b1.innerHTML='&nbsp';
+                small1.textContent=' ';
+            }
 
-            var small=document.createElement('small');//5
-            small.textContent='руб';
-            spanPrPrice.appendChild(b);
-            spanPrPrice.appendChild(small);
+            spanPrPrice.appendChild(b1);
+            spanPrPrice.appendChild(small1);
         }
+
 
 
 
@@ -370,7 +413,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         a.appendChild(divPrT);
         a.appendChild(divPrAvail);
-        a.appendChild(spanPrPrice);
+        a.appendChild(spanPriceInclude);
         zakazContainer.appendChild(buttonM);
         zakazContainer.appendChild(inputZakaz);
         zakazContainer.appendChild(buttonP);
@@ -402,120 +445,11 @@ window.addEventListener('DOMContentLoaded', function() {
         buttonM.addEventListener('click', decrementAmount.bind(item) );
 
         buttonP.addEventListener('click', incrementAmount.bind(item));
-        
+
         inputZakaz.addEventListener('ch', changeZakaz.bind(item));
 
         inputZakaz.addEventListener('keyup', checkKey.bind(item));
 
-        function changeZakaz(e) {
-            var select=document.getElementById(`select${this._id}`);
-            var discount=0;
-            try {
-                if(this.discount!==undefined)
-                     discount=parseFloat(this.discount);
-            }
-            catch (e){
-
-            }
-            if(select==undefined)
-                var price=this.price;
-            else
-                price=select.options[select.selectedIndex].value;
-
-
-            var value=checkInput(e.target, this);
-            if(value==null)
-                return;
-
-            if(value<this.minOrder){
-                var totalPrice=document.getElementById(`PriceTotal${this._id}`);
-                totalPrice.textContent='0';
-                calculateAll();
-                return;
-            }
-            var totalPrice=document.getElementById(`PriceTotal${this._id}`);
-            totalPrice.textContent=` ${Math.round((value*price-value*price*discount/100)*1000)/1000} `;
-            calculateAll();
-
-
-        }
-        
-        function incrementAmount (e) {
-            e.preventDefault();
-            let input=document.getElementById(`inputZ${this._id}`);
-            if(input.value==''){
-                input.value=this.minOrder;
-                var event = new Event('ch');
-                input.dispatchEvent(event);
-                return
-            }
-
-
-            var value=checkInput(input,this);
-            if(value==null)
-                return;
-
-
-
-                input.value=value+1;
-                var event = new Event('ch');
-
-                input.dispatchEvent(event);
-
-
-
-
-        }
-
-        function decrementAmount(e) {
-            e.preventDefault();
-            let input=document.getElementById(`inputZ${this._id}`);
-            if(input.value==''){
-                input.value=this.minOrder;
-
-            }
-
-
-
-            var value=checkInput(input,this);
-            if(value==null)
-                return;
-
-
-
-            if(value>this.minOrder){
-                input.value=value-1;
-                var event = new Event('ch');
-                input.dispatchEvent(event);
-            }
-
-            else{
-                var totalPrice=document.getElementById(`PriceTotal${this._id}`);
-                totalPrice.textContent='0';
-                input.value='0';
-                alert(`Минимальный заказ для этого товара: ${this.minOrder}`);
-                calculateAll();
-            }
-
-
-
-        }
-
-        function checkKey(e) {
-            var ip=document.getElementById(`inputZ${this._id}`);
-            if(e.keyCode==8&&ip.value==""){
-                var totalPrice=document.getElementById(`PriceTotal${this._id}`);
-                totalPrice.textContent='0';
-                calculateAll();
-                return
-            }
-            else {
-                var event = new Event('ch');
-
-                ip.dispatchEvent(event);
-            }
-
-        }
 
         return li;
     }
@@ -530,6 +464,9 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
     function addEvents() {
+        //settings
+        document.getElementsByClassName('loginForm')[0].addEventListener('click',changeSettings );
+
         document.getElementById('PR').addEventListener('click', deleteFromKorzina);
         document.getElementById('PR').addEventListener('change', recalculate);
         document.getElementById('OrderForm').addEventListener('submit', checkout);
@@ -537,14 +474,16 @@ window.addEventListener('DOMContentLoaded', function() {
     function checkout(e) {
         var form=document.forms.checkout;
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/searchCat', true);
+        xhr.open('POST', '/checkout', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
         var data={
             name:form.name.value,
             email:form.emailaddress.value,
             phone:form.phone.value,
-            comment:form.subject.value
+            comment:form.subject.value,
+            order:getCookie('orderId')
         };
-        xhr.send();
+        xhr.send(JSON.stringify(data));
         xhr.onreadystatechange = function () {
             if (xhr.readyState != 4) return;
 
@@ -620,7 +559,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         document.cookie = updatedCookie;
     }
-    
+
     function calculateAll() {
         var span=document.getElementById('ZakazItogForAllPrice');
         var price=0;
@@ -636,7 +575,7 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
         span.textContent=`Сумма заказа: ${price} руб`;
-        
+
     }
 
     function Order(e) {
@@ -661,101 +600,425 @@ window.addEventListener('DOMContentLoaded', function() {
 
     }
 
+    function setOrderCookie() {
+        var inputs=Array.from(document.getElementsByTagName('input')).filter((item)=>{
+            return item.id.includes('inputZ')
+        });
+        var a=0;
+        var cookie='';
+        inputs.forEach((item)=>{
+            if(item.value=='')
+                var value='0'
+            else
+                var value=item.value
+            cookie=cookie+`;${item.id.substring(item.id.indexOf('Z')+1)}-${value}`;
+        });
+        cookie=cookie.substring(1);
+        setCookie('orderId', cookie);
+    }
+
+
+    function isEverythingFilled() {
+        var flag=true;
+        var pos=null;
+        var inputs=Array.from(document.getElementsByTagName('input')).filter((item)=>{
+            return item.id.includes('inputZ')
+        });
+        inputs.forEach((item, i)=>{
+            if(item.value==''||checkInput(item,{minOrder:1})==null||item.value=='0'){
+                flag=false;
+                item.classList.add('inputErr');
+                item.value='Заполните это поле!';
+                pos=i;
+            }
+            else if(item.value!='Заполните это поле!'){
+                try{
+                    item.classList.remove('inputErr');
+                }
+                catch (e){
+
+                }
+            }
+
+        });
+
+        if(flag)
+            return true
+
+        $('html, body').animate({
+            scrollTop: pos*inputs[pos].parentNode.parentNode.offsetHeight
+        }, 500);
+
+        return false
+    }
+
+    function setCookie(name, value, options) {//Установка кук
+        options = options || {};
+
+        var expires = options.expires;
+
+        if (typeof expires == "number" && expires) {
+            var d = new Date();
+            d.setTime(d.getTime() + expires * 1000);
+            expires = options.expires = d;
+        }
+        if (expires && expires.toUTCString) {
+            options.expires = expires.toUTCString();
+        }
+
+        value = encodeURIComponent(value);
+
+        var updatedCookie = name + "=" + value;
+
+        for (var propName in options) {
+            updatedCookie += "; " + propName;
+            var propValue = options[propName];
+            if (propValue !== true) {
+                updatedCookie += "=" + propValue;
+            }
+        }
+
+        document.cookie = updatedCookie;
+    }
+
+    function changeZakaz(e) {
+        var price=0;
+        try{
+            let BSP=document.getElementById(`BSP${this._id}`);
+             price=parseFloat(BSP.textContent);
+        }
+        catch (err){
+            let BO=document.getElementById(`BO${this._id}`);
+             price=parseFloat(BO.textContent);
+        }
+
+
+        var select=document.getElementById(`select${this._id}`);
+        var discount=0;
+        try {
+            if(this.discount!==undefined)
+                discount=parseFloat(this.discount);
+        }
+        catch (e){
+
+        }
+
+
+        var value=checkInput(e.target, this);
+        if(value==null)
+            return;
+
+        if(value<this.minOrder){
+            var totalPrice=document.getElementById(`PriceTotal${this._id}`);
+            totalPrice.textContent='0';
+            calculateAll();
+            return;
+        }
+        else
+            e.target.value=value;
+
+
+        var totalPrice=document.getElementById(`PriceTotal${this._id}`);
+        totalPrice.textContent=` ${Math.round((value*price-value*price*discount/100)*1000)/1000} `;
+        calculateAll();
+
+
+    }
+
+    function incrementAmount (e) {
+        e.preventDefault();
+        let input=document.getElementById(`inputZ${this._id}`);
+        if(input.value==''){
+            input.value=this.minOrder;
+            var event = new Event('ch');
+            input.dispatchEvent(event);
+            return
+        }
+
+
+        var value=checkInput(input,this);
+        if(value==null)
+            return;
+
+
+
+        input.value=value+parseInt(this.minOrder);
+        var event = new Event('ch');
+
+        input.dispatchEvent(event);
+
+
+
+
+    }
+
+    function decrementAmount(e) {
+        e.preventDefault();
+        let input=document.getElementById(`inputZ${this._id}`);
+        if(input.value==''){
+            input.value=this.minOrder;
+
+        }
+
+
+
+        var value=checkInput(input,this);
+        if(value==null)
+            return;
+
+
+
+        if(value>this.minOrder&&value-this.minOrder>0){
+            input.value=value-this.minOrder;
+            var event = new Event('ch');
+            input.dispatchEvent(event);
+        }
+
+        else{
+            var totalPrice=document.getElementById(`PriceTotal${this._id}`);
+            totalPrice.textContent='0';
+            input.value='0';
+            alert(`Минимальный заказ для этого товара: ${this.minOrder}`);
+            calculateAll();
+        }
+
+
+
+    }
+
+    function checkKey(e) {
+        var ip=document.getElementById(`inputZ${this._id}`);
+        if(e.keyCode==8&&ip.value==""){
+            var totalPrice=document.getElementById(`PriceTotal${this._id}`);
+            totalPrice.textContent='0';
+            calculateAll();
+            return
+        }
+        else {
+            var event = new Event('ch');
+
+            ip.dispatchEvent(event);
+        }
+
+    }
+
+    function checkInput(input, item) {
+        var value=parseInt(input.value);
+
+        if(isNaN(value)){
+            input.value=item.minOrder;
+            alert('Введите целое число');
+            calculateAll();
+            return null
+        }
+        var ost=value % item.minOrder;
+        if(ost ==0)
+            return value;
+        else
+            return value-ost-(-item.minOrder)
+
+    }
+
+
+
+    function calculateEachTptalPrice() {
+
+    }
+
+    function changeSettings(e) {
+        var a=e.target;
+        if(a.nodeName=='A'&&a.textContent=='Настройки'){
+            if(!wasTriggered){
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/userSettings', true);
+                xhr.send('');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState != 4) return;
+
+                    if (xhr.status == 200) {
+                        var USER=JSON.parse(xhr.response);
+
+                        try{
+                            var a=document.getElementById('check').textContent;
+                        }
+                        catch (e){
+                            var divChange= document.getElementById('Change');
+                            var loginForm=document.getElementById('loginForm');
+                            var checkBox=document.createElement('input');
+                            checkBox.setAttribute('type','checkbox');
+                            checkBox.setAttribute('id','check');
+                            if(!USER.show)
+                                checkBox.setAttribute('checked', 'true');
+                            var label=document.createElement('label');
+                            label.setAttribute('for','check');
+                            label.textContent='Скрыть Вашу цену';
+
+                            var div=document.createElement('div');
+                            div.style.display='inline';
+                            div.appendChild(checkBox);
+                            div.appendChild(label);
+
+                            if(USER.discount!="0.0"){
+                                var checkDiscount=document.createElement('input');
+                                checkDiscount.setAttribute('type','checkbox');
+                                checkDiscount.setAttribute('id','checkDiscount');
+
+                                var labelDisc=document.createElement('label');
+                                labelDisc.setAttribute('for','checkDiscount');
+                                labelDisc.textContent=`Применить скидку в ${USER.discount}%`;
+
+                                if(USER.useDiscount){
+                                    checkDiscount.setAttribute('checked', 'true');
+                                }
+
+                                div.appendChild(checkDiscount);
+                                div.appendChild(labelDisc);
+
+                            }
+
+                            var select=document.createElement('select');
+                            select.setAttribute('id','selectPrice');
+                            divChange.insertBefore(select, divChange.firstChild);
+                            divChange.insertBefore(div,divChange.firstChild.nextSibling);
+                            var opt=document.createElement('option');
+                            opt.textContent='0';
+                            select.appendChild(opt);
+                            USER.price.forEach((item)=>{
+                                var opt=document.createElement('option');
+                                opt.textContent=`${item}`;
+                                if(item==USER.curPrice){
+                                    opt.setAttribute('selected', 'true');
+                                }
+                                select.appendChild(opt);
+                            });
+                        }
+                        var divChange= document.getElementById('Change');
+                        var loginForm=document.getElementById('loginForm');
+                        $(loginForm).slideToggle(300);
+                        $(divChange).slideToggle(300);
+                        wasTriggered=true;
+
+                    }
+                }
+            }
+            else {
+                var divChange= document.getElementById('Change');
+                var loginForm=document.getElementById('loginForm');
+                $(loginForm).slideToggle(300);
+                $(divChange).slideToggle(300);
+
+            }
+
+        }
+        else if(a.nodeName=='A'&&a.textContent=='Сохранить'){
+            var form=document.getElementById('Change');
+            var selectedPrice=document.getElementById('selectPrice').options[document.getElementById('selectPrice').selectedIndex].value;
+            var check1=document.getElementById('check').checked;
+            var check2=document.getElementById('checkDiscount').checked;
+            var req={
+                curPrice:selectedPrice,
+                showSP_Price:!check1,
+                useDiscount:check2
+            };
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/userSettings', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(req));
+            a.textContent='Сохранение...'
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState != 4) return;
+
+                if (xhr.status == 200) {
+                    var divChange= document.getElementById('Change');
+                    var loginForm=document.getElementById('loginForm');
+                    $(loginForm).slideToggle(300);
+                    $(divChange).slideToggle(300);
+                    a.textContent='Сохранить';
+                    let obj=JSON.parse(xhr.response);
+                    if(obj.done)
+                        location.reload();
+
+                }
+
+
+            }
+
+
+
+        }
+
+    }
+
+
+
+
+
 });
 
-function setOrderCookie() {
-    var inputs=Array.from(document.getElementsByTagName('input')).filter((item)=>{
-        return item.id.includes('inputZ')
-    });
-    var a=0;
-    var cookie='';
-    inputs.forEach((item)=>{
-       if(item.value=='')
-           var value='0'
-        else
-           var value=item.value
-        cookie=cookie+`;${item.id.substring(item.id.indexOf('Z')+1)}-${value}`;
-    });
-    cookie=cookie.substring(1);
-    setCookie('orderId', cookie);
+
+
+
+
+/*
+ item.discount=User.discount;
+ var small = document.createElement('small');//5
+ if (item.status[2] != '1') {
+
+ var select = document.createElement('select');
+ select.setAttribute('id',`select${item._id}`);
+ spanPrPrice.classList.add('selectPrice');
+ if(User.price.length==0){
+ var b=document.createElement('b');//5
+ b.setAttribute('id',`BPRICE${item._id}`);
+ b.textContent=item.price;
+
+ var small=document.createElement('small');//5
+ small.textContent='руб';
+ spanPrPrice.appendChild(b);
+ spanPrPrice.appendChild(small);
+
+ }
+ else {
+ var option = document.createElement('option');
+ option.textContent="Выберете цену";
+ option.disabled=true;
+ select.appendChild(option);
+ User.price.forEach((price, i) => {
+ var option = document.createElement('option');
+ var priceName = `specialPrice${i+1}`;
+ option.textContent = item[priceName];
+ select.appendChild(option);
+ });
+ spanPrPrice.appendChild(select);
+ }
+
+ }
+ else{
+ small.innerHTML="<br> <br>";
+ spanPrPrice.appendChild(small);
+ }
+
+ }
+ else{
+ var b=document.createElement('b');//5
+ b.setAttribute('id',`BPRICE${item._id}`);
+ b.textContent=item.price;
+
+ var small=document.createElement('small');//5
+ small.textContent='руб';
+ spanPrPrice.appendChild(b);
+ spanPrPrice.appendChild(small);
+*/
+
+/*
+if(login){
+    var discount=document.createElement('span');
+    discount.textContent=`Ваша персональная скидка: ${User.discount} %`;
+    discount.setAttribute('data-disc',User.discount);
+    discount.setAttribute('id','DISCOUNT');
+    discount.style.display="block";
+    div.appendChild(discount);
 }
-
-
-function isEverythingFilled() {
-    var flag=true;
-    var pos=null;
-    var inputs=Array.from(document.getElementsByTagName('input')).filter((item)=>{
-        return item.id.includes('inputZ')
-    });
-    inputs.forEach((item, i)=>{
-        if(item.value==''||checkInput(item,{minOrder:1})==null||item.value=='0'){
-            flag=false;
-            item.classList.add('inputErr');
-            item.value='Заполните это поле!';
-            pos=i;
-        }
-        else if(item.value!='Заполните это поле!'){
-            try{
-                item.classList.remove('inputErr');
-            }
-            catch (e){
-
-            }
-        }
-
-    });
-
-    if(flag)
-        return true
-
-    $('html, body').animate({
-        scrollTop: pos*inputs[pos].parentNode.parentNode.offsetHeight
-    }, 500);
-
-    return false
-}
-
-function setCookie(name, value, options) {//Установка кук
-    options = options || {};
-
-    var expires = options.expires;
-
-    if (typeof expires == "number" && expires) {
-        var d = new Date();
-        d.setTime(d.getTime() + expires * 1000);
-        expires = options.expires = d;
-    }
-    if (expires && expires.toUTCString) {
-        options.expires = expires.toUTCString();
-    }
-
-    value = encodeURIComponent(value);
-
-    var updatedCookie = name + "=" + value;
-
-    for (var propName in options) {
-        updatedCookie += "; " + propName;
-        var propValue = options[propName];
-        if (propValue !== true) {
-            updatedCookie += "=" + propValue;
-        }
-    }
-
-    document.cookie = updatedCookie;
-}
-
-function checkInput(input, item) {
-    var value=parseInt(input.value);
-
-    if(isNaN(value)){
-        input.value=item.minOrder;
-        alert('Введите целое число');
-        return null
-    }
-    return value;
-}
-
-function calculateEachTptalPrice() {
-    
-}
+*/
 

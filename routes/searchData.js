@@ -47,6 +47,9 @@ exports.get=async function(ctx, next) {
             }*/
 
             var products=await Data.find({'category':cat}).sort(sortField).skip((page-1)*LIMIT).limit(LIMIT);
+            if(products.length==0){
+                products.push('no');
+            }
             if(!isPageSearch)
                 var numberOfPages=await Data.count({'category':cat}).then(returnLength);
 
@@ -115,6 +118,7 @@ function deepSearch(cat, req) {
     var resSubcats=[];
     search(cat);
     return resSubcats;
+
     function search(cat) {
         cat.forEach((item)=>{
             if(item.name==req){
@@ -146,3 +150,10 @@ function prepareForSearch(str) {//Для поиска по всем комбин
     return mass;
 }
 
+/*
+var allCats=await Category.find({});
+var resMass=deepSearch(allCats,cat);
+resMass.shift();
+products=await Data.find({'category':{ $in : resMass }}).sort(sortField).skip((page-1)*LIMIT).limit(LIMIT);
+
+*/

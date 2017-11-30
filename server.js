@@ -41,7 +41,8 @@ router.get('/corzina', require('./routes/korzina').get);
 router.post('/corzina', require('./routes/korzina').post);
 router.post('/order',require('./routes/order').post);
 router.post('/checkout', require('./routes/checkout').post);
-
+router.get('/userSettings', require('./routes/userSettings').get);
+router.post('/userSettings', require('./routes/userSettings').post);
 
 app.use(async (ctx, next) => {
   var f=this.session;

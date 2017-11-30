@@ -11,12 +11,16 @@ async function main() {
 
     try{
         mainFile.users.forEach((item)=>{
+            let prices=item[3].split(' ');
             let user={
                 username:item[0],
                 displayName:item[2],
                 password:item[1],
-                visiblePrice:item[3].split(' '),
-                discount:item[4]
+                visiblePrice:prices,
+                discount:item[4],
+                curPrice:prices[prices.length-1],
+                showSP_Price:false,
+                useDiscount:true
             };
             resultUsers.push(user);
         });
