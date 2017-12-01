@@ -500,6 +500,15 @@ window.addEventListener('DOMContentLoaded', function() {
             e.target.parentNode.parentNode.remove();
             setOrderCookie();
 
+            var span=document.getElementById('ZakazItogForAllPrice');
+            try{
+                var Price=calculateAll();
+            }
+            catch (err){
+                var Price=0;
+            }
+            setCookie('Price',Price);
+
             /*let id=e.target.dataset.info;
             var mass=getCookie('itemsID').split(';');
             var index = mass.indexOf(id);
@@ -575,6 +584,7 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
         span.textContent=`Сумма заказа: ${price} руб`;
+        return price;
 
     }
 
@@ -615,6 +625,7 @@ window.addEventListener('DOMContentLoaded', function() {
         });
         cookie=cookie.substring(1);
         setCookie('orderId', cookie);
+
     }
 
 
