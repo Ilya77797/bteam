@@ -6,96 +6,16 @@ const mainFile=require('../Price/last.json');
 var resultCat=[];
 var resultMass = [];
 var resultUsers=[];
-async function main() {
-//parcing categories
+async function main(changeUsers,changeCats,changeData) {
+ //addUsers
+ addUsers(changeUsers);
 
-    try{
-        mainFile.users.forEach((item)=>{
-            let prices=item[3].split(' ');
-            let user={
-                username:item[0],
-                displayName:item[2],
-                password:item[1],
-                visiblePrice:prices,
-                discount:item[4],
-                curPrice:prices[prices.length-1],
-                showSP_Price:false,
-                useDiscount:true
-            };
-            resultUsers.push(user);
-        });
-    }
-    catch (e){
+//add categories
+addCats(changeCats);
 
-    }
+//parcing data from JSON
+addData(changeData);
 
-    resultUsers.forEach(async function (item) {
-        let us=new User(item);
-        await us.save();
-        console.log(`user ${item.name} is added to the database`);
-    });
-    try{
-        mainFile.groups.forEach((item)=>{
-            let cat={
-                name:item.name,
-                subcat:item.subcat
-            };
-            resultCat.push(cat);
-            console.log(`category ${item.name} is added to the database`);
-        });
-    }
-    catch (e) {
-
-    }
-     resultCat.forEach(async function (item) {
-     let cat=new Categor(item);
-     await cat.save();
-     console.log(`category ${item.name} is added to the database`);
-     });
-
-
-//parcing data from JSON---Доделать
-
-    try {
-        mainFile.data.forEach((item, i) => {
-            var dataObj = {
-                _id: parseInt(item[0]),
-                name: item[0] + ' ' + item[1],
-                status: item[2],
-                textDescription: item[3],
-                measure: item[4],
-                amount: item[5],
-                price: item[6],
-                specialPrice1: item[7],
-                specialPrice2: item[8],
-                specialPrice3: item[9],
-                specialPrice4: item[10],
-                minOrder: item[11],
-                category: takeCat(item[12]),
-                icon: takeIcon(item[13]),
-                info: takeInfo(item[13], item[14]),
-                index: i,
-
-
-            };
-            resultMass.push(dataObj);
-        });
-
-    }
-    catch (e) {
-        console.log('err: ', e)
-    }
-
-    await sortPriceUp(resultMass);
-    await sortAlpha(resultMass);
-    var a=0;
-
-
-    resultMass.forEach(async function (data,i) {
-     var b=new Dataq(data);
-     await b.save();
-     console.log('done: ', i);
-     });
 }
 
 function takeName(str) {
@@ -165,12 +85,22 @@ async function sortPriceUp(mass) {
 
 async function sortAlpha(mass) {
     var sortedMass = mass;
-    await sortedMass.sort((a, b) => {
-        var aN=a.name.substring(firstLetter(a.name)).toUpperCase();
-        var bN=b.name.substring(firstLetter(b.name)).toUpperCase();
-       return compareLetters(aN,bN,0);
 
-    });
+        await sortedMass.sort((a, b) => {
+            if(a.name.includes('00395')&&b.name.includes('20481')){
+                var letff=0;
+            }
+
+            if(a.name.includes('20481')){
+                var letff=0;
+            }
+            var aN=a.name.substring(firstLetter(a.name)).toUpperCase();
+            var bN=b.name.substring(firstLetter(b.name)).toUpperCase();
+
+            return compareLetters(aN,bN,0);
+        });
+
+
 
     await sortedMass.forEach(function (item,i) {
         item.indexSortAlp=i;
@@ -201,8 +131,35 @@ function firstLetter(string) {
 }
 
 function compareLetters(a,b, i) {
-    if(a[i]!=b[i])
-        return a.charCodeAt(0)-b.charCodeAt(0)
+   /* var aIndex=0;
+    var bIndex=0;
+    for(let j=0;j<a.length;j++)
+    {
+        var p=a[j].charCodeAt(0);
+        if(p>1039&&p<1072||p>64&&p<91||p>47&&p<58)
+            aIndex+=a[j].charCodeAt(0);
+    }
+
+    for(let j=0;j<b.length;j++)
+    {
+        var p=b[j].charCodeAt(0);
+        if(p>1039&&p<1072||p>64&&p<91||p>47&&p<58)
+            bIndex+=b[j].charCodeAt(0);
+    }
+    return aIndex-bIndex*/
+/*if(i<a.length&&i<b.length){
+    var aCHar=a[i].charCodeAt(0);
+    var bCHar=b[i].charCodeAt(0);
+    if(!(aCHar>1039&&aCHar<1072||aCHar>64&&aCHar<91)&&i<a.length)
+        i++
+
+    if(!(bCHar>1039&&bCHar<1072||bCHar>64&&bCHar<91)&&i<b.length)
+        i++
+}*/
+
+
+    if(a[i]!=b[i]&&i<a.length&&i<b.length)
+        return a[i].charCodeAt(0)-b[i].charCodeAt(0)
     else {
         if(a.length==b.length&&a.length==i)
             return 1
@@ -215,5 +172,141 @@ function compareLetters(a,b, i) {
     }
 }
 
-main();
+async function addUsers(isNeeded) {
+    if(!isNeeded)
+        return
+    try{
+        mainFile.users.forEach((item)=>{
+            let prices=item[3].split(' ');
+            let user={
+                username:item[0],
+                displayName:item[2],
+                password:item[1],
+                visiblePrice:prices,
+                discount:item[4],
+                curPrice:prices[prices.length-1],
+                showSP_Price:false,
+                useDiscount:true
+            };
+            resultUsers.push(user);
+        });
+    }
+    catch (e){
 
+    }
+
+    resultUsers.forEach(async function (item) {
+        let us=new User(item);
+        await us.save();
+        console.log(`user ${item.name} is added to the database`);
+    });
+
+}
+
+async function addCats(isNeeded) {
+    if(!isNeeded)
+        return
+
+
+    try{
+        mainFile.groups.forEach((item, i)=>{
+            let cat={
+                name:item.name,
+                subcat:item.subcat,
+                index:i
+            };
+            resultCat.push(cat);
+            console.log(`category ${item.name} is added to the database`);
+        });
+    }
+    catch (e) {
+
+    }
+    resultCat.forEach(async function (item) {
+        let cat=new Categor(item);
+        await cat.save();
+        console.log(`category ${item.name} is added to the database`);
+    });
+
+}
+
+async function addData(isNeeded) {
+    if(!isNeeded)
+        return
+
+
+    try {
+        mainFile.data.forEach((item, i) => {
+            var dataObj = {
+                _id: parseInt(item[0]),
+                name: item[0] + ' ' + item[1],
+                status: item[2],
+                textDescription: item[3],
+                measure: item[4],
+                amount: item[5],
+                price: item[6],
+                specialPrice1: item[7],
+                specialPrice2: item[8],
+                specialPrice3: item[9],
+                specialPrice4: item[10],
+                minOrder: item[11],
+                category: takeCat(item[12]),
+                icon: takeIcon(item[13]),
+                info: takeInfo(item[13], item[14]),
+                index: i,
+
+
+            };
+            resultMass.push(dataObj);
+        });
+
+    }
+    catch (e) {
+        console.log('err: ', e)
+    }
+
+    await sortPriceUp(resultMass);
+    await sortAlpha(resultMass);
+    var a=0;
+
+
+    resultMass.forEach(async function (data,i) {
+        var b=new Dataq(data);
+        await b.save();
+        console.log('done: ', i);
+    });
+
+}
+
+ function sort(mass) {
+    var resMass=mass;
+    var flag=true;
+    while(flag){
+        flag=false;
+        resMass.forEach((item,i)=>{
+
+            if(i<resMass.length-1){
+                var aN=item.name.substring(firstLetter(item.name)).toUpperCase();
+                var bN=resMass[i+1].name.substring(firstLetter(resMass[i+1].name)).toUpperCase();
+
+                var index=compareLetters(aN,bN,0);
+                if(index>0){
+                    let b=resMass[i+1];
+                    resMass[i+1]=item;
+                    resMass[i]=b;
+                    flag=true;
+                }
+
+            }
+
+        })
+
+    }
+    return resMass
+
+}
+
+
+
+main(false, false, true);
+//Отправлять запрос н очистку кук, если были изменения в User

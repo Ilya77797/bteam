@@ -40,13 +40,19 @@ html
                         div.loginForm
                             form(action="/login:main" method="POST" id="loginForm")
                                 h2 Вход
-                                input(name="username" placeholder="Имя пользователья")
-                                input(name="password" placeholder="Пароль")
-                                button(type="submit") Войти
+                                if(noUser)
+                                    h4(style="color:red") Неправильное имя или пароль
+                                    input(name="username" placeholder="Имя пользователья" )
+                                    input(name="password" type="password" placeholder="Пароль" )
+                                    button(type="submit") Войти
+                                else
+                                    input(name="username" placeholder="Имя пользователья")
+                                    input(name="password" type="password" placeholder="Пароль")
+                                    button(type="submit") Войти
             div(style='clear:both')
                 hr.line
             div.topMenu
-                a(href="/main").catMainPage На главную
+
                 img(src='images/mobile.png')#mobMenu.mobile
                 div.dataS
                     form(action="/searchData" method="POST" id="dataSearch")

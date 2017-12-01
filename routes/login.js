@@ -24,8 +24,10 @@ exports.post = async (ctx, next) => {
         else
             ctx.redirect('/corzina');
     } else {
-      ctx.status = 401;
-      ctx.body = { error: 'err'};
+        if(ctx.request.ctx.params.f==':main')
+            ctx.body=ctx.render('main',{isLoged:false, noUser:true});
+        else
+            ctx.body=ctx.render('korzina',{isLoged:false, noUser:true});
 
     }
   };

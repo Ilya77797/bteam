@@ -2,7 +2,7 @@ const mongoose=require('../libs/mongoose');
 var Categor=require('../models/categor');
 exports.get=async function(ctx, next) {
 
-    ctx.body=await Categor.find({});
+    ctx.body=await Categor.find({}).sort('index');
 
    /* var data=ctx.request.body.search.trim();
     if(data==undefined||data[0]==''){

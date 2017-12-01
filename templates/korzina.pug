@@ -41,9 +41,15 @@ html
                         div.loginForm
                             form(action="/login:korz" method="POST" id="loginForm")
                                 h2 Вход
-                                input(name="username" placeholder="Имя пользователья")
-                                input(name="password" placeholder="Пароль")
-                                button(type="submit") Войти
+                                if(noUser)
+                                    h4(style="color:red") Неправильное имя или пароль
+                                    input(name="username" placeholder="Имя пользователья" )
+                                    input(name="password" type="password" placeholder="Пароль" )
+                                    button(type="submit") Войти
+                                else
+                                    input(name="username" placeholder="Имя пользователья")
+                                    input(name="password" type="password" placeholder="Пароль")
+                                    button(type="submit") Войти
             div(style='clear:both')
                 hr.line
             div.topMenu.clearfix(style="display:block")

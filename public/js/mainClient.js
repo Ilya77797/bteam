@@ -364,6 +364,14 @@ function getCats() {
         document.getElementsByClassName('loginForm')[0].addEventListener('click',changeSettings );
         document.getElementsByClassName('loginForm')[0].addEventListener('submit',clearAllCookies );
 
+        //for userImg
+        /*try {
+            document.getElementsByClassName('userImg')[0].addEventListener('click', Show_Hide_Loginform);
+        }
+        catch (err){
+
+        }
+*/
 
 
 
@@ -1328,7 +1336,13 @@ function getPointerFromHistoryCat(name) {
             var form=document.getElementById('Change');
             var selectedPrice=document.getElementById('selectPrice').options[document.getElementById('selectPrice').selectedIndex].value;
             var check1=document.getElementById('check').checked;
-            var check2=document.getElementById('checkDiscount').checked;
+            var check2=false;
+            try {
+                check2=document.getElementById('checkDiscount').checked;
+            }
+            catch (err){
+
+            }
             var req={
                 curPrice:selectedPrice,
                 showSP_Price:!check1,
@@ -1637,6 +1651,17 @@ function getPointerFromHistoryCat(name) {
         setCookie('Price','');
         setCookie('orderId','');
     }
+
+  /*  function Show_Hide_Loginform() {
+        var userImg=document.getElementsByClassName('userImg')[0];
+        var loginForm=document.getElementById('loginForm');
+       // userImg.style.display='none';
+        Array.from(loginForm.children).forEach((child)=>{
+            if(child.nodeName!='IMG')
+                $(child).fadeToggle();
+        });
+
+    }*/
 
 
 
