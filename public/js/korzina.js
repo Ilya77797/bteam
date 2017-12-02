@@ -157,7 +157,7 @@ window.addEventListener('DOMContentLoaded', function() {
                                 price=parseFloat(document.getElementById(`BSP${id}`).textContent);
                             }
                             catch (err){
-
+                                price=parseFloat(document.getElementById(`BO${id}`).textContent);
                             }
 
                         }
@@ -339,6 +339,15 @@ window.addEventListener('DOMContentLoaded', function() {
                     spanPrPrice.appendChild(b1);
                     spanPrPrice.appendChild(small1);
 
+                 /*   if(User.show==false&&User.curPrice!='0'&&User.price.length != 0){
+                        var b2 = document.createElement('b');//5
+                        b2.setAttribute('id',`BSP${item._id}`)
+                        b2.textContent = item[`specialPrice${User.curPrice}`];
+                        b2.style.display='none';
+                        spanPrPrice.appendChild(b2);
+                    }*/
+
+
 
                 }
                 else if(User.show==true) {
@@ -470,6 +479,14 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('PR').addEventListener('click', deleteFromKorzina);
         document.getElementById('PR').addEventListener('change', recalculate);
         document.getElementById('OrderForm').addEventListener('submit', checkout);
+
+        //backToProducts
+        document.getElementsByClassName('backToProduct')[0].addEventListener('click', function (e) {
+            recalculatePriceCookie();
+        });
+
+        document.getElementsByClassName('loginForm')[0].addEventListener('submit',clearAllCookies );
+
     }
     function checkout(e) {
         var form=document.forms.checkout;
@@ -500,14 +517,7 @@ window.addEventListener('DOMContentLoaded', function() {
             e.target.parentNode.parentNode.remove();
             setOrderCookie();
 
-            var span=document.getElementById('ZakazItogForAllPrice');
-            try{
-                var Price=calculateAll();
-            }
-            catch (err){
-                var Price=0;
-            }
-            setCookie('Price',Price);
+            recalculatePriceCookie();
 
             /*let id=e.target.dataset.info;
             var mass=getCookie('itemsID').split(';');
@@ -582,6 +592,7 @@ window.addEventListener('DOMContentLoaded', function() {
             }
 
         });
+        price = Math.round(price * 1000) / 1000;
 
         span.textContent=`Сумма заказа: ${price} руб`;
         return price;
@@ -601,6 +612,7 @@ window.addEventListener('DOMContentLoaded', function() {
         else{
             a.textContent='Назад в корзину';
             setOrderCookie();
+            recalculatePriceCookie();
         }
 
         $(ul).slideToggle(300);
@@ -925,7 +937,12 @@ window.addEventListener('DOMContentLoaded', function() {
             var form=document.getElementById('Change');
             var selectedPrice=document.getElementById('selectPrice').options[document.getElementById('selectPrice').selectedIndex].value;
             var check1=document.getElementById('check').checked;
-            var check2=document.getElementById('checkDiscount').checked;
+            try{
+                var check2=document.getElementById('checkDiscount').checked;
+            }
+            catch (err){
+                var check2=false;
+            }
             var req={
                 curPrice:selectedPrice,
                 showSP_Price:!check1,
@@ -959,6 +976,21 @@ window.addEventListener('DOMContentLoaded', function() {
 
         }
 
+    }
+    function recalculatePriceCookie() {
+        try{
+            var Price=calculateAll();
+        }
+        catch (err){
+            var Price=0;
+        }
+        setCookie('Price',Price);
+
+    }
+
+    function clearAllCookies() {
+        setCookie('Price','');
+        setCookie('orderId','');
     }
 
 

@@ -1,4 +1,6 @@
 window.addEventListener('DOMContentLoaded', function() {
+
+   
     var wasTriggered=false;// Был ли запрос за настройками на сервер
     var startPoint={};
     var userSettings={
@@ -906,8 +908,15 @@ function getPointerFromHistoryCat(name) {
         if(login){
 
             userSettings.show=User.show;
-            userSettings.useDiscount=User.useDiscount;
-            userSettings.discount=User.discount;
+            if(User.discount=='0.0'){
+                userSettings.useDiscount=false;
+
+            }
+            else {
+                userSettings.useDiscount=User.useDiscount;
+                userSettings.discount=User.discount;
+            }
+
 
             var small = document.createElement('small');//5
 
@@ -1319,6 +1328,8 @@ function getPointerFromHistoryCat(name) {
                         $(divChange).slideToggle(300);
                         wasTriggered=true;
 
+
+
                     }
                 }
             }
@@ -1330,6 +1341,7 @@ function getPointerFromHistoryCat(name) {
 
 
             }
+
 
         }
         else if(a.nodeName=='A'&&a.textContent=='Сохранить'){
@@ -1349,6 +1361,9 @@ function getPointerFromHistoryCat(name) {
                 useDiscount:check2
             };
 
+
+
+
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/userSettings', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -1363,6 +1378,14 @@ function getPointerFromHistoryCat(name) {
                     $(loginForm).slideToggle(300);
                     $(divChange).slideToggle(300);
                     a.textContent='Сохранить';
+                    let obj=JSON.parse(xhr.response);
+                    if(obj.goToCart)
+                        location.assign('/corzina');
+                    else if(obj.done){
+                        SearchData(false, true);
+                    }
+
+
 
                 }
 
@@ -1620,7 +1643,7 @@ function getPointerFromHistoryCat(name) {
             document.getElementsByClassName('wrapImg')[0].style.width='';
 
         }
-
+        price=Math.round(price * 1000) / 1000;
         totalPriceCart.textContent=price;
     }
 

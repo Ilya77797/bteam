@@ -1180,6 +1180,7 @@ small.spPrice{
 .wrapImg{
     align-self:center;
     margin-right: 1%;
+    text-decoration: none;
 }
 
 .PriceTotal{
@@ -1228,10 +1229,16 @@ small.spPrice{
 
 #PriceTotalInCart{
     display: none;
-
+    color: black;
+    font-size: 1.1em;
 
 
 }
+#PriceTotalInCart:after{
+    content: 'руб';
+}
+
+
 
 /*LoginForm*/
 .userImg{
