@@ -483,6 +483,7 @@ window.addEventListener('DOMContentLoaded', function() {
         //backToProducts
         document.getElementsByClassName('backToProduct')[0].addEventListener('click', function (e) {
             recalculatePriceCookie();
+            setOrderCookie();
         });
 
         document.getElementsByClassName('loginForm')[0].addEventListener('submit',clearAllCookies );

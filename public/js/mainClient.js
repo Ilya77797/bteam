@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', function() {
 
-   
+
     var wasTriggered=false;// Был ли запрос за настройками на сервер
     var startPoint={};
     var userSettings={
