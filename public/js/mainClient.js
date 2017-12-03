@@ -614,7 +614,7 @@ function getPointerFromHistoryCat(name) {
             renderHistoryCat(histCat);
             document.getElementsByClassName('subcatHistory')[0].style.display='block';//changing flex to block
             hasSubcats=true;
-            if(e.target.nodeName='IMG')
+            if(e.target.nodeName=='IMG')
                 searchDatabyCat(e.target.previousSibling, hasSubcats);
 
 
