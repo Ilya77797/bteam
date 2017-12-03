@@ -490,6 +490,20 @@ window.addEventListener('DOMContentLoaded', function() {
 
     }
     function checkout(e) {
+        e.preventDefault();
+        var cookies=getCookie('orderId');
+        if(cookies==''){
+            clear('PR');
+            var PR=document.getElementById('PR');
+            var li=document.createElement('li');
+            li.textContent='Невозможно сделать заказ, так как Ваша корзина пуста';
+            li.style.textAlign = "center";
+            PR.appendChild(li);
+            $(PR).slideToggle(300);
+            $(document.getElementById('OrderForm')).slideToggle(300);
+
+            return
+        }
         var form=document.forms.checkout;
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/checkout', true);
@@ -506,7 +520,45 @@ window.addEventListener('DOMContentLoaded', function() {
             if (xhr.readyState != 4) return;
 
             if (xhr.status == 200) {
-                renderCat(JSON.parse(xhr.response));
+                //renderCat(JSON.parse(xhr.response));
+                var status=JSON.parse(xhr.response).status;
+                if(status=='send'){
+                    var promise=new Promise(function (res,rej) {
+                        clearAllCookies();
+                        res();
+                    })
+                        .then(()=>{
+                            clear('PR');
+                        })
+                        .then(()=>{
+                        var PR=document.getElementById('PR');
+                            var li=document.createElement('li');
+                            li.textContent='Ваш заказ оформлен, проверьте свою почту';
+                            li.style.textAlign = "center";
+                            PR.appendChild(li);
+                            $(PR).slideToggle(300);
+                            $(document.getElementById('OrderForm')).slideToggle(300);
+                        });
+
+
+
+
+                }
+                else{
+                    var promise=new Promise(function (res,rej) {
+                        res();
+                    })
+                        .then(()=>{
+                            clear('PR');
+                        })
+                        .then(()=>{
+                            var PR=document.getElementById('PR');
+                            var li=document.createElement('li');
+                            li.textContent='Что-то пошло не так, попробуйте еще раз';
+                            li.style.textAlign = "center";
+                            PR.appendChild(li);
+                        });
+                }
             }
 
 

@@ -1025,11 +1025,18 @@ small.spPrice{
 
 
 
+
+
 }
 
 @media only screen and (min-width: 600px) and (max-width: 800px) {
     .product-wrapper {
         width: 33.333%;
+
+    }
+
+    .ZakazAmount input{
+        width: 40%;
 
     }
    /* .corzina{
@@ -1221,6 +1228,7 @@ small.spPrice{
 
 .ZakazAmount{
     display:inline;
+
 }
 
 .twoPrices span{

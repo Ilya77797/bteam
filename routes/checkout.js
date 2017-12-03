@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+var getUser=require('../libs/getUser');
 const config1 = require('../config/default');
 var Data=require('../models/data');
 exports.post=async function(ctx, next) {
@@ -23,26 +24,27 @@ exports.post=async function(ctx, next) {
         to: `${config1.emailTo},${data.email}`, // list of receivers
         subject: 'Заказ на сайте bteam', // Subject line
         text: 'Заказ на сайте bteam', // plain text body
-        html: getMessage(data) // html body
+        html: await getMessage(data, ctx) // html body
     };
 
-    smtpTransport.sendMail(mailOptions, (error, info) => {
+    smtpTransport.sendMail(mailOptions, (error, info, ctx) => {
         if (error) {
             // return console.log(error);
+            ctx.body={status:'error'};
             return console.log('Error');
         } else {
             console.log('Message sent: %s', info.messageId);
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+            ctx.body.status=200;
         }
     });
-
+ctx.body={status:'send'};
 }
 
 
-function getMessage(data) {
+async function getMessage(data,ctx) {
 
     return `
-        <p>Заказ на сайте bteam.ru</p>
     <h3>Детали заказа</h3>
     <ul>
     <li>Имя: ${data.name}</li>
@@ -51,18 +53,15 @@ function getMessage(data) {
     </ul>
     <h3>Сообщение</h3>
     <p>${data.comment}</p>
-    <h3>Headers</h3>
+    <h3>Заказ</h3>
     <ul>
-    <li>cookie: ${req.headers.cookie}</li>
-    <li>user-agent: ${req.headers["user-agent"]}</li>
-    <li>referer: ${req.headers["referer"]}</li>
-    <li>IP: ${req.ip}</li>
+        ${await getOrder(data.order,ctx)}
     </ul>
     
     `
 }
 
-async function getOrder(order) {//Проверка на правильность кук
+async function getOrder(order, ctx) {//Проверка на правильность кук
     var obj={};
     var zakaz=order.split(';');
     zakaz.forEach((item)=>{
@@ -74,9 +73,31 @@ async function getOrder(order) {//Проверка на правильность
     });
     var products= await searchData(search);
     var htmlContent='';
+    try {
+        var User= await getUser(ctx);
+    }
+    catch (err){
+        var User=null;
+    }
+    var price=0;
     products.forEach((item)=>{
-        htmlContent+=`<li> Название: ${item.name} <br> Колличество: ${obj[item._id]} <br> Цена: </li>>`
+        var curPrice=getPrice(item, User);
+        price+=curPrice*obj[item._id];
+        htmlContent+=`<li> Название: ${item.name} <br> Колличество: ${obj[item._id]} <br> Цена:${curPrice} </li>`
     });
+
+    var discount=0;
+
+    if(User!=null&&User.useDiscount){
+        htmlContent+=`<h3>Ваша скидка: ${User.discount} % </h3>`
+        discount=User.discount;
+    }
+
+    htmlContent+=`<p>Итого: ${price-price*discount/100} руб</p>`
+
+    return htmlContent;
+
+
 }
 
 async  function searchData(mass) {
@@ -91,6 +112,13 @@ async  function searchData(mass) {
     });
     var products= await Data.find({_id:{ $in : nmass }});
     return products
+}
+
+function getPrice(item, User){
+    if(User==null||User.curPrice=='0')
+        return item.price
+
+    return item[`specialPrice${User.curPrice}`]
 }
 
 
