@@ -641,7 +641,7 @@ function getPointerFromHistoryCat(name) {
         }
 
         if(e.target.nodeName!='A')
-            return
+            return;
 
 
 
