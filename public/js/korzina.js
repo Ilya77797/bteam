@@ -111,6 +111,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
                 products.forEach((item)=>{
                     var li=createElements(item, login, User);
+                    res[item._id]=`${parseFloat(res[item._id])} ${item.measure}`;
                     ul.appendChild(li);
                 });
                 document.getElementsByClassName('topMenu')[0].appendChild(div);
@@ -163,7 +164,8 @@ window.addEventListener('DOMContentLoaded', function() {
                         }
 
                         item.value=res[id];
-                        document.getElementById(`PriceTotal${id}`).textContent=` ${Math.round((res[id]*price-res[id]*price*discount/100)*1000)/1000} `;
+                        var amount=parseFloat(res[id]);
+                        document.getElementById(`PriceTotal${id}`).textContent=` ${Math.round((amount*price-amount*price*discount/100)*1000)/1000} `;
                     });
 
                     calculateAll();
@@ -292,7 +294,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
         else {
             imgIcon.setAttribute('src','images/inOrder.png');//Акция
-            spanIcon.textContent='В наличие';
+            spanIcon.textContent='В наличии';
         }
         /* switch(item.status){
          case 'Акция!': imgIcon.setAttribute('src','images/onSale.png');
@@ -701,7 +703,7 @@ window.addEventListener('DOMContentLoaded', function() {
             return item.id.includes('inputZ')
         });
         inputs.forEach((item, i)=>{
-            if(item.value==''||checkInput(item,{minOrder:1})==null||item.value=='0'){
+            if(item.value==''||checkInput(item,{minOrder:1})==null||parseFloat(item.value)=='0'){
                 flag=false;
                 item.classList.add('inputErr');
                 item.value='Заполните это поле!';
@@ -791,7 +793,7 @@ window.addEventListener('DOMContentLoaded', function() {
             return;
         }
         else
-            e.target.value=value;
+            e.target.value=`${value} ${this.measure}`;
 
 
         var totalPrice=document.getElementById(`PriceTotal${this._id}`);
@@ -818,7 +820,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
 
-        input.value=value+parseInt(this.minOrder);
+        input.value=`${value+parseInt(this.minOrder)} ${this.measure}`;
         var event = new Event('ch');
 
         input.dispatchEvent(event);
@@ -832,7 +834,7 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         let input=document.getElementById(`inputZ${this._id}`);
         if(input.value==''){
-            input.value=this.minOrder;
+            input.value=`${this.minOrder} ${this.measure}`;
 
         }
 
@@ -845,7 +847,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
         if(value>this.minOrder&&value-this.minOrder>0){
-            input.value=value-this.minOrder;
+            input.value=`${value-this.minOrder} ${this.measure}`;
             var event = new Event('ch');
             input.dispatchEvent(event);
         }
@@ -853,7 +855,7 @@ window.addEventListener('DOMContentLoaded', function() {
         else{
             var totalPrice=document.getElementById(`PriceTotal${this._id}`);
             totalPrice.textContent='0';
-            input.value='0';
+            input.value=`0 ${this.measure}`;
             alert(`Минимальный заказ для этого товара: ${this.minOrder}`);
             calculateAll();
         }

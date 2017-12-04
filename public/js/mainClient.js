@@ -880,7 +880,7 @@ function getPointerFromHistoryCat(name) {
 
            }
            else{
-               spanIcon.textContent='Нет в наличие';
+               spanIcon.textContent='Нет в наличии';
                imgIcon.setAttribute('src','images/no.jpg');
            }
 
@@ -1410,7 +1410,7 @@ function getPointerFromHistoryCat(name) {
             return;
         }
         else
-            e.target.value=value;
+            e.target.value=`${value} ${this.measure}`;
 
 
     }
@@ -1419,7 +1419,7 @@ function getPointerFromHistoryCat(name) {
         e.preventDefault();
         let input=document.getElementById(`inputZ${this._id}`);
         if(input.value==''){
-            input.value=this.minOrder;
+            input.value=this.minOrder*2;
             var event = new Event('ch');
             input.dispatchEvent(event);
             return
@@ -1432,7 +1432,7 @@ function getPointerFromHistoryCat(name) {
 
 
 
-        input.value=value+parseInt(this.minOrder);
+        input.value=`${value+parseInt(this.minOrder)} ${this.measure}`;
         var event = new Event('ch');
 
         input.dispatchEvent(event);
@@ -1446,7 +1446,7 @@ function getPointerFromHistoryCat(name) {
         e.preventDefault();
         let input=document.getElementById(`inputZ${this._id}`);
         if(input.value==''){
-            input.value=this.minOrder;
+            input.value=this.minOrder*2;
 
         }
 
@@ -1459,13 +1459,13 @@ function getPointerFromHistoryCat(name) {
 
 
         if(value>this.minOrder&&value-this.minOrder>0){
-            input.value=value-this.minOrder;
+            input.value=`${value-this.minOrder} ${this.measure}`;
             var event = new Event('ch');
             input.dispatchEvent(event);
         }
 
         else{
-            input.value='0';
+            input.value=`0 ${this.measure}`;
             alert(`Минимальный заказ для этого товара: ${this.minOrder}`);
 
         }

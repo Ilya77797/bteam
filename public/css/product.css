@@ -725,6 +725,8 @@ small.spPrice{
 .dataS input{
     width: 70%;
     /*float: right;*/
+    margin-top: 5px;
+    margin-bottom: 5px;
     font-size: 1.2em;
     border-radius: 5px;
     text-align: center;
@@ -1089,6 +1091,11 @@ small.spPrice{
         /*text-align: center;*/
 
     }
+
+    .ZakazAmount input{
+        width: 40%;
+
+    }
 }
 @media only screen and (max-width: 650px){
     #logo{
@@ -1243,8 +1250,9 @@ small.spPrice{
 
 }
 #PriceTotalInCart:after{
-    content: 'руб';
+    content: ' руб';
 }
+
 
 
 

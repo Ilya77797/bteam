@@ -45,21 +45,36 @@ ctx.body={status:'send'};
 async function getMessage(data,ctx) {
 
     return `
-    <h3>Детали заказа</h3>
+    <h4>Информация о заказчике</h4>
     <ul>
     <li>Имя: ${data.name}</li>
     <li>Email: ${data.email}</li>
     <li>Телефон: ${data.phone}</li>
+    <li>Сообщение: ${data.comment}</li>
     </ul>
-    <h3>Сообщение</h3>
-    <p>${data.comment}</p>
-    <h3>Заказ</h3>
+    <h4>Информация о заказе:</h4>
     <ul>
-        ${await getOrder(data.order,ctx)}
+    <li>Дата: ${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')}</li>
     </ul>
+    <table border="1"  >
+        <tr >
+            <td><b>ID</b></td>
+            <td><b>Наименование</b></td>
+            <td><b>Кол-во</b></td>
+            <td><b>Цена</b></td>
+        </tr>
+    ${await getOrder(data.order,ctx)}
+    
+   
     
     `
 }
+
+/*<ul>
+${await getOrder(data.order,ctx)}
+</ul>*/
+
+/*htmlContent+=`<li> Название: ${item.name} <br> Количество: ${obj[item._id]} <br> Цена:${curPrice} </li>`*/
 
 async function getOrder(order, ctx) {//Проверка на правильность кук
     var obj={};
@@ -82,14 +97,15 @@ async function getOrder(order, ctx) {//Проверка на правильно�
     var price=0;
     products.forEach((item)=>{
         var curPrice=getPrice(item, User);
-        price+=curPrice*obj[item._id];
-        htmlContent+=`<li> Название: ${item.name} <br> Колличество: ${obj[item._id]} <br> Цена:${curPrice} </li>`
+        price+=curPrice*parseFloat(obj[item._id]);
+        htmlContent+=`<tr> <td> ${item._id} </td> <td> ${getShortName(item.name)} </td> <td> ${obj[item._id]} </td> <td> ${curPrice} руб </td> </tr>`
     });
 
     var discount=0;
+    htmlContent+='</table>';
 
     if(User!=null&&User.useDiscount){
-        htmlContent+=`<h3>Ваша скидка: ${User.discount} % </h3>`
+        htmlContent+=`<h4>Ваша скидка: ${User.discount} % </h4>`
         discount=User.discount;
     }
 
@@ -120,6 +136,13 @@ function getPrice(item, User){
 
     return item[`specialPrice${User.curPrice}`]
 }
+
+
+function getShortName(str) {
+    return str.substring(6);
+}
+
+
 
 
 
