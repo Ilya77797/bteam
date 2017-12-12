@@ -1,7 +1,11 @@
 const nodemailer = require('nodemailer');
+var fs = require('fs');
+var p=createPath(__dirname)+'logs/logs.json';
 var getUser=require('../libs/getUser');
 const config1 = require('../config/default');
 var Data=require('../models/data');
+var orderId=require('../logs/logs.json').orderId;
+var strZakaz='';
 exports.post=async function(ctx, next) {
     var data=ctx.request.body;
     let smtpTransport;
@@ -36,9 +40,14 @@ exports.post=async function(ctx, next) {
             console.log('Message sent: %s', info.messageId);
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
             ctx.body.status=200;
+
         }
     });
+
+
+//fs.writeFile(p, JSON.stringify({orderId:parseInt(orderId)+1}), 'utf8');
 ctx.body={status:'send'};
+
 }
 
 
@@ -54,9 +63,10 @@ async function getMessage(data,ctx) {
     </ul>
     <h4>Информация о заказе:</h4>
     <ul>
-    <li>Дата: ${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')}</li>
+    <li>Дата: ${new Date(Date.now()).toISOString().replace(/T/, ' ').replace(/\..+/, '')}</li>
+    
     </ul>
-    <table border="1"  >
+    <table border="1" cellpadding="0" cellspacing="0" >
         <tr >
             <td><b>ID</b></td>
             <td><b>Наименование</b></td>
@@ -64,6 +74,8 @@ async function getMessage(data,ctx) {
             <td><b>Цена</b></td>
         </tr>
     ${await getOrder(data.order,ctx)}
+    <p><i>Письмо создано автоматически. Пожалуйста, не отвечайте на него! Если у Вас возникли любые вопросы - Вы можете перезвонить по тел. 24-07-05, 24-07-08 в рабочее время или отправить письмо на адрес...</i></p>
+    <p>${strZakaz}</p>
     
    
     
@@ -77,6 +89,9 @@ ${await getOrder(data.order,ctx)}
 /*htmlContent+=`<li> Название: ${item.name} <br> Количество: ${obj[item._id]} <br> Цена:${curPrice} </li>`*/
 
 async function getOrder(order, ctx) {//Проверка на правильность кук
+    //id;наименование;количество;цена;|
+    var strReader=``;
+
     var obj={};
     var zakaz=order.split(';');
     zakaz.forEach((item)=>{
@@ -98,7 +113,8 @@ async function getOrder(order, ctx) {//Проверка на правильно�
     products.forEach((item)=>{
         var curPrice=getPrice(item, User);
         price+=curPrice*parseFloat(obj[item._id]);
-        htmlContent+=`<tr> <td> ${item._id} </td> <td> ${getShortName(item.name)} </td> <td> ${obj[item._id]} </td> <td> ${curPrice} руб </td> </tr>`
+        htmlContent+=`<tr> <td> ${item._id} </td> <td> ${getShortName(item.name)} </td> <td> ${obj[item._id]} </td> <td> ${curPrice} руб </td> </tr>`;
+        strReader+=`|${item._id};${getShortName(item.name)};${obj[item._id]};${curPrice}`
     });
 
     var discount=0;
@@ -109,8 +125,10 @@ async function getOrder(order, ctx) {//Проверка на правильно�
         discount=User.discount;
     }
 
-    htmlContent+=`<p>Итого: ${price-price*discount/100} руб</p>`
+    htmlContent+=`<p>Итого: ${price-price*discount/100} руб</p>`;
 
+
+    strZakaz=strReader.substring(1);
     return htmlContent;
 
 
@@ -141,6 +159,22 @@ function getPrice(item, User){
 function getShortName(str) {
     return str.substring(6);
 }
+
+function done(err) {
+    if (err){
+        console.log(err);
+    } else {
+        console.log(`orderId changed to ${orderId} from ${orderId-1} `);
+    }
+
+}
+
+function createPath(path){
+    return path.substring(0,path.indexOf('routes'));
+
+}
+
+
 
 
 

@@ -174,21 +174,50 @@
 
 }
 
+#HISTORY{
+    min-width: 20%;
+    max-width: 20%;
+}
 
+#categor #SUBH{
+    display: none;
+    margin-top: 2px;
+    background-color: white;
+    line-height: 1.2em;
+    font-size: 1.1em;
+    opacity: 0.7;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+/*#HISTORY:hover #SUBH{
+    display: block;
+}
+#HISTORY:not(:hover) #SUBH{
+    display: none;
+}*/
+
+.subcatHistory{
+    /*display: block*/
+    align-self: center;
+    min-width: 20%;
+    max-width: 20%;
+    max-height: 1.3em;
+    overflow: hidden;
+}
 .subcatHistory a{/*class for subcatHistory*/
     text-decoration: underline !important;
     color: blue !important;
     font-size: 1.1em !important;
 }
 .subcatHistory a:after{
-    content: '/';
+    /*content: '/';*/
 }
 .subcatHistory a:hover{
-    color: green!important;
+   /* color: green!important;*/
 }
 .subcatHistory:hover{
-    background-color: white !important;
-    opacity: 0.7 !important;
+    /*background-color: white !important;
+    opacity: 0.7 !important;*/
 }
 
 .curSubcat{
@@ -1086,7 +1115,7 @@ small.spPrice{
     }
     .dataS{
 
-        margin-left: 20%;
+        /*margin-left: 20%;*/
 
         /*text-align: center;*/
 

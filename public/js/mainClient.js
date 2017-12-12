@@ -1,6 +1,14 @@
 window.addEventListener('DOMContentLoaded', function() {
+//3) некорректно работат при переходе в корзину без выбранной категории
+    //4) ошибка когда нет страниц
+    //5) Если пустая категория-в этой категории пока ничего нет
+    //6) Если сначала выбрать категорию, перейти в корзину, вернуться, выбрать категорию, снова перейти --- ошибка
+    //7) Дублирование a в History!!!!
+    //8) Если не возвращатьв корень каталога после перехода в корзину-ошибка
+    //--9) Переход в корзину без выбора категории, возврат обратно-ошибка
+    //--10) curSubcat
 
-
+    var Remove=true;
     var wasTriggered=false;// Был ли запрос за настройками на сервер
     var startPoint={};
     var userSettings={
@@ -17,22 +25,42 @@ window.addEventListener('DOMContentLoaded', function() {
 
     var activeCatPointer=null; //Указатель на текущую категорию
     var currentCat=null;
+    var isMobileVersion=false;
+    chechForMobile();
     addEvents();
-    SearchData(false,true);
-    getCats();
+    addSubhistory();
+    if(!getStateCookie()){
+        getCats();
+        SearchData(false,true);
+    }
+    else {
+       getCats(true);
+    }
+
     setShowingTotalPrice();
    /* var catForm=document.getElementById('catSearch');
     var e=new Event('submit');
     catForm.dispatchEvent(e);*/
 
     function clear(id) {
+        var hasSubh=false;
+        var subhPointer=null;
         var element = document.getElementById(id);
         while (element.firstChild) {
+            if(element.firstChild.classList.contains('subcatHistory')){
+                hasSubh=true;
+                subhPointer=element.firstChild;
+            }
+
             element.removeChild(element.firstChild);
         }
+        if(hasSubh){
+            element.appendChild(subhPointer);
+        }
+
     }
 
-     function renderCat(mass) {
+     function renderCat(mass, needSinh) {
         var isAnActiveCat=false;
         var promise=new Promise((resolve, reject)=>{
             resolve();
@@ -62,7 +90,8 @@ window.addEventListener('DOMContentLoaded', function() {
                         div.insertBefore(div_2, div.firstElementChild);
                     }
                 }
-
+            if(needSinh)
+                SearchData(false,true);
             });
 
 
@@ -82,19 +111,77 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     function renderHistoryCat(prevCat) {
+       // var topMenu=document.getElementsByClassName('topMenu')[0];
+
+        //var HISTORY=document.getElementById('HISTORY');
+
+
+
+      /*  if(historyCat.div==null){
+
+
+            var div_2=document.createElement('div');
+            div_2.classList.add('subcatHistory');
+            div_2.setAttribute('id','SUBH');
+            topMenu.insertBefore(div_2, topMenu.firstChild);
+
+             var a=document.createElement('a');
+             a.setAttribute('data-info', 'allProducts');
+             a.setAttribute('href','#');
+             a.textContent='Назад';
+
+             div_2.appendChild(a)
+
+            historyCat.div=div_2.cloneNode(true);
+            let pointer={
+                name:'allProducts',
+                div:null
+            }
+            historyCat.pointers.push(pointer);
+
+        }
+        else {
+
+
+            var a=document.createElement('a');
+            a.setAttribute('data-info', 'allProducts');
+            a.setAttribute('href','#');
+            a.textContent='Назад';
+            let pointer={
+                name:prevCat.firstChild.dataset.info,
+                div:prevCat
+            }
+            historyCat.pointers.pop();
+            var div_2=document.getElementById('SUBH');
+            div_2.remove(div_2.firstChild);
+            historyCat.pointers.push(pointer);
+            div_2.appendChild(a);
+
+        }*/
+
+
         var div=document.getElementById('categor');
         var a=document.createElement('a');
         a.setAttribute('data-info', prevCat.firstChild.dataset.info);
         a.setAttribute('href','#');
-        a.textContent = prevCat.firstChild.textContent;
+        //a.textContent = prevCat.firstChild.textContent;
+        a.textContent='Назад';
         if(historyCat.div==null){
-            var div_2=document.createElement('div');
-            div_2.classList.add('categor-item');
-            div_2.classList.add('subcatHistory')
+                    Remove=false;
+                /*var div_2=document.getElementById('SUBH');*/
+                document.getElementById('SUBH').remove();
+                var div_2=document.createElement('div');
+                div_2.classList.add('subcatHistory');
+                div_2.setAttribute('id','SUBH');
+
+
+
+
             var aAllPr = document.createElement('a');
             aAllPr.setAttribute('data-info', 'allProducts');
             aAllPr.setAttribute('href','#');
             aAllPr.textContent = 'Все товары ';
+
             div_2.appendChild(aAllPr);
             div_2.appendChild(a);
             historyCat.div=div_2.cloneNode(true);
@@ -105,14 +192,37 @@ window.addEventListener('DOMContentLoaded', function() {
             historyCat.pointers.push(pointer);
         }
         else{
+
+            historyCat.div.remove( historyCat.div.firstChild);
             historyCat.div.appendChild(a);
+
+            /*if(historyCat.pointers.length!=1)
+                document.getElementById('SUBH').appendChild(a);*/
+
+
         }
-        div.insertBefore(historyCat.div, div.firstChild);
+
+        //div.insertBefore(historyCat.div, div.firstChild);
+        if(isMobileVersion){
+            var categor= document.getElementById('categor');
+            categor.insertBefore(historyCat.div, categor.firstChild)
+
+        }
+        else {
+            var topMenu=document.getElementsByClassName('topMenu')[0];
+            topMenu.insertBefore(historyCat.div, topMenu.firstChild);
+        }
+
+
+        //HISTORY.appendChild(historyCat.div);
+
         let pointer={
             name:prevCat.firstChild.dataset.info,
             div:prevCat
         }
         historyCat.pointers.push(pointer);
+        if(historyCat.pointers.length>1)
+            rerenderCurentHistoryCat();
 
     }
 
@@ -153,7 +263,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-     function renderData(mass,f, hasSubcats) {
+     function renderData(mass,f, hasSubcats,  statePage) {
 
         var ul=document.getElementById('PR');
         ul.classList.remove('awaitSearch');
@@ -232,14 +342,19 @@ window.addEventListener('DOMContentLoaded', function() {
 
                 if(!f){//Запрос не по номеру страницы
                     if(pages>1){
-                        $('#light-pagination').pagination({
-                            displayedPages: 3,
-                            edges:1,
-                            items: pages,
-                            cssStyle: 'light-theme',
-                            prevText: 'Пред',
-                            nextText: 'След',
-                        });
+                   try{
+                       $('#light-pagination').pagination({
+                           displayedPages: 3,
+                           edges:1,
+                           items: pages,
+                           cssStyle: 'light-theme',
+                           prevText: 'Пред',
+                           nextText: 'След',
+                       });
+                   }
+                   catch (err){
+
+                   }
                     }
                     else{
                         try{
@@ -251,6 +366,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
                     }
                 }
+
 
             });
 
@@ -280,20 +396,34 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }*/
 
-function getCats() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/searchCat', true);
-    xhr.send('');
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState != 4) return;
+function getCats(needSinh) {
 
-        if (xhr.status == 200) {
-            renderCat(JSON.parse(xhr.response));
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/searchCat', true);
+        xhr.send('');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState != 4) return;
+
+            if (xhr.status == 200) {
+                if(needSinh){
+
+                    renderCat(JSON.parse(xhr.response), needSinh)
+
+                }
+                else
+                    renderCat(JSON.parse(xhr.response))
+
+            }
         }
-    }
+
+
 }
 
     function SearchData(f,isMain, hasSubcats) {
+
+        var statePge=-1;
+
+
         var ul=document.getElementById('PR');
         ul.classList.add('awaitSearch');
         var li=document.createElement('li');
@@ -301,19 +431,23 @@ function getCats() {
         li.style.textAlign = "center";
         ul.appendChild(li);
 
-        var textS=document.getElementById('dataSearch').searchD.value;
-        var PageS;
-        var categor;
-        if(currentCat==null)
-            categor=null;
-        else
-            categor=currentCat.getAttribute('data-info');
-        if(document.getElementById('light-pagination').firstChild!=undefined)
-            PageS=$('#light-pagination').pagination('getCurrentPage');
-        else
-            PageS=1;
-        if(f==undefined)
-            f=false;
+        var stateObj=getStateCookie();
+        if(!stateObj)
+        {
+
+            var textS=document.getElementById('dataSearch').searchD.value;
+            var PageS;
+            var categor;
+            if(currentCat==null)
+                categor=null;
+            else
+                categor=currentCat.getAttribute('data-info');
+            if(document.getElementById('light-pagination').firstChild!=undefined)
+                PageS=$('#light-pagination').pagination('getCurrentPage');
+            else
+                PageS=1;
+            if(f==undefined)
+                f=false;
             var sort=document.getElementById('chooseSort').options[document.getElementById('chooseSort').selectedIndex].value;
             var req={
                 text:textS,
@@ -323,6 +457,38 @@ function getCats() {
                 isPageS:f,
                 sort:sort
             };
+        }
+        else {
+            f=true;
+            if(stateObj['page']>1)
+                f=false
+
+            if(stateObj['searchText']=='')
+                isMain=false;
+
+            var req={
+                text:stateObj['searchText'],
+                page:stateObj['page'],
+                cat:stateObj['categor'],
+                flag:isMain,
+                isPageS:f,
+                sort:stateObj['sort']
+            };
+            setCookie('state','');
+
+            document.getElementById('chooseSort').options[parseInt(stateObj['sort'])+1].selected=true;
+
+            if(isMain)
+                document.getElementById('dataSearch').searchD.value=stateObj['searchText'];
+
+            /*if(f)
+                statePge=stateObj['page'];*/
+
+
+
+
+        }
+
 
 
 
@@ -334,7 +500,59 @@ function getCats() {
             if (xhr.readyState != 4) return;
 
             if (xhr.status == 200) {
-                renderData(JSON.parse(xhr.response),f, hasSubcats);
+                var promise=new  Promise((res,rej)=>{
+                    res();
+                })
+                    .then(renderData(JSON.parse(xhr.response),f, hasSubcats))
+                    .then(()=>{
+                    if(!f&&stateObj!=false)
+                        try {
+                            $('#light-pagination').pagination('selectPage',stateObj['page'] );
+                        }
+                        catch (err){
+
+                        }
+
+                    })
+                    .then(()=>{
+                    if(stateObj==false)
+                        return
+
+                    var targetCat=stateObj['categor'];
+                    if(targetCat=='')
+                        return
+
+                    //historyCat=stateObj['historyCat'];
+
+
+                        /*var pointer=getPointerFromHistoryCat(targetCat);
+                        if(pointer=={}) return;
+                        changeCurentCat(pointer);
+                        return
+                    */
+
+
+
+
+
+                    var categors=document.getElementById('categor');
+                    Array.from(categors.getElementsByClassName('categor-item')).forEach((categor)=>{
+                        var a=categor.getElementsByTagName('A');
+                        Array.from(a).forEach((href)=>{
+                            if(href.textContent==targetCat){
+                                switchCurentCat(href.parentNode)
+                                return
+                            }
+                        });
+
+                    })
+
+                    })
+                    .then(()=>{
+                    if(stateObj!=false)
+                        getHistorySetHistory(stateObj['history'])
+                    })
+
             }
 
 
@@ -603,7 +821,11 @@ function getPointerFromHistoryCat(name) {
         //working with subcats
         e.stopPropagation();
         var hasSubcats=false;
+
         if(e.target.nodeName=="IMG"||e.target.nodeName=="A"&& e.target.parentNode.getElementsByTagName('IMG').length>0){//Свернуть/развернуть категории
+         /*   if(Remove==true)
+                document.getElementById('SUBH').remove();*/
+
 
             let parent=e.target.parentNode;
             var histCat=parent;
@@ -612,16 +834,19 @@ function getPointerFromHistoryCat(name) {
             if(histCat.id!='categor')
                 curentSubcat(parent);//Добавть класс для текущей категории
             renderHistoryCat(histCat);
-            document.getElementsByClassName('subcatHistory')[0].style.display='block';//changing flex to block
+            //document.getElementsByClassName('subcatHistory')[0].style.display='block';//changing flex to block
             hasSubcats=true;
             if(e.target.nodeName=='IMG')
                 searchDatabyCat(e.target.previousSibling, hasSubcats);
 
-
-
+            var subh=document.getElementById('SUBH');
+            if(subh.parentNode.id=='categor')//Для того, чтобы сделать видимым SUBH в мобильной версии
+                subh.style.display='block'
         }
         var IMG=e.target.getElementsByTagName('IMG');
         if(e.target.classList.contains('categor-item')&&!e.target.classList.contains('subcatHistory')){
+           /* if(Remove==true)
+                document.getElementById('SUBH').remove();*/
 
             if(IMG.length>0){
                 changeDisplay('none', e.target.parentNode, 100);//Скрыть все категории
@@ -636,8 +861,9 @@ function getPointerFromHistoryCat(name) {
             searchDatabyCat(a, hasSubcats);
 
 
-
-
+            var subh=document.getElementById('SUBH');
+            if(subh.parentNode.id=='categor')
+                subh.style.display='block'
         }
 
         if(e.target.nodeName!='A')
@@ -650,6 +876,10 @@ function getPointerFromHistoryCat(name) {
             if(newVisibleCat=={}) return;
             changeCurentCat(newVisibleCat);//Изменить текущую категорию и отрисовать это
             hasSubcats=true;
+            var subh=document.getElementById('SUBH');
+            if(e.target.dataset.info=='allProducts'&&subh.parentNode.id=='categor'){ //Для того, чтобы сделать невидимым SUBH в мобильной версии
+                subh.style.display='none';
+            }
         }
 
         searchDatabyCat(e.target, hasSubcats);
@@ -666,11 +896,13 @@ function getPointerFromHistoryCat(name) {
                 ch[1].classList.remove('curSubcatImg');
             }
             historyCat.pointers.pop();
+
             count++;
         }
         while (count>0){//Удалить лишние ссылки из объекта historyCat
             historyCat.div.lastChild.remove();
             count--;
+            rerenderCurentHistoryCat();
         }
         if(historyCat.div.lastChild==null)
             historyCat.div=null;
@@ -695,7 +927,10 @@ function getPointerFromHistoryCat(name) {
        changeActiveCat(target.parentNode);
        SearchData(false,true, hasSubcats);
        var isMobile=getComputedStyle(document.getElementsByClassName('mobile')[0]);
-       if(isMobile.display!='none'&&!target.parentNode.classList.contains('subcatHistory')){
+       var p_target=target;//Для того, чтобы скрывать категории в мобильной версии лишь тогда, когда нет подкатегорий
+       if(target.nodeName=='A'||target.nodeName=='IMG')
+           p_target=target.parentNode;
+       if(isMobile.display!='none'&&!target.parentNode.classList.contains('subcatHistory')&&p_target.children.length<2){
            var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
            var ul=document.getElementById('PR');
            var pg=document.getElementById('light-pagination');
@@ -1097,7 +1332,7 @@ function getPointerFromHistoryCat(name) {
         else if(e.target.classList.contains('button')&&e.target.classList.contains('to-cart')){//Добавление товара в корзину
             var amount=document.getElementById(`inputZ${e.target.dataset.info}`).value;
             if(amount=='')
-                amount=0;
+                amount=document.getElementById(`inputZ${e.target.dataset.info}`).placeholder;
             var cookies=getCookie('orderId');
             try{
                 amount=parseInt(amount);
@@ -1167,7 +1402,12 @@ function getPointerFromHistoryCat(name) {
 
     }
 
-    function topMenuFetch(e) {
+    function topMenuFetch(e) {//working with subcats
+        if(e.target.classList.contains('subcatHistory')||e.target.parentNode.classList.contains('subcatHistory')){
+            onclick(e);
+            return
+
+        }
 
         e.preventDefault();
         var reg=new RegExp('main');
@@ -1197,6 +1437,11 @@ function getPointerFromHistoryCat(name) {
 
         }
         else{//Переход в корзину
+            if(!e.target.classList.contains('wrapImg')&&!e.target.parentNode.classList.contains('wrapImg'))
+                return
+
+            setStateCookie();
+
             if(e.target.classList.contains('wrapImg'))
                 window.location=e.target.href;
             else if(e.target.parentNode.classList.contains('wrapImg'))
@@ -1504,7 +1749,7 @@ function getPointerFromHistoryCat(name) {
 
     }
 
-    function deleteFromKorzina(delHref){ /////!!!!!!!!
+    function deleteFromKorzina(delHref){
         var id=delHref.dataset.info;
         var cookie=getCookie('orderId').split(';');
         var index=cookie.forEach((str,i)=>{
@@ -1673,6 +1918,337 @@ function getPointerFromHistoryCat(name) {
     function clearAllCookies() {
         setCookie('Price','');
         setCookie('orderId','');
+    }
+
+    function setStateCookie() {
+        var PageS;
+        var categor;
+        if(currentCat==null)
+            categor=null;
+        else
+            categor=currentCat.getAttribute('data-info');
+        if(document.getElementById('light-pagination').firstChild!=undefined)
+            PageS=$('#light-pagination').pagination('getCurrentPage');
+        else
+            PageS=1;
+        var hSubc=false;
+        var cat=document.getElementsByClassName('categor-item categor-item-active')[0];
+        if(currentCat!=null&&cat!=undefined&&cat.children.length>1)
+            hSubc=true;
+        var StateCookie={
+            sort:document.getElementById('chooseSort').options[document.getElementById('chooseSort').selectedIndex].value,
+            searchText:document.getElementById('dataSearch').searchD.value,
+            page:PageS,
+            categor:categor,
+            hasSubcats:hSubc,
+            history:setHistory()
+        }
+
+
+
+      var cookie=serialize(StateCookie);
+      setCookie('state', cookie);
+    }
+
+
+    function serialize(obj) {
+        var str='';
+        for(var key in obj){
+            str+=';'+obj[key]
+        }
+        return str.substring(1)
+
+    }
+
+    function deserialize(str) {
+        var obj={};
+        str.split(';').forEach((item, i)=>{
+            switch(i){
+                case 0:
+                    obj.sort=item;
+                    break;
+                case 1:
+                    obj.searchText=item;
+                    break;
+                case 2:
+                    obj.page=item;
+                    break;
+                case 3:
+                    obj.categor=item;
+                    break;
+                case 4:
+                    obj.hasSubcats=item;
+                    break
+                case 5:
+                    obj.history=item
+                    break
+            }
+        });
+
+        return obj
+    }
+
+    function getStateCookie() {
+        var cookie=getCookie('state')
+        if(cookie==undefined||cookie=='')
+            return false
+        var obj=deserialize(cookie);
+        if(isEmpty(obj))
+            return false
+        return obj
+    }
+
+    function isEmpty(obj) {
+        var count=0;
+        var length=0;
+        for(var key in obj){
+            if(obj[key]=='0')
+                count++
+            length++;
+        }
+
+        if(count==length)
+            return true
+
+        return false
+    }
+
+    function switchCurentCat(cat) {
+
+
+        var children=Array.from(cat.children);
+        cat.classList.add('categor-item-active');
+        if(children.length>2){
+            cat.style.display='block';
+            cat.classList.add('curSubcat');
+
+
+            Array.from(cat.children).forEach((ch)=>{
+                if(ch.nodeName=='A')
+                    ch.classList.add('curSubcatA');
+                if(ch.nodeName=='IMG')
+                    ch.classList.add('curSubcatImg');
+            });
+            children.forEach((ch)=>{
+                if(ch.nodeName!='A'&&ch.nodeName!='IMG')
+                    ch.style.display='flex';
+            });
+
+            var newName='';
+            Array.from(cat.children).forEach((ch)=>{
+                if(ch.nodeName=='A'){
+                    newName=ch.textContent;
+                    return
+                }
+            });
+            changeInLoop(cat.parentNode, newName)
+        }
+        else{
+            Array.from(cat.parentNode.children).forEach((ch)=>{
+                if(ch.nodeName!='A'&&ch.nodeName!='IMG')
+                    ch.style.display='flex';
+            });
+            cat.parentNode.classList.add('curSubcat')
+            cat.parentNode.style.display='block';
+
+                Array.from(cat.parentNode.children).forEach((ch)=>{
+                    if(ch.nodeName=='A')
+                       ch.classList.add('curSubcatA');
+                    if(ch.nodeName=='IMG')
+                        ch.classList.add('curSubcatImg');
+                });
+            var newName='';
+            Array.from(cat.parentNode.children).forEach((ch)=>{
+                if(ch.nodeName=='A'){
+                    newName=ch.textContent;
+                    return
+                }
+            });
+            changeInLoop(cat.parentNode.parentNode, newName)
+        }
+        
+      
+
+
+
+    }
+
+    function changeInLoop(parent, nameN) {
+        var name=nameN;
+        if(parent.id=='categor'){
+
+            Array.from(parent.children).forEach((ch)=>{
+                if(ch.nodeName=='A')
+                    ch.classList.add('curSubcatA');
+                if(ch.nodeName=='IMG')
+                    ch.classList.add('curSubcatImg');
+            });
+            Array.from(parent.children).forEach((ch)=>{
+                if(!compareAname(ch, name)&&!isCurentSubcat(ch)&&!isSubhistory(ch))
+                    ch.style.display='none';
+            });
+
+
+        }
+
+        do
+        {
+            parent.classList.add('curSubcat')
+            parent.style.display='block';
+            Array.from(parent.children).forEach((ch)=>{
+                if(ch.nodeName=='A')
+                    ch.classList.add('curSubcatA');
+                if(ch.nodeName=='IMG')
+                    ch.classList.add('curSubcatImg');
+            });
+            Array.from(parent.children).forEach((ch)=>{
+                if(!compareAname(ch, name)&&!isCurentSubcat(ch)&&!isSubhistory(ch))
+                    ch.style.display='none';
+            });
+
+                var newName='';
+            Array.from(parent.children).forEach((ch)=>{
+                if(ch.nodeName=='A'){
+                    newName=ch.textContent;
+                    return
+                }
+            });
+            parent=parent.parentNode;
+
+            name=newName;
+        }
+        while(parent.id!='categor-wrapper')
+
+
+
+    }
+
+    function compareAname(cat, name) {
+        var flag=false;
+        Array.from(cat.children).forEach((item)=>{
+            if(item.nodeName=='A'&&item.textContent==name){
+                flag=true;
+                return
+            }
+        });
+
+        return flag
+    }
+
+    function isSubhistory(ch) {
+        if(ch.classList.contains('subcatHistory'))
+            return true
+
+        return false
+    }
+
+    function isCurentSubcat(children){
+        if(children.classList.contains('curSubcatA')||children.classList.contains('curSubcatImg'))
+            return true
+
+        return false
+    }
+
+    function rerenderCurentHistoryCat() {
+        var histCat=document.getElementById('SUBH');
+        var children= Array.from(histCat.children);
+       children.forEach((a,i)=>{
+            if(i==children.length-2)
+                a.style.display='inline'
+           else {
+                a.style.display='none';
+            }
+
+        });
+    }
+
+    function setHistory(){
+        var str='|';
+        var subH=document.getElementById('SUBH');
+        var children=Array.from(subH.children);
+        children.forEach((a,i)=>{
+            str+=a.dataset.info+'-'+a.style.display+'|';
+        });
+        if(str=='|')
+            return false
+        return str.substring(1);
+    }
+
+    function getHistorySetHistory(history) {
+        if(history==false)
+            return
+        var subcatH=document.getElementById('SUBH');
+        historyCat.div=subcatH;
+        var mass=history.split('|');
+        mass.pop();
+        mass.forEach((str)=>{
+            var jer=str.split('-');
+            var a=document.createElement('A');
+            a.setAttribute('data-info',jer[0]);
+            a.setAttribute('href','#');
+            a.style.display=jer[1];
+            if(jer[0]=='allProducts')
+                a.textContent='Все товары';
+            else
+                a.textContent='Назад';
+            subcatH.appendChild(a);
+            historyCat.pointers.push(
+                {
+                    name:jer[0],
+                    div:findElementByDataInfo(jer[0])
+                }
+            )
+
+        });
+        var active=document.getElementsByClassName('categor-item-active')[0];
+        activeCatPointer=active;
+        currentCat=active.firstChild;
+        var subh=document.getElementById('SUBH');
+        if(subh.parentNode.id=='categor')
+            subh.style.display='block'
+    }
+
+    function findElementByDataInfo(info) {
+        if(info=='allProducts')
+            return null
+        var cat=document.getElementById('categor');
+        var massA=Array.from(cat.querySelectorAll(`[data-info='${info}']`));
+        for(let i=0;i<massA.length;i++){
+            if(!massA[i].classList.contains('subcatHistory'))
+                return massA[i].parentNode;
+        }
+
+
+    }
+
+    function addSubhistory() {
+
+        var topMenu=document.getElementsByClassName('topMenu')[0];
+        var categor=document.getElementById('categor');
+
+          if(document.getElementById('SUBH')==undefined){
+              var div_2=document.createElement('div');
+              div_2.classList.add('subcatHistory');
+              div_2.setAttribute('id','SUBH');
+              if(isMobileVersion){
+                  categor.insertBefore(div_2,categor.firstChild);
+                  //div_2.classList.add('categor-item');
+              }
+              else
+                  topMenu.insertBefore(div_2, topMenu.firstChild);
+          }
+
+
+    }
+
+    function chechForMobile() {
+        const mq = window.matchMedia( "(min-width: 801px)" );
+        if (mq.matches) {
+            isMobileVersion=false;
+        } else {
+            isMobileVersion=true;
+        }
+        var a=0;
     }
 
   /*  function Show_Hide_Loginform() {
