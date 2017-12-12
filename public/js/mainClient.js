@@ -536,16 +536,19 @@ function getCats(needSinh) {
 
 
                     var categors=document.getElementById('categor');
-                    Array.from(categors.getElementsByClassName('categor-item')).forEach((categor)=>{
-                        var a=categor.getElementsByTagName('A');
-                        Array.from(a).forEach((href)=>{
-                            if(href.textContent==targetCat){
-                                switchCurentCat(href.parentNode)
-                                return
-                            }
-                        });
+                    if(stateObj.history!=false){
+                        Array.from(categors.getElementsByClassName('categor-item')).forEach((categor)=>{
+                            var a=categor.getElementsByTagName('A');
+                            Array.from(a).forEach((href)=>{
+                                if(href.textContent==targetCat){
+                                    switchCurentCat(href.parentNode)
+                                    return
+                                }
+                            });
 
-                    })
+                        })
+                    }
+
 
                     })
                     .then(()=>{
@@ -2165,6 +2168,7 @@ function getPointerFromHistoryCat(name) {
     function setHistory(){
         var str='|';
         var subH=document.getElementById('SUBH');
+
         var children=Array.from(subH.children);
         children.forEach((a,i)=>{
             str+=a.dataset.info+'-'+a.style.display+'|';
@@ -2214,7 +2218,7 @@ function getPointerFromHistoryCat(name) {
         var cat=document.getElementById('categor');
         var massA=Array.from(cat.querySelectorAll(`[data-info='${info}']`));
         for(let i=0;i<massA.length;i++){
-            if(!massA[i].classList.contains('subcatHistory'))
+            if(!massA[i].parentNode.classList.contains('subcatHistory'))
                 return massA[i].parentNode;
         }
 
