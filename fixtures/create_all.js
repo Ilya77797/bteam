@@ -84,9 +84,10 @@ async function sortPriceUp(mass) {
     }
 
 async function sortAlpha(mass) {
-    var sortedMass = mass;
+    var sortedMass = mass.slice();
+    var itogMass=[];
 
-        await sortedMass.sort((a, b) => {
+/*        await sortedMass.sort((a, b) => {
             if(a.name.includes('00395')&&b.name.includes('20481')){
                 var letff=0;
             }
@@ -98,14 +99,28 @@ async function sortAlpha(mass) {
             var bN=b.name.substring(firstLetter(b.name)).toUpperCase();
 
             return compareLetters(aN,bN,0);
-        });
+        });*/
 
+     var mass=await sortedMass.map(async function (item) {
+        var str=await prepareForSprtAlpha(item.name);
+        return str;
 
+    });
+    var B=0;
+
+    await itogMass.sort((a,b)=>{
+        return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0;
+    });
+
+var s=0;
 
     await sortedMass.forEach(function (item,i) {
-        item.indexSortAlp=i;
+        //item.indexSortAlp=i;
+        var a=0;
+        itogMass[item.index].indexSortAlp=i;
     });
     var b=0;
+    return itogMass;
 }
 
 /*var indexUp=FindId(item._id, resultMass);
@@ -120,7 +135,7 @@ function FindId(id, mass) {
         }
         return i+1;
     }
-function firstLetter(string) {
+async function firstLetter(string) {
     for(var i=0; i<string.length;i++){
         var lll=string[i];
         var p=string[i].toUpperCase().charCodeAt(0);
@@ -266,7 +281,7 @@ async function addData(isNeeded) {
     }
 
     await sortPriceUp(resultMass);
-    await sortAlpha(resultMass);
+    resultMass=await sortAlpha(resultMass);
     var a=0;
 
 
@@ -304,6 +319,17 @@ async function addData(isNeeded) {
     }
     return resMass
 
+}
+
+async function prepareForSprtAlpha(str) {
+    var str_1=str.substring(firstLetter(str)).toUpperCase();
+    var itog='';
+    for(let i=0;i<str_1.length;i++){
+        var p=str_1[i].charCodeAt(0);
+        if(p>64&&p<91||p>1038&&p<1073)
+            itog+=str_1[i];
+    }
+    return itog;
 }
 
 

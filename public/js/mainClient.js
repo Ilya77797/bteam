@@ -1504,6 +1504,7 @@ function getPointerFromHistoryCat(name) {
 
 
     function changeSettings(e) {
+
         var a=e.target;
         if(a.nodeName=='A'&&a.textContent=='Настройки'){
             if(!wasTriggered){

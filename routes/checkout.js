@@ -1,12 +1,13 @@
 const nodemailer = require('nodemailer');
-var fs = require('fs');
-var p=createPath(__dirname)+'logs/logs.json';
+const Info=require('../models/info');
 var getUser=require('../libs/getUser');
 const config1 = require('../config/default');
 var Data=require('../models/data');
-var orderId=require('../logs/logs.json').orderId;
+var orderId=null;
+
 var strZakaz='';
 exports.post=async function(ctx, next) {
+
     var data=ctx.request.body;
     let smtpTransport;
     try {
@@ -19,6 +20,9 @@ exports.post=async function(ctx, next) {
                 pass: config1.emailPassword
             }
         });
+        var info=await Info.find({_id:0});
+        orderId=info[0].orderId;
+        await Info.update({ _id: 0 }, { $set: { orderId: orderId+1 }});
     } catch (e) {
         return console.log('Error: ' + e.name + ":" + e.message);
     }
@@ -45,7 +49,6 @@ exports.post=async function(ctx, next) {
     });
 
 
-//fs.writeFile(p, JSON.stringify({orderId:parseInt(orderId)+1}), 'utf8');
 ctx.body={status:'send'};
 
 }
@@ -64,6 +67,7 @@ async function getMessage(data,ctx) {
     <h4>Информация о заказе:</h4>
     <ul>
     <li>Дата: ${new Date(Date.now()).toISOString().replace(/T/, ' ').replace(/\..+/, '')}</li>
+    <li>Заказ номер: ${orderId}</li>
     
     </ul>
     <table border="1" cellpadding="0" cellspacing="0" >
@@ -114,7 +118,7 @@ async function getOrder(order, ctx) {//Проверка на правильно�
         var curPrice=getPrice(item, User);
         price+=curPrice*parseFloat(obj[item._id]);
         htmlContent+=`<tr> <td> ${item._id} </td> <td> ${getShortName(item.name)} </td> <td> ${obj[item._id]} </td> <td> ${curPrice} руб </td> </tr>`;
-        strReader+=`|${item._id};${getShortName(item.name)};${obj[item._id]};${curPrice}`
+        strReader+=`\r\n ${item._id};${getShortName(item.name)};${obj[item._id]};${curPrice}`
     });
 
     var discount=0;
