@@ -84,7 +84,7 @@ async function sortPriceUp(mass) {
     }
 
 async function sortAlpha(mass) {
-    var sortedMass = mass.slice();
+    var sortedMass = mass; //mass.slice();
     var itogMass=[];
 
 /*        await sortedMass.sort((a, b) => {
@@ -101,7 +101,7 @@ async function sortAlpha(mass) {
             return compareLetters(aN,bN,0);
         });*/
 
-     var mass=await sortedMass.map(async function (item) {
+    /* var mass=await sortedMass.map(async function (item) {
         var str=await prepareForSprtAlpha(item.name);
         return str;
 
@@ -113,14 +113,14 @@ async function sortAlpha(mass) {
     });
 
 var s=0;
-
+*/
     await sortedMass.forEach(function (item,i) {
-        //item.indexSortAlp=i;
+        item.indexSortAlp=i;
         var a=0;
-        itogMass[item.index].indexSortAlp=i;
+        //itogMass[item.index].indexSortAlp=i;
     });
-    var b=0;
-    return itogMass;
+    /*var b=0;
+    return itogMass;*/
 }
 
 /*var indexUp=FindId(item._id, resultMass);
@@ -281,7 +281,7 @@ async function addData(isNeeded) {
     }
 
     await sortPriceUp(resultMass);
-    resultMass=await sortAlpha(resultMass);
+    await sortAlpha(resultMass);
     var a=0;
 
 
@@ -334,5 +334,5 @@ async function prepareForSprtAlpha(str) {
 
 
 
-main(false, false, true);
+main(true, true, true);
 //Отправлять запрос н очистку кук, если были изменения в User

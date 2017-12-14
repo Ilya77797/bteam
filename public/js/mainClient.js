@@ -584,8 +584,20 @@ function getCats(needSinh) {
         });*/
 
       //For settings
-        document.getElementsByClassName('loginForm')[0].addEventListener('click',changeSettings );
-        document.getElementsByClassName('loginForm')[0].addEventListener('submit',clearAllCookies );
+        var loginForm=document.getElementsByClassName('loginForm')[0];
+        loginForm.addEventListener('click',changeSettings );
+        loginForm.addEventListener('submit',clearAllCookies );
+        //Dispatching submit event on button like link
+        var aSubmit=document.getElementsByClassName('submit');
+        Array.from(aSubmit).forEach((child)=>{
+            if(child.nodeName=="A"&&child.classList.contains('submit')) {
+                child.addEventListener('click', () => {
+                    var loginFormA=document.getElementsByClassName('loginForm')[0].children[0];
+                    loginFormA.submit();
+                });
+            }
+        });
+
 
         //for userImg
         /*try {
@@ -824,13 +836,14 @@ function getPointerFromHistoryCat(name) {
         //working with subcats
         e.stopPropagation();
         var hasSubcats=false;
-
+        if(e.target.nodeName=='DIV'&&e.target.firstChild.classList.contains('curSubcatA'))
+            return
         if(e.target.nodeName=="IMG"||e.target.nodeName=="A"&& e.target.parentNode.getElementsByTagName('IMG').length>0){//Свернуть/развернуть категории
          /*   if(Remove==true)
                 document.getElementById('SUBH').remove();*/
 
 
-            let parent=e.target.parentNode;
+            var parent=e.target.parentNode;
             var histCat=parent;
             changeDisplay('none', parent.parentNode, 100);//Скрыть все категории
             changeDisplay('flex',parent,1, true);//Сделать видимыми нужные категории
@@ -869,12 +882,24 @@ function getPointerFromHistoryCat(name) {
                 subh.style.display='block'
         }
 
+        var p_target=e.target;
+        if(e.target.nodeName=="A")
+            p_target=e.target.parentNode;
+        if(p_target.classList.contains('categor-item')&&p_target.children.length<2){
+            if(!isInHistory(p_target.parentNode))
+                 renderHistoryCat(p_target.parentNode);
+            else {
+                change2last();
+            }
+        }
+
         if(e.target.nodeName!='A')
             return;
 
 
 
         if(e.target.parentNode.classList.contains('subcatHistory')){
+            rerenderCurentHistoryCat();
             var newVisibleCat=getPointerFromHistoryCat(e.target.dataset.info);
             if(newVisibleCat=={}) return;
             changeCurentCat(newVisibleCat);//Изменить текущую категорию и отрисовать это
@@ -896,7 +921,8 @@ function getPointerFromHistoryCat(name) {
                 let ch=historyCat.pointers[i].div.childNodes;//Убрать классы "текущих" категорий
                 historyCat.pointers[i].div.classList.remove('curSubcat');
                 ch[0].classList.remove('curSubcatA');
-                ch[1].classList.remove('curSubcatImg');
+                if(ch.length>1)
+                    ch[1].classList.remove('curSubcatImg');
             }
             historyCat.pointers.pop();
 
@@ -1949,7 +1975,8 @@ function getPointerFromHistoryCat(name) {
         }
 
 
-
+      if(StateCookie.page==1&&StateCookie.searchText==''&&StateCookie.sort=='0'&&StateCookie.categor==null&&StateCookie.history==false)
+          return
       var cookie=serialize(StateCookie);
       setCookie('state', cookie);
     }
@@ -2254,6 +2281,24 @@ function getPointerFromHistoryCat(name) {
             isMobileVersion=true;
         }
         var a=0;
+    }
+    function isInHistory(div) {
+        var info=div.firstChild.dataset.info;
+        var history=Array.from(document.getElementById('SUBH').children);
+        for(let i=0;i<history.length;i++){
+            if(history[i].dataset.info==info)
+                return true
+        }
+
+        return false
+
+    }
+
+    function change2last() {
+        var histCat=Array.from(document.getElementById('SUBH').children);
+        histCat[histCat.length-2].style.display='none';
+        histCat[histCat.length-1].style.display='inline';
+
     }
 
   /*  function Show_Hide_Loginform() {

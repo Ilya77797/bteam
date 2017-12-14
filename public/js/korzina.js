@@ -489,6 +489,15 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
         document.getElementsByClassName('loginForm')[0].addEventListener('submit',clearAllCookies );
+        var aSubmit=document.getElementsByClassName('submit');
+        Array.from(aSubmit).forEach((child)=>{
+            if(child.nodeName=="A"&&child.classList.contains('submit')) {
+                child.addEventListener('click', () => {
+                    var loginFormA=document.getElementsByClassName('loginForm')[0].children[0];
+                    loginFormA.submit();
+                });
+            }
+        });
 
     }
     function checkout(e) {

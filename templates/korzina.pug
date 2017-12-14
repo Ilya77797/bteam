@@ -33,7 +33,7 @@ html
                         div.loginForm
                             form(action="/logout:korz" method="POST" id="loginForm")
                                 h3 Добро пожаловать, #{name}
-                                button(type="submit") Выйти
+                                a.submit.aButton Выйти
                                 a#settings(href='#') Настройки
                             form(action="/userSettings" method="POST" id="Change")
                                 a#settings(href='#') Сохранить
@@ -45,11 +45,11 @@ html
                                     h4(style="color:red") Неправильное имя или пароль
                                     input(name="username" placeholder="Имя пользователья" )
                                     input(name="password" type="password" placeholder="Пароль" )
-                                    button(type="submit") Войти
+                                    a.submit.aButton Войти
                                 else
                                     input(name="username" placeholder="Имя пользователья")
                                     input(name="password" type="password" placeholder="Пароль")
-                                    button(type="submit") Войти
+                                    a.submit.aButton Войти
             div(style='clear:both')
                 hr.line
             div.topMenu.clearfix(style="display:block")
