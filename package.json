@@ -40,7 +40,8 @@
     "trace": "^3.0.0",
     "yargs": "^8.0.2",
     "async_hooks": "^1.0.0",
-    "nodemailer":"4.4.0"
+    "nodemailer":"4.4.0",
+    "sha256": "^0.2.0"
   },
   "main": "server.js",
   "directories": {

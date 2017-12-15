@@ -26,6 +26,8 @@ window.addEventListener('DOMContentLoaded', function() {
     var activeCatPointer=null; //Указатель на текущую категорию
     var currentCat=null;
     var isMobileVersion=false;
+    var showPictures=true;
+
     chechForMobile();
     addEvents();
     addSubhistory();
@@ -460,6 +462,8 @@ function getCats(needSinh) {
         }
         else {
             f=true;
+            showPictures=(stateObj['showIm']=='true');
+            setImgShowOrNot();
             if(stateObj['page']>1)
                 f=false
 
@@ -583,6 +587,22 @@ function getCats(needSinh) {
             });
         });*/
 
+
+        var photo=document.getElementById('ShowImg');
+        photo.addEventListener('click',()=>{
+            var photoStr=photo.getAttribute('src');
+            if(photoStr.includes('hideImg')){
+                photo.setAttribute('src','images/showImg.png');
+                showPictures=true;
+                SearchData(true, false);
+            }
+            else{
+                photo.setAttribute('src','images/hideImg.png');
+                showPictures=false;
+                SearchData(true, false);
+            }
+
+        });
       //For settings
         var loginForm=document.getElementsByClassName('loginForm')[0];
         loginForm.addEventListener('click',changeSettings );
@@ -1027,7 +1047,8 @@ function getPointerFromHistoryCat(name) {
         divPrP.classList.add('product-photo');//3
 
         var img=document.createElement('img');//4
-        img.setAttribute('src',item.icon);
+        if(showPictures)
+            img.setAttribute('src',item.icon);
 
         var divPrPr=document.createElement('div');//4
         divPrPr.classList.add('product-preview');
@@ -1971,11 +1992,12 @@ function getPointerFromHistoryCat(name) {
             page:PageS,
             categor:categor,
             hasSubcats:hSubc,
-            history:setHistory()
+            history:setHistory(),
+            showIM:showPictures
         }
 
 
-      if(StateCookie.page==1&&StateCookie.searchText==''&&StateCookie.sort=='0'&&StateCookie.categor==null&&StateCookie.history==false)
+      if(StateCookie.page==1&&StateCookie.searchText==''&&StateCookie.sort=='0'&&StateCookie.categor==null&&StateCookie.history==false&&showPictures==true)
           return
       var cookie=serialize(StateCookie);
       setCookie('state', cookie);
@@ -2013,6 +2035,8 @@ function getPointerFromHistoryCat(name) {
                 case 5:
                     obj.history=item
                     break
+                case 6:
+                    obj.showIm=item;
             }
         });
 
@@ -2298,6 +2322,25 @@ function getPointerFromHistoryCat(name) {
         var histCat=Array.from(document.getElementById('SUBH').children);
         histCat[histCat.length-2].style.display='none';
         histCat[histCat.length-1].style.display='inline';
+
+    }
+
+    function insertCheckbox() {
+        var check=document.createElement('input');
+        check.setAttribute('id','showPtotos');
+        check.setAttribute('type','checkbox');
+        //check.setAttribute('checked','true');
+        var dataS=document.getElementsByClassName('topMenu')[0];
+        dataS.insertBefore(check,dataS.firstChild);
+    }
+    function setImgShowOrNot() {
+        var photo=document.getElementById('ShowImg');
+        if(showPictures)
+            photo.setAttribute('src','images/showImg.png');
+        else
+            photo.setAttribute('src','images/hideImg.png');
+
+
 
     }
 

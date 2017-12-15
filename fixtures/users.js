@@ -1,9 +1,10 @@
 const mongoose=require('../libs/mongoose');
+const sha256=require('sha256');
 const User=require('../models/user');
 var user={
   username:"A1",
   displayName:'user1',
-  password:'12345'
+  password:sha256('12345')
 };
 console.log('12');
 async function doit1 () {

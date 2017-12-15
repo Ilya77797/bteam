@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const sha256=require('sha256');
 const _ = require('lodash');
 const config = require('../config/default');
 
@@ -87,7 +88,8 @@ userSchema.methods.checkPassword = function(password) {
   if (!password) return false; // empty password means no login by password
   if (!this.passwordHash) return false; // this user does not have password (the line below would hang!)
   // bcrypt.compare(password, this.passwordHash) // sync?
-  const passwordHash = crypto.pbkdf2Sync(
+    //var ph256=sha256(password);
+    const passwordHash = crypto.pbkdf2Sync(
     password,
     this.salt,
     config.crypto.hash.iterations,
