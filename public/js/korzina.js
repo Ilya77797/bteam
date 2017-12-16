@@ -547,6 +547,10 @@ window.addEventListener('DOMContentLoaded', function() {
                             li.textContent='Ваш заказ оформлен, проверьте свою почту';
                             li.style.textAlign = "center";
                             PR.appendChild(li);
+                            Array.from(document.getElementsByClassName('textbox')).forEach((input)=>{
+                                input.value='';
+                            });
+                            document.getElementsByClassName('message')[0].value='';
                             $(PR).slideToggle(300);
                             $(document.getElementById('OrderForm')).slideToggle(300);
                         });
@@ -712,7 +716,7 @@ window.addEventListener('DOMContentLoaded', function() {
             return item.id.includes('inputZ')
         });
         inputs.forEach((item, i)=>{
-            if(item.value==''||checkInput(item,{minOrder:1})==null||parseFloat(item.value)=='0'){
+            if(item.value==''||checkInput(item,{minOrder:1})==null||parseFloat(item.value)=='0'||isInteger(item.value)){
                 flag=false;
                 item.classList.add('inputErr');
                 item.value='Заполните это поле!';
@@ -875,7 +879,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     function checkKey(e) {
         var ip=document.getElementById(`inputZ${this._id}`);
-        if(e.keyCode==8&&ip.value==""){
+        if(e.keyCode==8){
             var totalPrice=document.getElementById(`PriceTotal${this._id}`);
             totalPrice.textContent='0';
             calculateAll();
@@ -891,6 +895,21 @@ window.addEventListener('DOMContentLoaded', function() {
 
     function checkInput(input, item) {
         var value=parseInt(input.value);
+        if(!isInteger(input.value)){
+            var addValue=input.value.split('').reverse().join('');
+            try{
+                var a=parseInt(addValue);
+                if(!isNaN(a))
+                    addValue=a;
+                else
+                    addValue='';
+            }
+            catch (err){
+                addValue='';
+            }
+            if(addValue!='')
+                value=value+''+addValue;
+        }
 
         if(isNaN(value)){
             input.value=item.minOrder;
@@ -1055,6 +1074,10 @@ window.addEventListener('DOMContentLoaded', function() {
     function clearAllCookies() {
         setCookie('Price','');
         setCookie('orderId','');
+    }
+
+    function isInteger(x) {
+        return x % 1 === 0;
     }
 
 

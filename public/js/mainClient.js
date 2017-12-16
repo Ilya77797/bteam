@@ -1146,7 +1146,7 @@ function getPointerFromHistoryCat(name) {
 
 
         var imgIcon=document.createElement('img');
-       if(item.status[2]=='1'){
+       if(item.status[2]=='1'&&item.amount[0]=="0"){
            imgIcon.setAttribute('src','images/comingSoon.png');//Ожидается
            spanIcon.textContent='Ожидается';
        }
@@ -1772,7 +1772,8 @@ function getPointerFromHistoryCat(name) {
 
     function checkKey(e) {
         var ip=document.getElementById(`inputZ${this._id}`);
-        if(e.keyCode==8&&ip.value==""){
+        if(e.keyCode==8){
+
 
             return
         }
@@ -1786,6 +1787,22 @@ function getPointerFromHistoryCat(name) {
 
     function checkInput(input, item) {
         var value=parseInt(input.value);
+        if(!isInteger(input.value)){
+            var addValue=input.value.split('').reverse().join('');
+            try{
+                var a=parseInt(addValue);
+                if(!isNaN(a))
+                  addValue=a;
+                else
+                    addValue='';
+            }
+            catch (err){
+                addValue='';
+            }
+            if(addValue!='')
+                value=value+''+addValue;
+        }
+
 
         if(isNaN(value)){
             input.value=item.minOrder;
@@ -2231,7 +2248,7 @@ function getPointerFromHistoryCat(name) {
     }
 
     function getHistorySetHistory(history) {
-        if(history==false)
+        if(history=="false")
             return
         var subcatH=document.getElementById('SUBH');
         historyCat.div=subcatH;
@@ -2342,6 +2359,10 @@ function getPointerFromHistoryCat(name) {
 
 
 
+    }
+
+    function isInteger(x) {
+        return x % 1 === 0;
     }
 
   /*  function Show_Hide_Loginform() {

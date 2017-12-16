@@ -10,6 +10,8 @@ function returnLength(mass) {
 exports.get=async function(ctx, next) {
     var search=ctx.request.body.text.trim();
     var cat=ctx.request.body.cat;
+    if(cat=='null')
+        cat=null;
     var isMainSearch=ctx.request.body.flag;
     var isPageSearch=ctx.request.body.isPageS;
     var page=ctx.request.body.page;

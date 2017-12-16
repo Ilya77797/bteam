@@ -88,9 +88,9 @@ userSchema.methods.checkPassword = function(password) {
   if (!password) return false; // empty password means no login by password
   if (!this.passwordHash) return false; // this user does not have password (the line below would hang!)
   // bcrypt.compare(password, this.passwordHash) // sync?
-    //var ph256=sha256(password);
+    var ph256=sha256(password);
     const passwordHash = crypto.pbkdf2Sync(
-    password,
+    ph256,
     this.salt,
     config.crypto.hash.iterations,
     config.crypto.hash.length,
