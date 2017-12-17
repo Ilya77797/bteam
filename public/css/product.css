@@ -199,12 +199,27 @@
 #categor #SUBH{
     display: none;
     margin-top: 2px;
-    background-color: white;
-    line-height: 1.2em;
+    background-color:lightgray;
+    line-height: 1.4em;
+    max-height: 1.8em;
+    height: 1.8em;
     font-size: 1.1em;
     opacity: 0.7;
     max-width: 100% !important;
     width: 100% !important;
+}
+
+.ToProducts{
+    background-color:lightgray;
+    line-height: 1.4em;
+    max-width: 100% !important;
+    width: 100% !important;
+    opacity: 0.7;
+    height: 1.8em;
+    font-size: 1.1em;
+    text-decoration: underline;
+    color:blue;
+    cursor: pointer;
 }
 /*#HISTORY:hover #SUBH{
     display: block;
@@ -222,10 +237,14 @@
     overflow: hidden;
 }
 .subcatHistory a{/*class for subcatHistory*/
-    text-decoration: underline !important;
-    color: blue !important;
+    /*text-decoration: underline !important;
+    color: blue !important;*/
+    text-decoration: none;
+    color: black;
     font-size: 1.1em !important;
 }
+
+
 .subcatHistory a:after{
     /*content: '/';*/
 }
@@ -752,21 +771,7 @@ small.spPrice{
     font-size: 1.1em;
 
 }
-.corzina{
-    display: inline-block;
-    /*float: right;*/
-    margin-right: 3%;
-    box-sizing: border-box;
-    width: 100%;
-
-    cursor:pointer;
-
-}
-
-.corzina:hover{
-    transition: width .2s;
-    transform: scale(1.1);
-}
+/*корзина*/
 
 .dataS input{
     width: 70%;
@@ -1260,9 +1265,13 @@ small.spPrice{
 
 }
 .wrapImg{
-    align-self:center;
+    /*align-self:center;
     margin-right: 1%;
-    text-decoration: none;
+    text-decoration: none;*/
+    position: relative;
+    width: 30px;
+    height: 30px;
+
 }
 
 .PriceTotal{
@@ -1374,13 +1383,24 @@ small.spPrice{
 
 #PriceTotalInCart{
     display: none;
-    color: black;
+    color: red;
     font-size: 1.1em;
+    font-weight: bold;
+
+    width:30px;
+    height: 30px;
+    position: relative;
+    top: -35px;
+    float: right;
+    right: 5px;
+
+
+
 
 
 }
 #PriceTotalInCart:after{
-    content: ' руб';
+    /*content: ' руб';*/
 }
 
 
@@ -1446,6 +1466,24 @@ small.spPrice{
     padding:5px;
     width:130px;
     behavior: url(pie.php);
+}
+
+.corzina{
+    /*position: absolute;*/
+    display: inline-block;
+
+    margin-right: 3%;
+    box-sizing: border-box;
+    /*width: 100%;*/
+    width:30px;
+    float: right;
+    cursor:pointer;
+
+}
+
+.corzina:hover{
+    transition: width .2s;
+    transform: scale(1.1);
 }
 
 

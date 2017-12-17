@@ -854,6 +854,14 @@ function getPointerFromHistoryCat(name) {
 
     function onclick(e) {
         //working with subcats
+        try{//Delete div(Перейти к категориям текущей категории)
+            var goToPR=document.getElementsByClassName('ToProducts')[0];
+            if(goToPR!=undefined&&!e.target.classList.contains('ToProducts'))
+                goToPR.remove();
+        }
+        catch (err){
+
+        }
         e.stopPropagation();
         var hasSubcats=false;
         if(e.target.nodeName=='DIV'&&e.target.firstChild.classList.contains('curSubcatA'))
@@ -979,14 +987,20 @@ function getPointerFromHistoryCat(name) {
        var p_target=target;//Для того, чтобы скрывать категории в мобильной версии лишь тогда, когда нет подкатегорий
        if(target.nodeName=='A'||target.nodeName=='IMG')
            p_target=target.parentNode;
-       if(isMobile.display!='none'&&!target.parentNode.classList.contains('subcatHistory')&&p_target.children.length<2){
-           var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
-           var ul=document.getElementById('PR');
-           var pg=document.getElementById('light-pagination');
-           cat.style.display="none";
-           ul.style.display="block";
-           pg.style.display="block";
-
+       if(isMobile.display!='none'&&!target.parentNode.classList.contains('subcatHistory')){
+           if(p_target.children.length<2)
+            hideCatsGoToProducts();
+           else {
+               var subh=document.getElementById('SUBH');
+               var categor=document.getElementById('categor');
+               var div=document.createElement('div');
+               categor.insertBefore(div,subh.nextSibling);
+               div.classList.add('ToProducts');
+               div.textContent='Перейти к товарам этой категроии';
+               div.addEventListener('click',(e)=>{
+                   hideCatsGoToProducts();
+               })
+           }
        }
 
 
@@ -1113,6 +1127,10 @@ function getPointerFromHistoryCat(name) {
             productNAmeA.setAttribute('href',item.info);
             productNAmeA.textContent=item.name;
             divPrN.appendChild(productNAmeA);
+            productNAmeA.addEventListener('click',(e)=>{
+                e.preventDefault();
+                window.open(item.info, '_blank');
+            });
         }
         else{//Вывод текстового описания
             divPrN.textContent=item.name;
@@ -1938,7 +1956,9 @@ function getPointerFromHistoryCat(name) {
         var totalPriceCart=document.getElementById(`PriceTotalInCart`);
 
         var corzina=document.getElementsByClassName('corzina')[0];
-        corzina.style.display='none';
+        //corzina.style.display='none';
+        corzina.style.opacity=0.2;
+
         document.getElementsByClassName('wrapImg')[0].style.width='auto';
         if(totalPriceCart==undefined){
             var totalPriceCart=document.createElement('span');
@@ -1951,13 +1971,15 @@ function getPointerFromHistoryCat(name) {
 
         if(price==''){
             var corzina=document.getElementsByClassName('corzina')[0];
-            corzina.style.display='inline-block';
+            //corzina.style.display='inline-block';
+            corzina.style.opacity=1;
             totalPriceCart.style.display='none';
             document.getElementsByClassName('wrapImg')[0].style.width='';
 
         }
         price=Math.round(price * 1000) / 1000;
         totalPriceCart.textContent=price;
+        changeFontSizeDependOnLength(totalPriceCart);
     }
 
     function setShowingTotalPrice() {
@@ -2304,6 +2326,7 @@ function getPointerFromHistoryCat(name) {
               div_2.classList.add('subcatHistory');
               div_2.setAttribute('id','SUBH');
               if(isMobileVersion){
+
                   categor.insertBefore(div_2,categor.firstChild);
                   //div_2.classList.add('categor-item');
               }
@@ -2363,6 +2386,29 @@ function getPointerFromHistoryCat(name) {
 
     function isInteger(x) {
         return x % 1 === 0;
+    }
+
+    function changeFontSizeDependOnLength(PriceTotalInCart) {
+        if(PriceTotalInCart==undefined||PriceTotalInCart.style.display=='none')
+            return
+        var count=PriceTotalInCart.textContent.length;
+        if(count<6)
+            PriceTotalInCart.style.fontSize='1.1em'
+        else if(count<8)
+            PriceTotalInCart.style.fontSize='0.9em'
+        else {
+            PriceTotalInCart.style.fontSize='0.7em'
+        }
+    }
+
+    function hideCatsGoToProducts() {
+        var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
+        var ul=document.getElementById('PR');
+        var pg=document.getElementById('light-pagination');
+        cat.style.display="none";
+        ul.style.display="block";
+        pg.style.display="block";
+
     }
 
   /*  function Show_Hide_Loginform() {

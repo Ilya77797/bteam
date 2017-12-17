@@ -732,6 +732,9 @@ window.addEventListener('DOMContentLoaded', function() {
             }
 
         });
+        var cookie=getCookie('orderId')
+        if(cookie==undefined||cookie=='')
+            return false
 
         if(flag)
             return true
