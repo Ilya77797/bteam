@@ -546,6 +546,8 @@ window.addEventListener('DOMContentLoaded', function() {
                             var li=document.createElement('li');
                             li.textContent='Ваш заказ оформлен, проверьте свою почту';
                             li.style.textAlign = "center";
+                            var a=document.getElementById('showOrderForm');
+                            a.textContent='Оформить заказ';
                             PR.appendChild(li);
                             Array.from(document.getElementsByClassName('textbox')).forEach((input)=>{
                                 input.value='';
