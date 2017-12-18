@@ -3,18 +3,37 @@ const mongoose=require('../libs/mongoose');
 const Categor=require('../models/categor');
 const User=require('../models/user');
 const mainFile=require('../Price/last.json');
+var clearAll=require('./clear_all');
 var resultCat=[];
 var resultMass = [];
 var resultUsers=[];
-async function main(changeUsers,changeCats,changeData) {
+async function main(resolve) {
+    var changeUsers=false;
+    var changeData=false;
+    var changeCats=false;
+    var flags=mainFile.flags;
+    if(flags[0]){
+        changeUsers=true;
+    }
+
+    if(flags[1]){
+        changeCats=true;
+    }
+
+    if(flags[2]){
+        changeData=true;
+    }
+
+    await clearAll(changeUsers,changeCats,changeData);
+
  //addUsers
- addUsers(changeUsers);
+ await addUsers(changeUsers);
 
 //add categories
-addCats(changeCats);
+await addCats(changeCats);
 
 //parcing data from JSON
-addData(changeData);
+await addData(changeData);
 
 }
 
@@ -334,5 +353,6 @@ async function prepareForSprtAlpha(str) {
 
 
 
-main(true, true, true);
+module.exports=main;
+
 //Отправлять запрос н очистку кук, если были изменения в User

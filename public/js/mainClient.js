@@ -429,9 +429,11 @@ function getCats(needSinh) {
         var ul=document.getElementById('PR');
         ul.classList.add('awaitSearch');
         var li=document.createElement('li');
+        li.setAttribute('id','waitForLoading');
         li.textContent='Подождите, идет загрузка...';
         li.style.textAlign = "center";
         ul.appendChild(li);
+        //setTimeout(setWaitingIndecator,2000);
 
         var stateObj=getStateCookie();
         if(!stateObj)
@@ -501,6 +503,8 @@ function getCats(needSinh) {
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(req));
         xhr.onreadystatechange = function () {
+
+
             if (xhr.readyState != 4) return;
 
             if (xhr.status == 200) {
@@ -2408,6 +2412,15 @@ function getPointerFromHistoryCat(name) {
         cat.style.display="none";
         ul.style.display="block";
         pg.style.display="block";
+
+    }
+
+    function setWaitingIndecator() {
+        var ul=document.getElementById('PR');
+        var li=document.getElementById('waitForLoading');
+        if(li==undefined)
+            return
+        li.textContent='Подождите, наш каталог обновляется. Это может занять несколько минут';
 
     }
 

@@ -2,6 +2,8 @@
 // using 3rd party middleware modules
 // P.S. MWs calls be refactored in many files
 
+
+var Data=require('./models/data');
 // long stack trace (+clarify from co) if needed
 if (process.env.TRACE) {
   require('./libs/trace');
@@ -54,4 +56,53 @@ app.use(async (ctx, next) => {
 
 app.use(router.routes());
 app.listen(config1.port);
+
+var root=pathToJson();
+fs.watch(root, async function (event, filename) {
+    console.log('event is: ' + event);
+    if (filename) {
+
+        try{
+            setPendingStatus(true);
+            console.log('status:',config1.isPending);
+            require('./fixtures/create_all')();
+            var promise=new Promise((res,rej)=>{
+                res();
+            });
+            promise.then(async function(){
+                new Promise((res,rej)=>{
+                   var int= setInterval(async function(res){
+                       var products= await Data.find().limit(9);
+                       if(products.length>0){
+                           res(int);
+                       }
+                   },1000);
+                });
+
+            })
+                .then((int)=>{
+                clearInterval(int);
+                    setPendingStatus(false);
+                    console.log('status:',config1.isPending);
+                });
+
+
+        }
+        catch (err){
+
+        }
+
+
+    } else {
+        console.log('filename not provided');
+    }
+});
+
+function pathToJson() {
+    return __dirname+'/Price/last.json';
+}
+
+function setPendingStatus(status){
+    config1.isPending=status;
+}
 

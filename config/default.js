@@ -34,7 +34,8 @@ module.exports = {
   port: process.env.PORT || 8080,
   emailFrom:'farrukx.val@yandex.ru',
   emailPassword:'123456789qwer',
-  emailTo:'farrukx.val@yandex.ru'
+  emailTo:'farrukx.val@yandex.ru',
+    isPending:false
 };
 
 

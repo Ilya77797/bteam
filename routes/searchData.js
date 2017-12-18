@@ -149,6 +149,7 @@ function prepareForSearch(str) {//Для поиска по всем комбин
     mass=mass.map((item)=>{
         return new RegExp(item.toString(),'i');
     });
+
     return mass;
 }
 
