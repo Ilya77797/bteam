@@ -354,5 +354,5 @@ async function prepareForSprtAlpha(str) {
 
 
 module.exports=main;
-
+main();
 //Отправлять запрос н очистку кук, если были изменения в User

@@ -210,16 +210,20 @@
 }
 
 .ToProducts{
+    margin-top: 0px!important;
     background-color:lightgray;
     line-height: 1.4em;
     max-width: 100% !important;
     width: 100% !important;
-    opacity: 0.7;
+    opacity: 0.7!important;
     height: 1.8em;
     font-size: 1.1em;
-    text-decoration: underline;
-    color:blue;
+   /* text-decoration: underline;*/
+    color: black;
     cursor: pointer;
+}
+.ToProducts:before{
+    content: " < ";
 }
 /*#HISTORY:hover #SUBH{
     display: block;
@@ -227,6 +231,10 @@
 #HISTORY:not(:hover) #SUBH{
     display: none;
 }*/
+
+#SUBH a:before{
+    content: " < ";
+}
 
 .subcatHistory{
     /*display: block*/
@@ -871,6 +879,7 @@ small.spPrice{
       bottom: 0px;
   }
     #ShowPhpotoID{
+        margin-top: 5px;
         margin-left: -30px;
         height: 25px;
         position: absolute;
@@ -888,7 +897,11 @@ small.spPrice{
     }
 
     #header{
-        height:50px !important;
+        height:40px !important;
+    }
+
+    .loginForm h3{
+        font-size: 1.0em;
     }
 
 

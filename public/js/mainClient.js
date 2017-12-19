@@ -860,7 +860,7 @@ function getPointerFromHistoryCat(name) {
         //working with subcats
         try{//Delete div(Перейти к категориям текущей категории)
             var goToPR=document.getElementsByClassName('ToProducts')[0];
-            if(goToPR!=undefined&&!e.target.classList.contains('ToProducts'))
+            if(goToPR!=undefined&&!e.target.classList.contains('ToProducts')&&!e.target.classList.contains('subcatHistory')&&!e.target.classList.contains('categor'))
                 goToPR.remove();
         }
         catch (err){
@@ -985,7 +985,7 @@ function getPointerFromHistoryCat(name) {
 
         var catNode=target;
        currentCat=catNode.cloneNode(true);
-       changeActiveCat(target.parentNode);
+       changeActiveCat(target.parentNode, target);
        SearchData(false,true, hasSubcats);
        var isMobile=getComputedStyle(document.getElementsByClassName('mobile')[0]);
        var p_target=target;//Для того, чтобы скрывать категории в мобильной версии лишь тогда, когда нет подкатегорий
@@ -995,15 +995,7 @@ function getPointerFromHistoryCat(name) {
            if(p_target.children.length<2)
             hideCatsGoToProducts();
            else {
-               var subh=document.getElementById('SUBH');
-               var categor=document.getElementById('categor');
-               var div=document.createElement('div');
-               categor.insertBefore(div,subh.nextSibling);
-               div.classList.add('ToProducts');
-               div.textContent='Перейти к товарам этой категроии';
-               div.addEventListener('click',(e)=>{
-                   hideCatsGoToProducts();
-               })
+           addToProductsElementMenu();
            }
        }
 
@@ -1037,6 +1029,13 @@ function getPointerFromHistoryCat(name) {
            // document.getElementById('dataSearch').searchD.value='';
             activeCatPointer=parrent;
 
+        }
+        else{
+            var flag=false;
+            if(child.nodeName=='A'&&child.dataset.info=='allProducts')
+                flag=true;
+            if(!flag)
+              addToProductsElementMenu();
         }
 
 
@@ -2422,6 +2421,17 @@ function getPointerFromHistoryCat(name) {
             return
         li.textContent='Подождите, наш каталог обновляется. Это может занять несколько минут';
 
+    }
+    function addToProductsElementMenu() {
+        var subh=document.getElementById('SUBH');
+        var categor=document.getElementById('categor');
+        var div=document.createElement('div');
+        categor.insertBefore(div,subh.nextSibling);
+        div.classList.add('ToProducts');
+        div.textContent='Перейти к товарам этой категроии';
+        div.addEventListener('click',(e)=>{
+            hideCatsGoToProducts();
+        })
     }
 
   /*  function Show_Hide_Loginform() {
