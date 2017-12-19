@@ -58,7 +58,7 @@ app.use(router.routes());
 app.listen(config1.port);
 
 var root=pathToJson();
-fs.watch(root, async function (event, filename) {
+/*fs.watch(root, async function (event, filename) {
     console.log('event is: ' + event);
     if (filename) {
 
@@ -96,7 +96,7 @@ fs.watch(root, async function (event, filename) {
     } else {
         console.log('filename not provided');
     }
-});
+});*/
 
 function pathToJson() {
     return __dirname+'/Price/last.json';
