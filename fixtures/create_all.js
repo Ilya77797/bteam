@@ -2,12 +2,15 @@ const Dataq=require('../models/data');
 const mongoose=require('../libs/mongoose');
 const Categor=require('../models/categor');
 const User=require('../models/user');
-const mainFile=require('../Price/last.json');
+const fs = require('fs');
+var session=require('../libs/mongoose');
+var mainFile;
 var clearAll=require('./clear_all');
 var resultCat=[];
 var resultMass = [];
 var resultUsers=[];
 async function main(resolve) {
+    mainFile=await JSON.parse(fs.readFileSync('./Price/last.json', 'utf8'));
     var changeUsers=false;
     var changeData=false;
     var changeCats=false;
@@ -103,8 +106,16 @@ async function sortPriceUp(mass) {
     }
 
 async function sortAlpha(mass) {
-    var sortedMass = mass; //mass.slice();
+    var sortedMass = mass.slice(); //mass.slice();
     var itogMass=[];
+    sortedMass.forEach(function (item,i) {
+        itogMass[i]=[prepareForSprtAlpha(item.name),i];
+    });
+    itogMass.sort();
+    itogMass.forEach((item,i)=>{
+        resultMass[item[1]].indexSortAlp=i;
+    });
+
 
 /*        await sortedMass.sort((a, b) => {
             if(a.name.includes('00395')&&b.name.includes('20481')){
@@ -133,11 +144,11 @@ async function sortAlpha(mass) {
 
 var s=0;
 */
-    await sortedMass.forEach(function (item,i) {
+   /* await sortedMass.forEach(function (item,i) {
         item.indexSortAlp=i;
         var a=0;
         //itogMass[item.index].indexSortAlp=i;
-    });
+    });*/
     /*var b=0;
     return itogMass;*/
 }
@@ -154,7 +165,7 @@ function FindId(id, mass) {
         }
         return i+1;
     }
-async function firstLetter(string) {
+ function firstLetter(string) {
     for(var i=0; i<string.length;i++){
         var lll=string[i];
         var p=string[i].toUpperCase().charCodeAt(0);
@@ -209,6 +220,8 @@ function compareLetters(a,b, i) {
 async function addUsers(isNeeded) {
     if(!isNeeded)
         return
+
+    await session.models.Session.remove();
     try{
         mainFile.users.forEach((item)=>{
             let prices=item[3].split(' ');
@@ -220,7 +233,8 @@ async function addUsers(isNeeded) {
                 discount:item[4],
                 curPrice:prices[prices.length-1],
                 showSP_Price:false,
-                useDiscount:true
+                useDiscount:true,
+                email:item[5]||''
             };
             resultUsers.push(user);
         });
@@ -340,8 +354,9 @@ async function addData(isNeeded) {
 
 }
 
-async function prepareForSprtAlpha(str) {
-    var str_1=str.substring(firstLetter(str)).toUpperCase();
+function prepareForSprtAlpha(str) {
+    var index=firstLetter(str);
+    var str_1=str.substring(index).toUpperCase();
     var itog='';
     for(let i=0;i<str_1.length;i++){
         var p=str_1[i].charCodeAt(0);
@@ -354,5 +369,5 @@ async function prepareForSprtAlpha(str) {
 
 
 module.exports=main;
-main();
+//main();
 //Отправлять запрос н очистку кук, если были изменения в User

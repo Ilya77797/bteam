@@ -15,7 +15,8 @@ async function getUser(ctx) {
         curPrice:user[0].curPrice,
         show:user[0].showSP_Price,
         useDiscount:user[0].useDiscount,
-        _id:user[0]._id
+        _id:user[0]._id,
+        email:user[0].email
     };
     return UserN;
 }

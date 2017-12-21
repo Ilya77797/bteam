@@ -1,9 +1,9 @@
 {
-  "flags":[true,true,true],
+  "flags":[false,false,true],
   "prefixes": ["http://img.optonoff.ru/show/","http://img.optonoff.ru/"],
 "users":[
 ["person","4d1c6d706d875e0325916dab097e2b1f50cc93fca363d04ccde3d78f3a6c2f18","Клиент","1 2 3","0.0","somewhere@hidden.net"],
-["shopper","8283613e8c31cd4f9a26a7fd01d575be33dd7bcdb48b9952638a4e5b4b384979","Гость","1 2","1.0","myname@mail.ru"],
+["shopper","8283613e8c31cd4f9a26a7fd01d575be33dd7bcdb48b9952638a4e5b4b384979","Гость","1 2","1.0"],
 ["super","f7b389455dcc74b13e13628f5d5cc3db5ca36d4e115a6fef8d2dffd4ca9bf00a","Сотрудник","1 2 3 4","0.0","fio@bteam.ru"]],
 "groups":[
 {"name":"Батареи и элементы питания",

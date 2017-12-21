@@ -5,5 +5,5 @@ async function q1() {
     console.log('done');
 }
 
-q1();
+
 module.exports=q1;

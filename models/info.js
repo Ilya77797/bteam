@@ -6,7 +6,10 @@ const infoShema=new mongoose.Schema({
         },
         orderId:{
             type:Number
-        }
+        },
+    fileHash:{
+            type:String
+    }
     },
     {}
 );

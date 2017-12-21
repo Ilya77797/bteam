@@ -9,7 +9,8 @@ async function q1() {
 async function createInfo() {
     var info={
         _id:0,
-        orderId:1
+        orderId:1,
+        fileHash:'qqq'
     }
     var newInfo= new Info(info);
     await newInfo.save();
@@ -17,7 +18,7 @@ async function createInfo() {
 }
 
 async function main() {
-    //await q1();
+    await q1();
     await createInfo();
 }
 main();

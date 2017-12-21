@@ -44,7 +44,10 @@ const userSchema = new mongoose.Schema({
   salt: {
     required: true,
     type: String
-  }
+  },
+    email:{
+    type:String
+    }
 }, {
   timestamps: true
 });
