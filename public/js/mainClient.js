@@ -2395,7 +2395,11 @@ function getPointerFromHistoryCat(name) {
         if(PriceTotalInCart==undefined||PriceTotalInCart.style.display=='none')
             return
         var count=PriceTotalInCart.textContent.length;
-        if(count<6)
+        PriceTotalInCart.style.right='5px';
+        if(count<4){
+            PriceTotalInCart.style.right='-2px';
+        }
+        else if(count<6)
             PriceTotalInCart.style.fontSize='1.1em'
         else if(count<8)
             PriceTotalInCart.style.fontSize='0.9em'

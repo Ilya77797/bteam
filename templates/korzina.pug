@@ -57,7 +57,7 @@ html
                 a.backToProduct(href="/") Назад к товарам
             ul#PR.table-layout.clearfix
 
-            if(email.length < 3)
+            if(email==undefined||email.length < 3)
                 form.formOrder(name='checkout', id="OrderForm")
                     input.textbox(name="name" placeholder="Укажите ваше ФИО"  required)
                     input.textbox(name="emailaddress" placeholder="Укажите ваш Email"  required)

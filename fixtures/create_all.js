@@ -221,7 +221,13 @@ async function addUsers(isNeeded) {
     if(!isNeeded)
         return
 
-    await session.models.Session.remove();
+    try{
+        await session.models.Session.remove();
+    }
+    catch (err){
+
+    }
+
     try{
         mainFile.users.forEach((item)=>{
             let prices=item[3].split(' ');
