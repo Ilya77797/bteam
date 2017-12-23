@@ -1,7 +1,7 @@
 
 module.exports = async function(ctx, next) {
 
-  // keep previous flash
+
   let messages = ctx.session.messages || {};
 
   // clear all flash
@@ -29,12 +29,11 @@ module.exports = async function(ctx, next) {
 
   await next();
 
-  // note that ctx.session can be null after other middlewares,
-  // e.g. logout does session.destroy()
+
   if (!ctx.session) return;
 
   if (ctx.status == 302 && !ctx.session.messages) {
-    // pass on the flash over a redirect
+
     ctx.session.messages = messages;
   }
 

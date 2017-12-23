@@ -582,16 +582,7 @@ function getCats(needSinh) {
 
             },false);
 
-function checkForEnableScrolling(element) {
-    var flag=false;
-    while(element.nodeName!="HTML"&&flag==false){
-        if(element.id=="PR"||element.id=="categor")
-            flag=true
 
-        element=element.parentNode;
-    }
-    return flag
-}
         /*$(document).bind('touchmove', false);
 
         $('#PR').bind('touchmove', true);*/
@@ -2456,6 +2447,18 @@ function getPointerFromHistoryCat(name) {
         div.addEventListener('click',(e)=>{
             hideCatsGoToProducts();
         })
+    }
+
+    function checkForEnableScrolling(element) {
+        var flag=false;
+        element=element.parentNode;
+        while(element.nodeName!="HTML"&&flag==false){
+            if(element.id=="PR"||element.id=="categor")
+                flag=true
+
+            element=element.parentNode;
+        }
+        return flag
     }
 
   /*  function Show_Hide_Loginform() {

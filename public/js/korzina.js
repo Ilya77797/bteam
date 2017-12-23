@@ -499,6 +499,16 @@ window.addEventListener('DOMContentLoaded', function() {
             }
         });
 
+        //Для того, чтобы не было фриза окна
+        document.body.addEventListener('touchmove',function(e){
+            if(!checkForEnableScrolling(e.srcElement))
+                event.preventDefault();
+
+        },false);
+
+
+
+
     }
     function checkout(e) {
         e.preventDefault();
@@ -1083,6 +1093,17 @@ window.addEventListener('DOMContentLoaded', function() {
 
     function isInteger(x) {
         return x % 1 === 0;
+    }
+
+    function checkForEnableScrolling(element) {
+        var flag=false;
+        while(element.nodeName!="HTML"&&flag==false){
+            if(element.id=="PR"||element.id=="categor")
+                flag=true
+
+            element=element.parentNode;
+        }
+        return flag
     }
 
 

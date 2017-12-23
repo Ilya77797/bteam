@@ -52,11 +52,6 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// const user = new User({password: 123})
-// user.password; // 123
-
-// const user = await User.findOne({});
-
 userSchema.virtual('password')
   .set(function(password) {
 
@@ -78,7 +73,7 @@ userSchema.virtual('password')
         'sha256'
       ).toString('base64');
     } else {
-      // remove password (unable to login w/ password any more, but can use providers)
+
       this.salt = undefined;
       this.passwordHash = undefined;
     }
@@ -87,12 +82,12 @@ userSchema.virtual('password')
     return this._plainPassword;
   });
 
+//Виртуальное поле для проверки пароля
 userSchema.methods.checkPassword = function(password) {
-  if (!password) return false; // empty password means no login by password
-  if (!this.passwordHash) return false; // this user does not have password (the line below would hang!)
-  // bcrypt.compare(password, this.passwordHash) // sync?
-    var ph256=sha256(password);
-    const passwordHash = crypto.pbkdf2Sync(
+  if (!password) return false;
+  if (!this.passwordHash) return false;
+    var ph256=sha256(password);//Получение хэша sha256 от введенного пользователем пароля
+    const passwordHash = crypto.pbkdf2Sync(//paswordHash хранится в бд
     ph256,
     this.salt,
     config.crypto.hash.iterations,

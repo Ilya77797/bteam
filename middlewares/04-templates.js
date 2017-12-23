@@ -1,6 +1,4 @@
-// initialize template system early, to let error handler use them
-// koa-views is a wrapper around many template systems!
-// most of time it's better to use the chosen template system directly
+//Подготовка шаблонов
 const pug = require('pug');
 const config = require('config');
 const path = require('path');

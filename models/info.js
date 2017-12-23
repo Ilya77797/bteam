@@ -1,3 +1,4 @@
+//Здесь хранится дополнительная информация, такая как номер заказа(orderId) и хэш last.json(для отслеживания изменений в этом файле)
 const mongoose = require('mongoose');
 
 const infoShema=new mongoose.Schema({

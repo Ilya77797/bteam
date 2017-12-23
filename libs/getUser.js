@@ -6,6 +6,8 @@ async function getUser(ctx) {
     var ses=ctx.sessionId;
     var sesObj= await session.models.Session.find({sid:`koa:sess:${ses}`});
     var userId=sesObj[0].user;
+    if(userId==undefined)
+        return null
     var c=userId.toObjectId();
     var user= await User.find({_id:userId.toObjectId()});
     var UserN={

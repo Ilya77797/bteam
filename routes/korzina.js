@@ -13,7 +13,10 @@ exports.get=async function (ctx, next) {
     if(await isLogged(ctx))
     {
         var userN= await getUser(ctx);
-        ctx.body = ctx.render('korzina',{isLoged:true, name:userN.name, email:userN.email});
+        if(userN==null)
+            ctx.body = ctx.render('korzina',{isLoged:false, email:''});
+        else
+            ctx.body = ctx.render('korzina',{isLoged:true, name:userN.name, email:userN.email});
     }
     else
         ctx.body = ctx.render('korzina',{isLoged:false, email:''});
