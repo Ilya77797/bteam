@@ -575,6 +575,7 @@ function getCats(needSinh) {
     }
 
     function addEvents() {
+        $(document).bind('touchmove', false);
         //for categories
      /*   var catForm=document.getElementById('catSearch');
         SearchCat(catForm);
