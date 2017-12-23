@@ -576,14 +576,22 @@ function getCats(needSinh) {
 
     function addEvents() {
 
-        document.body.addEventListener('touchmove',function(event){
-            var a=event.target;
-            
-            event.preventDefault();
+        document.body.addEventListener('touchmove',function(e){
+            if(!checkForEnableScrolling(e.srcElement))
+                 event.preventDefault();
 
             },false);
 
+function checkForEnableScrolling(element) {
+    var flag=false;
+    while(element.nodeName!="HTML"&&flag==false){
+        if(element.id=="PR"||element.id=="categor")
+            flag==true
 
+        element=element.parentNode;
+    }
+    return flag
+}
         /*$(document).bind('touchmove', false);
 
         $('#PR').bind('touchmove', true);*/
