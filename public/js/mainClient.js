@@ -586,7 +586,7 @@ function checkForEnableScrolling(element) {
     var flag=false;
     while(element.nodeName!="HTML"&&flag==false){
         if(element.id=="PR"||element.id=="categor")
-            flag==true
+            flag=true
 
         element=element.parentNode;
     }
