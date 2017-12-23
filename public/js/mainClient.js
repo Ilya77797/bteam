@@ -576,6 +576,17 @@ function getCats(needSinh) {
 
     function addEvents() {
 
+        document.body.addEventListener('touchmove',function(event){
+            var a=event.target;
+            
+            event.preventDefault();
+
+            },false);
+
+
+        /*$(document).bind('touchmove', false);
+
+        $('#PR').bind('touchmove', true);*/
         //for categories
      /*   var catForm=document.getElementById('catSearch');
         SearchCat(catForm);
