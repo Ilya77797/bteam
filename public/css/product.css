@@ -927,6 +927,10 @@ small.spPrice{
         width: 100% ;
         height: 100% ;
     }
+    body{
+        position: fixed;
+        width: 100%;
+    }
     /* Возможно надо будет настроить и для других расширений (Размер текста в категориях) */
     #categor a{
         text-decoration: none;
