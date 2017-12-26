@@ -576,15 +576,15 @@ function getCats(needSinh) {
 
     function addEvents() {
         var catt=document.getElementById('categor');
-    /*    document.body.addEventListener('touchmove',function(e){
-
-            if(!checkForEnableScrolling(e.target))
+        document.body.addEventListener('touchmove',function(e){
+            e.preventDefault();
+           /* if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
-                return true
-        });*/
+                return true*/
+        });
     catt.addEventListener('touchmove',function(e){
-        e.preventDefault();
+        return true
     },false);
 
       /*  catt.addEventListener('touchmove',function(e){

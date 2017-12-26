@@ -948,7 +948,6 @@ small.spPrice{
 
   #categor{
       display: block;
-      position: fixed;
       overflow-y: scroll;
       max-height: 70vh;
       min-width:100%;
