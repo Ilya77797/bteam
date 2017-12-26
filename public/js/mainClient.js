@@ -2458,7 +2458,7 @@ function getPointerFromHistoryCat(name) {
         var catStyle=getComputedStyle(cat);
 
         if(catStyle.display!='none'){
-           true
+           return true
         }
 
 
