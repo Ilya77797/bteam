@@ -576,6 +576,13 @@ function getCats(needSinh) {
 
     function addEvents() {
         var catt=document.getElementById('categor');
+        document.body.addEventListener('touchmove',function(e){
+
+            if(!checkForEnableScrolling(e.target))
+                e.preventDefault();
+            else
+                return true
+        });
 
       /*  catt.addEventListener('touchmove',function(e){
 
@@ -1531,13 +1538,14 @@ function getPointerFromHistoryCat(name) {
                 $(cat).slideToggle(300);
                 ul.style.display="none";
                 pg.style.display="none";
+                document.body.style.position='static';
 
             }
             else {
                 $(cat).slideToggle(300);
                 ul.style.display="block";
                 pg.style.display="block";
-
+                document.body.style.position='fixed';
             }
 
         }
@@ -2478,10 +2486,7 @@ function getPointerFromHistoryCat(name) {
         var catStyle=getComputedStyle(cat);
 
         if(catStyle.display!='none'){
-            if(isDescendant(cat, element))
-                return true
-            else
-                return false
+           return true
         }
 
 
