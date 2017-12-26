@@ -576,7 +576,7 @@ function getCats(needSinh) {
 
     function addEvents() {
 
-        document.body.addEventListener('touchmove',function(e){
+      /*  document.body.addEventListener('touchmove',function(e){
 
 
             if(!checkForEnableScrolling(e.target))
@@ -584,7 +584,7 @@ function getCats(needSinh) {
 
 
 
-            },false);
+            },false);*/
 
         /*$(document).bind('touchmove', false);
 
@@ -2458,7 +2458,10 @@ function getPointerFromHistoryCat(name) {
         var catStyle=getComputedStyle(cat);
 
         if(catStyle.display!='none'){
-           return true
+            if(isDescendant(document.getElementById('categor'), element))
+                return true
+            else
+                return false
         }
 
 
