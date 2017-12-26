@@ -577,13 +577,11 @@ function getCats(needSinh) {
     function addEvents() {
         var catt=document.getElementById('categor');
         document.body.addEventListener('touchmove',function(e){
-            var cat=document.getElementById('categor');
-            cat.dispatchEvent(e);
-
-           /* if(!checkForEnableScrolling(e.target))
+            
+            if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
-                return true*/
+                return true
         },false);
 
 
