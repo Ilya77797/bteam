@@ -578,7 +578,7 @@ function getCats(needSinh) {
 
         document.body.addEventListener('touchmove',function(e){
 
-            var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
+         /*   var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
             var catWr=document.getElementById('categor-wrapper');
             if(e.target==cat||e.target==catWr){
                 var b=0;
@@ -586,14 +586,14 @@ function getCats(needSinh) {
                 var event=new Event('touchmove',e);
              document.body.dispatchEvent(event);
              return
-            }
-            if(!checkForEnableScrolling(e.target)){
+            }*/
+            /*if(!checkForEnableScrolling(e.target)){
                // e.preventDefault();
-                e.target=document.getElementById('categor');
-                var event=new Event('touchmove',e);
-                document.body.dispatchEvent(event);
-            }
 
+            }*/
+            e.target=document.getElementById('categor');
+            var event=new Event('touchmove',e);
+            document.body.dispatchEvent(event);
 
 
 
