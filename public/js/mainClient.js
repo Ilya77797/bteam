@@ -2452,14 +2452,14 @@ function getPointerFromHistoryCat(name) {
 
     function checkForEnableScrolling(element) {
         var flag=false;
-        var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
+     /*   var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
         var catStyle=getComputedStyle(cat);
 
         if(catStyle.display!='none')
-            return true
+            return true*/
 
         while(element.nodeName!="HTML"&&flag==false){
-            if(element.id=="PR")
+            if(element.id=="PR"||element.id=='categor')
                 flag=true
 
             element=element.parentNode;
