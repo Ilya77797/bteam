@@ -601,7 +601,7 @@ function getCats(needSinh) {
             document.body.dispatchEvent(event);
 */
 
-            },false);
+            },true);
 
         /*$(document).bind('touchmove', false);
 
