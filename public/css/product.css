@@ -922,7 +922,7 @@ small.spPrice{
 
 
     }
-    html, body {
+     body {
         overflow-y:hidden;
         position: fixed;
         width: 100% ;
