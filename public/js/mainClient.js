@@ -578,7 +578,8 @@ function getCats(needSinh) {
 
         document.body.addEventListener('touchmove',function(e){
             var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
-            if(cat.style.display!='none'){
+            var catStyle=getComputedStyle(cat);
+            if(catStyle.display!='none'){
                 var scrollEl=document.getElementById('categor');
                 e.target=scrollEl;
             }
