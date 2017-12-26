@@ -591,10 +591,11 @@ function getCats(needSinh) {
                // e.preventDefault();
 
             }*/
-            e.target=document.getElementById('categor');
+
+            /*e.target=document.getElementById('categor');
             var event=new Event('touchmove',e);
             document.body.dispatchEvent(event);
-
+*/
 
 
             },false);
