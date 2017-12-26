@@ -577,19 +577,10 @@ function getCats(needSinh) {
     function addEvents() {
 
         document.body.addEventListener('touchmove',function(e){
-            var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
-            var catStyle=getComputedStyle(cat);
-            if(catStyle.display!='none'){
-                var scrollEl=document.getElementById('categor');
-                e.target=scrollEl;
-            }
-            else {
-                var scrollEl=document.getElementById('PR');
-                e.target=scrollEl;
-            }
 
-            /*if(!checkForEnableScrolling(e.srcElement))
-                 event.preventDefault();*/
+
+            if(!checkForEnableScrolling(e.target))
+                 event.preventDefault();
 
             },false);
 
@@ -2462,7 +2453,9 @@ function getPointerFromHistoryCat(name) {
     function checkForEnableScrolling(element) {
         var flag=false;
         var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
-        if(cat.style.display!='none')
+        var catStyle=getComputedStyle(cat);
+
+        if(catStyle.display!='none')
             return true
 
         while(element.nodeName!="HTML"&&flag==false){
