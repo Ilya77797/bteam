@@ -585,7 +585,7 @@ function getCats(needSinh) {
             if(!checkForEnableScrolling(e.target))
                  event.preventDefault();
 
-            },false);
+            },true);
 
         /*$(document).bind('touchmove', false);
 
