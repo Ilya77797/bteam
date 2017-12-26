@@ -576,12 +576,12 @@ function getCats(needSinh) {
 
     function addEvents() {
 
-        document.body.addEventListener('touchmove',function(e){
+       /* document.body.addEventListener('touchmove',function(e){
             if(!checkForEnableScrolling(e.srcElement))
                  event.preventDefault();
 
             },false);
-
+*/
 
         /*$(document).bind('touchmove', false);
 
