@@ -576,15 +576,23 @@ function getCats(needSinh) {
 
     function addEvents() {
 
-      /*  document.body.addEventListener('touchmove',function(e){
+        document.body.addEventListener('touchmove',function(e){
 
-
+            /*var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
+            var catWr=document.getElementById('categor-wrapper');
+            if(e.target==cat||e.target==catWr){
+                var b=0;
+                e.target=document.getElementById('categor');
+                var event=new Event('touchmove',e);
+             document.body.dispatchEvent(event);
+             return
+            }*/
             if(!checkForEnableScrolling(e.target))
-                 event.preventDefault();
+                 e.preventDefault();
 
 
 
-            },false);*/
+            },false);
 
         /*$(document).bind('touchmove', false);
 
