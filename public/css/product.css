@@ -945,11 +945,15 @@ small.spPrice{
         min-width: 100%;
 
     }
+    .categor-wrapper-fix{
+        overflow-y: scroll;
+        -webkit-overflow-scrolling:touch;
+    }
   #categor{
-      overflow-y: scroll;
+      /*overflow-y: scroll;*/
       max-height: 75vh;
       min-width:100%;
-      -webkit-overflow-scrolling:touch;
+     /* -webkit-overflow-scrolling:touch;*/
 
   }
 
