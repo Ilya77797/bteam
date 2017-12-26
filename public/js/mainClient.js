@@ -575,8 +575,8 @@ function getCats(needSinh) {
     }
 
     function addEvents() {
-
-        document.body.addEventListener('touchmove',function(e){
+        var catt=document.getElementById('categor');
+        catt.addEventListener('touchmove',function(e){
 
          var f=e;
             /*   var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
