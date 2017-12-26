@@ -924,6 +924,7 @@ small.spPrice{
     }
     html, body {
         overflow-y:hidden;
+        position: relative;
         width: 100% ;
         height: 100% ;
     }
@@ -954,9 +955,7 @@ small.spPrice{
 
   }
 
-  .topMenu, header{
-      position: fixed;
-  }
+
 
 
 
