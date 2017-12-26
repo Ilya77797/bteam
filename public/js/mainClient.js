@@ -577,15 +577,15 @@ function getCats(needSinh) {
     function addEvents() {
         var catt=document.getElementById('categor');
         document.body.addEventListener('touchmove',function(e){
-            e.preventDefault();
+            var cat=document.getElementById('categor');
+            cat.dispatchEvent(e);
+
            /* if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
                 return true*/
-        });
-    catt.addEventListener('touchmove',function(e){
-        return true
-    },false);
+        },false);
+
 
       /*  catt.addEventListener('touchmove',function(e){
 
