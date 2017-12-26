@@ -2452,9 +2452,9 @@ function getPointerFromHistoryCat(name) {
     function checkForEnableScrolling(element) {
         var flag=false;
         var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
-        if(cat.display!='none')
+        if(cat.style.display!='none')
             return true
-        
+
         while(element.nodeName!="HTML"&&flag==false){
             if(element.id=="PR")
                 flag=true
