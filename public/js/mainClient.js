@@ -576,10 +576,12 @@ function getCats(needSinh) {
 
     function addEvents() {
         var catt=document.getElementById('categor');
-        catt.addEventListener('touchmove',function(e){
+
+      /*  catt.addEventListener('touchmove',function(e){
 
          var f=e;
-            /*   var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
+
+            /!*   var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
             var catWr=document.getElementById('categor-wrapper');
             if(e.target==cat||e.target==catWr){
                 var b=0;
@@ -587,21 +589,22 @@ function getCats(needSinh) {
                 var event=new Event('touchmove',e);
              document.body.dispatchEvent(event);
              return
-            }*/
-            if(!checkForEnableScrolling(e.target)){
+            }*!/
+
+         /!*   if(!checkForEnableScrolling(e.target)){
                 e.preventDefault();
 
             }
             else {
                 return true
-            }
+            }*!/
 
-           /* e.target=document.getElementById('categor');
+           /!* e.target=document.getElementById('categor');
             var event=new Event('touchmove',e);
             document.body.dispatchEvent(event);
-*/
+*!/
 
-            },true);
+            },true);*/
 
         /*$(document).bind('touchmove', false);
 
