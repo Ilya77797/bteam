@@ -2456,7 +2456,7 @@ function getPointerFromHistoryCat(name) {
         var catStyle=getComputedStyle(cat);
 
         if(catStyle.display!='none'){
-            if(isDescendant(cat, element))
+            if(isDescendant(document.getElementById('categor'), element))
                 return true
             else
                 return false
