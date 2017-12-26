@@ -579,6 +579,9 @@ function getCats(needSinh) {
         document.body.addEventListener('touchmove',function(e){
 
 
+            if(e.target.nodeName!='A'&&!e.target.classList.contains('categor-item'))
+                var b=0;
+
             if(!checkForEnableScrolling(e.target))
                  event.preventDefault();
 
@@ -2459,7 +2462,7 @@ function getPointerFromHistoryCat(name) {
             return true*/
 
         while(element.nodeName!="HTML"&&flag==false){
-            if(element.id=="PR"||element.id=='categor')
+            if(element.id=="PR"||element.id=='categor'||element.id=='categor-wrapper'||element.classList.contains('categor-wrapper-fix'))
                 flag=true
 
             element=element.parentNode;
