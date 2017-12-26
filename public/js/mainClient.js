@@ -588,16 +588,18 @@ function getCats(needSinh) {
              document.body.dispatchEvent(event);
              return
             }*/
-            /*if(!checkForEnableScrolling(e.target)){
-               // e.preventDefault();
+            if(!checkForEnableScrolling(e.target)){
+                e.preventDefault();
 
-            }*/
+            }
+            else {
+                return true
+            }
 
-            /*e.target=document.getElementById('categor');
+           /* e.target=document.getElementById('categor');
             var event=new Event('touchmove',e);
             document.body.dispatchEvent(event);
 */
-
 
             },false);
 
