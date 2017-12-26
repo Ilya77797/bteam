@@ -587,8 +587,13 @@ function getCats(needSinh) {
              document.body.dispatchEvent(event);
              return
             }
-            if(!checkForEnableScrolling(e.target))
-                 e.preventDefault();
+            if(!checkForEnableScrolling(e.target)){
+               // e.preventDefault();
+                e.target=document.getElementById('categor');
+                var event=new Event('touchmove',e);
+                document.body.dispatchEvent(event);
+            }
+
 
 
 
