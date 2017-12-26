@@ -2451,7 +2451,6 @@ function getPointerFromHistoryCat(name) {
 
     function checkForEnableScrolling(element) {
         var flag=false;
-        element=element.parentNode;
         while(element.nodeName!="HTML"&&flag==false){
             if(element.id=="PR"||element.id=="categor")
                 flag=true
