@@ -582,8 +582,9 @@ function getCats(needSinh) {
 
             var force=e.changedTouches[0].force;
             if(force<0.3){
-                var cloneE=deepCopy(e);
+                var cloneE=e;
                 cloneE.changedTouches[0].force=0.3;
+                console.log('force: ',cloneE.changedTouches[0].force );
                 var cat=document.getElementById('categor');
                 var newEvent=new e.constructor(e.type, cloneE);
                 cat.dispatchEvent(newEvent);
@@ -2532,51 +2533,7 @@ function getPointerFromHistoryCat(name) {
     }
 
 
-     function copyObject(obj) {
 
-        var copy = {};
-
-        for (var key in obj) {
-
-            copy[key] = obj[key];
-
-        }
-
-        return copy;
-
-    }
-
-
-
-     function deepCopy(obj) {
-
-        if (typeof obj != "object") {
-
-            return obj;
-
-        }
-
-
-
-        var copy = new obj.constructor();
-
-        for (var key in obj) {
-
-            if (typeof obj[key] == "object") {
-
-                copy[key] = this.deepCopy(obj[key]);
-
-            } else {
-
-                copy[key] = obj[key];
-
-            }
-
-        }
-
-        return copy;
-
-    }
 
 
     /*  function Show_Hide_Loginform() {
