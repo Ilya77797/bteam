@@ -951,10 +951,10 @@ small.spPrice{
 
   #categor{
       display: block;
-    /*  overflow-y: scroll;*/
+      overflow-y: scroll;
       max-height: 70vh;
       min-width:100%;
-      /*-webkit-overflow-scrolling:touch;*/
+      -webkit-overflow-scrolling:touch;
       z-index: 100;
 
 

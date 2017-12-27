@@ -595,14 +595,13 @@ function getCats(needSinh) {
             if(e.changedTouches[0].force<0.1){
                 var catt=document.getElementById('categor');
             }*/
-         if(this.id!='categor')
-            return
+
 
             if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
                 return true
-        }, true);
+        }, false);
 
 
       /*  catt.addEventListener('touchmove',function(e){
@@ -1560,16 +1559,16 @@ function getPointerFromHistoryCat(name) {
                 ul.style.display="none";
                 pg.style.display="none";
 
-                /*document.body.style.position='static';
-                document.getElementsByTagName('HTML')[0].style.position='static';*/
+                document.body.style.position='static';
+                document.getElementsByTagName('HTML')[0].style.position='static';
 
             }
             else {
                 $(cat).slideToggle(300);
                 ul.style.display="block";
                 pg.style.display="block";
-                /*document.body.style.position='fixed';
-                document.getElementsByTagName('HTML')[0].style.position='fixed';*/
+                document.body.style.position='fixed';
+                document.getElementsByTagName('HTML')[0].style.position='fixed';
             }
 
         }
