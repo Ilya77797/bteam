@@ -14,6 +14,7 @@ window.addEventListener('DOMContentLoaded', function() {
     var userSettings={
         curPrice:{}
     };
+    canvas.allowTouchScrolling = true;
     var historyCat={//объект для работы с текущими категориями
         div:null,
         pointers:[]
@@ -575,15 +576,12 @@ function getCats(needSinh) {
     }
 
     function addEvents() {
-        var catt=document.getElementById('categor');
-        document.body.addEventListener('webkitmouseforcewillbegin',(e)=>{
-            var r=e;
-        });
+
 
         document.body.addEventListener('touchmove',function(e){
 
             var force=e.changedTouches[0].force;
-            if(force<0.5)
+            if(force<0.1)
                 e.changedTouches[0].force=0.5;
             var b=e.changedTouches[0].force;
             if(!checkForEnableScrolling(e.target))
