@@ -1559,16 +1559,16 @@ function getPointerFromHistoryCat(name) {
                 ul.style.display="none";
                 pg.style.display="none";
 
-                document.body.style.position='static';
-                document.getElementsByTagName('HTML')[0].style.position='static';
+                /*document.body.style.position='static';
+                document.getElementsByTagName('HTML')[0].style.position='static';*/
 
             }
             else {
                 $(cat).slideToggle(300);
                 ul.style.display="block";
                 pg.style.display="block";
-                document.body.style.position='fixed';
-                document.getElementsByTagName('HTML')[0].style.position='fixed';
+                /*document.body.style.position='fixed';
+                document.getElementsByTagName('HTML')[0].style.position='fixed';*/
             }
 
         }
