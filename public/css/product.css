@@ -920,8 +920,8 @@ small.spPrice{
         min-height: 10px;
         width: 100%;
 
-
-
+        -webkit-overflow-scrolling:touch;
+        overflow-y: scroll;
     }
     html, body {
         overflow-y:hidden;
@@ -950,7 +950,6 @@ small.spPrice{
     }
 
   #categor{
-      position: absolute;
       display: block;
       overflow-y: scroll;
       max-height: 70vh;
