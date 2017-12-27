@@ -298,10 +298,10 @@
     opacity: 0.8;
 }
 
-/*.categor-item:hover:not(.curSubcat){
+.categor-item:hover:not(.curSubcat){
     background-color: darkgrey;
     opacity: 0.5;
-}*/
+}
 
 
 .layout-buttons {
@@ -954,7 +954,7 @@ small.spPrice{
       max-height: 70vh;
       min-width:100%;
       -webkit-overflow-scrolling:touch;
-      z-index: 100;
+
 
 
 

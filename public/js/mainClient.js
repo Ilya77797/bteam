@@ -596,12 +596,22 @@ function getCats(needSinh) {
                 var catt=document.getElementById('categor');
             }*/
 
-
+            var g=document.querySelectorAll('.categor-item');
+            g.forEach((elem)=>{
+                elem.style.pointerEvents='none';
+            });
             if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
                 return true
         }, false);
+
+        document.body.addEventListener('touchend',(e)=>{
+            var g=document.querySelectorAll('.categor-item');
+            g.forEach((elem)=>{
+                elem.style.pointerEvents='auto';
+            });
+        });
 
 
       /*  catt.addEventListener('touchmove',function(e){
