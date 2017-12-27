@@ -595,10 +595,7 @@ function getCats(needSinh) {
             if(e.changedTouches[0].force<0.1){
                 var catt=document.getElementById('categor');
             }*/
-         if(e.changedTouches[0].force<0.09){
-             alert('1');
-             return
-         }
+
             if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
