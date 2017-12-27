@@ -298,10 +298,10 @@
     opacity: 0.8;
 }
 
-.categor-item:hover:not(.curSubcat){
+/*.categor-item:hover:not(.curSubcat){
     background-color: darkgrey;
     opacity: 0.5;
-}
+}*/
 
 
 .layout-buttons {
@@ -920,8 +920,7 @@ small.spPrice{
         min-height: 10px;
         width: 100%;
 
-        -webkit-overflow-scrolling:touch;
-        overflow-y: scroll;
+
     }
     html, body {
         overflow-y:hidden;
