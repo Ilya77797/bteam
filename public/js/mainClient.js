@@ -595,12 +595,14 @@ function getCats(needSinh) {
             if(e.changedTouches[0].force<0.1){
                 var catt=document.getElementById('categor');
             }*/
+         if(this.id!='categor')
+            return
 
             if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
                 return true
-        });
+        }, true);
 
 
       /*  catt.addEventListener('touchmove',function(e){
