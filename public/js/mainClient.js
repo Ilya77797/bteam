@@ -591,8 +591,11 @@ function getCats(needSinh) {
                 return
             }*/
 
-            var b=e.changedTouches[0].force;
-            if(!checkForEnableScrolling(e.target)||e.changedTouches[0].force<0.1)
+         /*   var b=e.changedTouches[0].force;
+            if(e.changedTouches[0].force<0.1){
+                var catt=document.getElementById('categor');
+            }*/
+            if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
                 return true
