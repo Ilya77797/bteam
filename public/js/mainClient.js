@@ -2558,7 +2558,7 @@ function getPointerFromHistoryCat(name) {
 
 
 
-        var copy = obj.constructor();
+        var copy = new obj.constructor();
 
         for (var key in obj) {
 
