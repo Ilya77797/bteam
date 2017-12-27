@@ -590,7 +590,7 @@ function getCats(needSinh) {
                 e.preventDefault();
             else
                 return true
-        },false);
+        },true);
 
 
       /*  catt.addEventListener('touchmove',function(e){
