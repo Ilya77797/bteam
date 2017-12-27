@@ -582,7 +582,7 @@ function getCats(needSinh) {
 
             var force=e.changedTouches[0].force;
             if(force<0.3){
-                var cloneE=e;
+                var cloneE= jQuery.extend(true, {}, e);
                 cloneE.changedTouches[0].force=0.3;
                var ddd=cloneE.changedTouches[0].force;
                 var cat=document.getElementById('categor');
