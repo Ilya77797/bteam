@@ -580,7 +580,7 @@ function getCats(needSinh) {
 
             var force=e.changedTouches[0].force;
             if(force<0.5)
-                force=0.5
+                e.changedTouches[0].force=0.5;
             var b=e.changedTouches[0].force;
             if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
