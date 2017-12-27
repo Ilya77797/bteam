@@ -584,7 +584,7 @@ function getCats(needSinh) {
             if(force<0.3){
                 var cloneE=e;
                 cloneE.changedTouches[0].force=0.3;
-               var ddd=changedTouches[0].force;
+               var ddd=cloneE.changedTouches[0].force;
                 var cat=document.getElementById('categor');
                 var newEvent=new e.constructor(e.type, cloneE);
                 cat.dispatchEvent(newEvent);
