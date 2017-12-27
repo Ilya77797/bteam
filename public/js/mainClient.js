@@ -580,7 +580,7 @@ function getCats(needSinh) {
 
         document.body.addEventListener('touchmove',function(e){
 
-            var force=e.changedTouches[0].force;
+          /*  var force=e.changedTouches[0].force;
             if(force<0.3){
                 var cloneE= jQuery.extend(true, {}, e);
                 cloneE.changedTouches[0].force=0.3;
@@ -589,10 +589,10 @@ function getCats(needSinh) {
                 var newEvent=new e.constructor(e.type, cloneE);
                 cat.dispatchEvent(newEvent);
                 return
-            }
+            }*/
 
             var b=e.changedTouches[0].force;
-            if(!checkForEnableScrolling(e.target))
+            if(!checkForEnableScrolling(e.target)||e.changedTouches[0].force<0.1)
                 e.preventDefault();
             else
                 return true
