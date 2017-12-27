@@ -581,14 +581,21 @@ function getCats(needSinh) {
         document.body.addEventListener('touchmove',function(e){
 
             var force=e.changedTouches[0].force;
-            if(force<0.1)
-                e.changedTouches[0].force=0.5;
+            if(force<0.3){
+                var cloneE=deepCopy(e);
+                cloneE.changedTouches[0].force=0.3;
+                var cat=document.getElementById('categor');
+                var newEvent=new e.constructor(e.type, cloneE);
+                cat.dispatchEvent(newEvent);
+                return
+            }
+
             var b=e.changedTouches[0].force;
             if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
                 return true
-        },{once:true});
+        });
 
 
       /*  catt.addEventListener('touchmove',function(e){
@@ -2524,16 +2531,64 @@ function getPointerFromHistoryCat(name) {
         return false;
     }
 
-  /*  function Show_Hide_Loginform() {
-        var userImg=document.getElementsByClassName('userImg')[0];
-        var loginForm=document.getElementById('loginForm');
-       // userImg.style.display='none';
-        Array.from(loginForm.children).forEach((child)=>{
-            if(child.nodeName!='IMG')
-                $(child).fadeToggle();
-        });
 
-    }*/
+     function copyObject(obj) {
+
+        var copy = {};
+
+        for (var key in obj) {
+
+            copy[key] = obj[key];
+
+        }
+
+        return copy;
+
+    }
+
+
+
+     function deepCopy(obj) {
+
+        if (typeof obj != "object") {
+
+            return obj;
+
+        }
+
+
+
+        var copy = obj.constructor();
+
+        for (var key in obj) {
+
+            if (typeof obj[key] == "object") {
+
+                copy[key] = this.deepCopy(obj[key]);
+
+            } else {
+
+                copy[key] = obj[key];
+
+            }
+
+        }
+
+        return copy;
+
+    }
+
+
+    /*  function Show_Hide_Loginform() {
+          var userImg=document.getElementsByClassName('userImg')[0];
+          var loginForm=document.getElementById('loginForm');
+         // userImg.style.display='none';
+          Array.from(loginForm.children).forEach((child)=>{
+              if(child.nodeName!='IMG')
+                  $(child).fadeToggle();
+          });
+
+      }*/
 
 
 
