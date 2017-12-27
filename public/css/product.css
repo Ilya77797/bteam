@@ -919,7 +919,7 @@ small.spPrice{
         display: none;
         min-height: 10px;
         width: 100%;
-        z-index: 1;
+
 
 
     }
@@ -945,7 +945,7 @@ small.spPrice{
     }
     #categor-wrapper{
         min-width: 100%;
-        z-index: 1;
+
 
     }
 
@@ -956,6 +956,7 @@ small.spPrice{
       min-width:100%;
       -webkit-overflow-scrolling:touch;
       z-index: 100;
+
 
 
   }
