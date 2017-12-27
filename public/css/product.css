@@ -952,8 +952,7 @@ small.spPrice{
       display: block;
       overflow-y: scroll;
       max-height: 70vh;
-      min-width:90%;
-      width: 90%;
+      min-width:100%;
       -webkit-overflow-scrolling:touch;
 
 
