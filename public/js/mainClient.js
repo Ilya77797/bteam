@@ -576,6 +576,10 @@ function getCats(needSinh) {
 
     function addEvents() {
         var catt=document.getElementById('categor');
+        document.body.addEventListener('webkitmouseforcewillbegin',(e)=>{
+            var r=e;
+        });
+
         document.body.addEventListener('touchmove',function(e){
 
             var force=e.changedTouches[0].force;
