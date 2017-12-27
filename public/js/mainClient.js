@@ -577,7 +577,11 @@ function getCats(needSinh) {
     function addEvents() {
         var catt=document.getElementById('categor');
         document.body.addEventListener('touchmove',function(e){
-            
+
+            var force=e.changedTouches[0].force;
+            if(force<0.5)
+                force=0.5
+            var b=e.changedTouches[0].force;
             if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
