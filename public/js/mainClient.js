@@ -604,7 +604,7 @@ function getCats(needSinh) {
                 e.preventDefault();
             else
                 return true
-        }, false);
+        }, true);
 
       /*  document.body.addEventListener('touchend',(e)=>{
             var g=document.querySelectorAll('.categor-item');
