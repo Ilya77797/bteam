@@ -577,8 +577,8 @@ function getCats(needSinh) {
 
     function addEvents() {
 
-
-        document.body.addEventListener('touchmove',function(e){
+        var catt=document.getElementById('categor');
+        catt.addEventListener('touchmove',function(e){
 
           /*  var force=e.changedTouches[0].force;
             if(force<0.3){
@@ -600,17 +600,17 @@ function getCats(needSinh) {
             g.forEach((elem)=>{
                 elem.style.pointerEvents='none';
             });*/
-           if(e.target.id!='categor'){
+          /* if(e.target.id!='categor'){
                var cat=document.getElementById('categor');
                var event=new e.constructor(e.type, e);
                cat.dispatchEvent(event);
-           }
+           }*/
 
 
-           /* if(!checkForEnableScrolling(e.target))
+            if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
-                return true*/
+                return true
         }, false);
 
       /*  document.body.addEventListener('touchend',(e)=>{

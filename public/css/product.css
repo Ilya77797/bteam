@@ -966,11 +966,10 @@ small.spPrice{
 
 
   }
- /* .categor-item{
-      !*min-height: 100px;*!
+  .categor-item{
+      min-height: 100px;
 
   }
-*/
 
 
 
