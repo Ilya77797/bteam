@@ -919,6 +919,7 @@ small.spPrice{
         display: none;
         min-height: 10px;
         width: 100%;
+        pointer-events: none;
 
 
     }
@@ -944,6 +945,7 @@ small.spPrice{
     }
     #categor-wrapper{
         min-width: 100%;
+        pointer-events: none;
 
 
     }
