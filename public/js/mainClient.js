@@ -578,9 +578,9 @@ function getCats(needSinh) {
     function addEvents() {
 
 
-        /*document.body.addEventListener('touchmove',function(e){
+        document.body.addEventListener('touchmove',function(e){
 
-          /!*  var force=e.changedTouches[0].force;
+          /*  var force=e.changedTouches[0].force;
             if(force<0.3){
                 var cloneE= jQuery.extend(true, {}, e);
                 cloneE.changedTouches[0].force=0.3;
@@ -589,22 +589,22 @@ function getCats(needSinh) {
                 var newEvent=new e.constructor(e.type, cloneE);
                 cat.dispatchEvent(newEvent);
                 return
-            }*!/
+            }*/
 
-         /!*   var b=e.changedTouches[0].force;
+         /*   var b=e.changedTouches[0].force;
             if(e.changedTouches[0].force<0.1){
                 var catt=document.getElementById('categor');
-            }*!/
+            }*/
 
-            var g=document.querySelectorAll('.categor-item');
+           /* var g=document.querySelectorAll('.categor-item');
             g.forEach((elem)=>{
                 elem.style.pointerEvents='none';
-            });
+            });*/
             if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
                 return true
-        }, false);*/
+        }, false);
 
       /*  document.body.addEventListener('touchend',(e)=>{
             var g=document.querySelectorAll('.categor-item');
