@@ -925,8 +925,8 @@ small.spPrice{
 
     }
     html, body {
-        overflow-y:scroll;
-        /*position: fixed;*/
+        overflow-y:hidden;
+        position: fixed;
         width: 100% ;
         height: 100% ;
         z-index: 1;
@@ -954,17 +954,7 @@ small.spPrice{
 
 
     }
-    ::-webkit-scrollbar{
-        width:12px;
-    }
-    ::-webkit-scrollbar-thumb{
-        border-width:1px 1px 1px 2px;
-        border-color: #777;
-        background-color: #aaa;
-    }
-    ::-webkit-scrollbar-track{
-        border-width:0;
-    }
+
 
 
     #categor{
