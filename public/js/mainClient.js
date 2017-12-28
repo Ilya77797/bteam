@@ -1580,6 +1580,7 @@ function getPointerFromHistoryCat(name) {
                // document.body.style.position='static';
                 document.getElementsByTagName('HTML')[0].style.position='static';
                 document.getElementsByTagName('HTML')[0].style.overflowY='scroll';
+                //document.getElementsByTagName('HTML')[0].style.maxHeight='80vh';
                 document.body.style.position='static';
                 document.body.style.overflowY='scroll';
 

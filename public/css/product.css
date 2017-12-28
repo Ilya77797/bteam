@@ -926,6 +926,7 @@ small.spPrice{
     }
     html, body {
         overflow-y:hidden;
+        max-height: 80vh;
         position: fixed;
         width: 100% ;
         height: 100% ;
