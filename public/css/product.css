@@ -966,6 +966,9 @@ small.spPrice{
 
 
   }
+  .categor-item{
+      min-height: 200px;
+  }
 
 
 

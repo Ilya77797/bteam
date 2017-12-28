@@ -1565,13 +1565,8 @@ function getPointerFromHistoryCat(name) {
             var pg=document.getElementById('light-pagination');
             var catInfo=getComputedStyle(cat);
             if(catInfo.display=="none"){
-                var topMenu=document.getElementsByClassName('topMenu')[0];
-                var cat2=document.getElementById('categor');
-                topMenu.parentNode.insertBefore(cat2,cat);
-                cat.remove();
-                cat2.classList.add('clearfix');
-                changeToLi();
-                /*$(cat).slideToggle(300);*/
+
+                $(cat).slideToggle(300);
                 ul.style.display="none";
                 pg.style.display="none";
 
@@ -2553,7 +2548,7 @@ function getPointerFromHistoryCat(name) {
         return false;
     }
 
-    function changeToLi() {
+  /*  function changeToLi() {
 
         var e = document.getElementsByClassName('categor-item');
         Array.from(e).forEach((elem)=>{
@@ -2571,7 +2566,7 @@ function getPointerFromHistoryCat(name) {
         categor.parentNode.replaceChild(categor2, categor);
 
     }
-
+*/
 
 
 
