@@ -1565,7 +1565,12 @@ function getPointerFromHistoryCat(name) {
             var pg=document.getElementById('light-pagination');
             var catInfo=getComputedStyle(cat);
             if(catInfo.display=="none"){
-                $(cat).slideToggle(300);
+                var topMenu=document.getElementsByClassName('topMenu');
+                var cat2=document.getElementById('categor');
+                topMenu.parentNode.insertBefore(cat2,cat);
+                cat.remove();
+
+                /*$(cat).slideToggle(300);*/
                 ul.style.display="none";
                 pg.style.display="none";
 
