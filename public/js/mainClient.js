@@ -1578,7 +1578,7 @@ function getPointerFromHistoryCat(name) {
                 pg.style.display="none";
 
                // document.body.style.position='static';
-                //document.getElementsByTagName('HTML')[0].style.position='static';
+                document.getElementsByTagName('HTML')[0].style.position='static';
                 //document.getElementsByTagName('HTML')[0].style.overflowY='scroll';
                 //document.getElementsByTagName('HTML')[0].style.maxHeight='80vh';
                 document.body.style.position='static';
