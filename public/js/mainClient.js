@@ -1578,8 +1578,8 @@ function getPointerFromHistoryCat(name) {
                 pg.style.display="none";
 
                // document.body.style.position='static';
-                document.getElementsByTagName('HTML')[0].style.position='static';
-                document.getElementsByTagName('HTML')[0].style.overflowY='scroll';
+                //document.getElementsByTagName('HTML')[0].style.position='static';
+                //document.getElementsByTagName('HTML')[0].style.overflowY='scroll';
                 //document.getElementsByTagName('HTML')[0].style.maxHeight='80vh';
                 document.body.style.position='static';
                 document.body.style.overflowY='scroll';
@@ -1589,8 +1589,8 @@ function getPointerFromHistoryCat(name) {
                 $(cat).slideToggle(300);
                 ul.style.display="block";
                 pg.style.display="block";
-                document.getElementsByTagName('HTML')[0].style.position='fixed';
-                document.getElementsByTagName('HTML')[0].style.overflowY='hidden';
+                //document.getElementsByTagName('HTML')[0].style.position='fixed';
+                //document.getElementsByTagName('HTML')[0].style.overflowY='hidden';
                 document.body.style.position='fixed';
                 document.body.style.overflowY='hidden';
                 /*document.body.style.position='fixed';
