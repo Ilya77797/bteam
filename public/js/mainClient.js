@@ -1580,7 +1580,8 @@ function getPointerFromHistoryCat(name) {
                // document.body.style.position='static';
                 document.getElementsByTagName('HTML')[0].style.position='static';
                 //document.getElementsByTagName('HTML')[0].style.overflowY='scroll';
-                //document.getElementsByTagName('HTML')[0].style.maxHeight='80vh';
+                var comp=getComputedStyle(document.getElementById('categor'));
+                document.getElementsByTagName('HTML')[0].style.maxHeight=comp.height+'px';
                 document.body.style.position='static';
                 document.body.style.overflowY='scroll';
 
