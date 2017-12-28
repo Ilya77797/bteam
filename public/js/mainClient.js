@@ -1569,7 +1569,8 @@ function getPointerFromHistoryCat(name) {
                 var cat2=document.getElementById('categor');
                 topMenu.parentNode.insertBefore(cat2,cat);
                 cat.remove();
-
+                cat2.classList.add('clearfix');
+                changeToLi();
                 /*$(cat).slideToggle(300);*/
                 ul.style.display="none";
                 pg.style.display="none";
@@ -2552,6 +2553,24 @@ function getPointerFromHistoryCat(name) {
         return false;
     }
 
+    function changeToLi() {
+
+        var e = document.getElementsByClassName('categor-item');
+        Array.from(e).forEach((elem)=>{
+            var d = document.createElement('li');
+            d.classList.add('categor-item');
+            d.innerHTML = elem.innerHTML;
+            elem.parentNode.replaceChild(d, elem);
+        });
+
+        var categor=document.getElementById('categor');
+        var categor2=document.createElement('ul');
+        categor2.style.listStyle='none';
+        categor2.setAttribute('id','categor');
+        categor2.innerHTML=categor.innerHTML;
+        categor.parentNode.replaceChild(categor2, categor);
+
+    }
 
 
 
