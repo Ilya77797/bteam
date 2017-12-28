@@ -600,11 +600,18 @@ function getCats(needSinh) {
             g.forEach((elem)=>{
                 elem.style.pointerEvents='none';
             });*/
-            if(!checkForEnableScrolling(e.target))
+           if(e.target.id!='categor'){
+               var cat=document.getElementById('categor');
+               var event=new e.constructor(e.type, e);
+               cat.dispatchEvent(event);
+           }
+
+
+           /* if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
-                return true
-        }, true);
+                return true*/
+        }, false);
 
       /*  document.body.addEventListener('touchend',(e)=>{
             var g=document.querySelectorAll('.categor-item');
