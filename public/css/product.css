@@ -959,11 +959,12 @@ small.spPrice{
 
 
     #categor{
+        float: left;
       display: block;
-      /*overflow-y: scroll;*/
-     /* max-height: 70vh;*/
+      overflow-y: scroll;
+      max-height: 70vh;
       min-width:100%;
-     /* -webkit-overflow-scrolling:touch;*/
+      -webkit-overflow-scrolling:touch;
 
       position: absolute;
       z-index: 100;
@@ -1039,7 +1040,11 @@ small.spPrice{
     }
     #header{
         height: 40px;
+
     }
+
+
+
     .loginForm input, button{
         display: inline-block;
     }

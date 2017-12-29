@@ -1578,12 +1578,18 @@ function getPointerFromHistoryCat(name) {
                 pg.style.display="none";
 
                // document.body.style.position='static';
-                document.getElementsByTagName('HTML')[0].style.position='static';
-                //document.getElementsByTagName('HTML')[0].style.overflowY='scroll';
+
+
+                /*document.getElementsByTagName('HTML')[0].style.position='static';
+                document.getElementsByTagName('HTML')[0].style.overflowY='scroll';
                 var comp=getComputedStyle(document.getElementById('categor'));
                 document.getElementsByTagName('HTML')[0].style.maxHeight=comp.height+'px';
                 document.body.style.position='static';
-                document.body.style.overflowY='scroll';
+                document.body.style.overflowY='scroll';*/
+
+
+               /* document.getElementsByClassName('topMenu')[0].style.position='fixed';
+                document.getElementById('header').style.position='fixed';*/
 
             }
             else {
@@ -1592,8 +1598,10 @@ function getPointerFromHistoryCat(name) {
                 pg.style.display="block";
                 //document.getElementsByTagName('HTML')[0].style.position='fixed';
                 //document.getElementsByTagName('HTML')[0].style.overflowY='hidden';
-                document.body.style.position='fixed';
-                document.body.style.overflowY='hidden';
+
+            /*    document.body.style.position='fixed';
+                document.body.style.overflowY='hidden';*/
+
                 /*document.body.style.position='fixed';
                 document.getElementsByTagName('HTML')[0].style.position='fixed';*/
             }
