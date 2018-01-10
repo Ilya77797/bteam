@@ -1,9 +1,11 @@
 const nodemailer = require('nodemailer');
 const Info=require('../models/info');
 var getUser=require('../libs/getUser');
+var isLogged=require('../libs/isLogged')
 const config1 = require('../config/default');
 var Data=require('../models/data');
 var orderId=null;
+var isUser=false;
 
 var strZakaz='';
 exports.post=async function(ctx, next) {
@@ -29,10 +31,10 @@ exports.post=async function(ctx, next) {
 
     let mailOptions = {
         from: config1.emailFrom, // sender address
-        to: `${config1.emailTo},${data.email}`, // list of receivers
+        to: config1.emailTo, // list of receivers
         subject: 'Заказ на сайте bteam', // Subject line
         text: 'Заказ на сайте bteam', // plain text body
-        html: await getMessage(data, ctx) // html body
+        html: await getMessage(data, ctx, true) // html body
     };
 
     smtpTransport.sendMail(mailOptions, (error, info, ctx) => {
@@ -41,12 +43,37 @@ exports.post=async function(ctx, next) {
             ctx.body={status:'error'};
             return console.log('Error');
         } else {
-            console.log('Message sent: %s', info.messageId);
+            console.log('Message sent to the shop assistant: %s', info.messageId);
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
             ctx.body.status=200;
 
         }
     });
+
+    if(data.email!=config1.emailTo){
+        var NeedTechInfo=isUser;
+
+        let mailOptions = {
+            from: config1.emailFrom, // sender address
+            to: data.email, // list of receivers
+            subject: 'Заказ на сайте bteam', // Subject line
+            text: 'Заказ на сайте bteam', // plain text body
+            html: await getMessage(data, ctx, NeedTechInfo) // html body
+        };
+
+        smtpTransport.sendMail(mailOptions, (error, info, ctx) => {
+            if (error) {
+                // return console.log(error);
+                ctx.body={status:'error'};
+                return console.log('Error');
+            } else {
+                console.log('Message sent to the client: %s', info.messageId);
+                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                ctx.body.status=200;
+
+            }
+        });
+    }
 
 
 ctx.body={status:'send'};
@@ -54,7 +81,7 @@ ctx.body={status:'send'};
 }
 
 
-async function getMessage(data,ctx) {
+async function getMessage(data,ctx, NeedTechInfo) {
 
     return `
     <h4>Информация о заказчике</h4>
@@ -79,18 +106,21 @@ async function getMessage(data,ctx) {
         </tr>
     ${await getOrder(data.order,ctx)}
     <p><i>Письмо создано автоматически. Пожалуйста, не отвечайте на него! Если у Вас возникли любые вопросы - Вы можете перезвонить по тел. 24-07-05, 24-07-08 в рабочее время или отправить письмо на адрес...</i></p>
-    <p>${strZakaz}</p>
+    ${getTechInfo(NeedTechInfo)}
     
    
     
     `
 }
 
-/*<ul>
-${await getOrder(data.order,ctx)}
-</ul>*/
+function getTechInfo(NeedTechInf) {
+    if(NeedTechInf)
+        return ` 
+        <p>${strZakaz}</p>
+        `
+    return ''
 
-/*htmlContent+=`<li> Название: ${item.name} <br> Количество: ${obj[item._id]} <br> Цена:${curPrice} </li>`*/
+}
 
 async function getOrder(order, ctx) {//Проверка на правильность кук
     //id;наименование;количество;цена;|
@@ -109,9 +139,11 @@ async function getOrder(order, ctx) {//Проверка на правильно�
     var htmlContent='';
     try {
         var User= await getUser(ctx);
+        isUser=true;
     }
     catch (err){
         var User=null;
+        isUser=false;
     }
     var price=0;
     products.forEach((item)=>{

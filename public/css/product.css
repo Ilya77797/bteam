@@ -1,15 +1,4 @@
-/* BUTTONS TO TOGGLE LAYOUT */
-/*!* to clear search*!
-.clearable{
-    background: #fff url(http://i.stack.imgur.com/mJotv.gif) no-repeat right -10px center;
-    border: 1px solid #999;
-    padding: 3px 18px 3px 4px;     !* Use the same right padding (18) in jQ! *!
-    border-radius: 3px;
-    transition: background 0.4s;
-}
-.clearable.x  { background-position: right 5px center; } !* (jQ) Show icon *!
-.clearable.onX{ cursor: pointer; }              !* (jQ) hover cursor style *!
-.clearable::-ms-clear {display: none; width:0; height:0;} !* Remove IE default X *!*/
+
 
 #ShowPhpotoID{
     margin-left: -35px;
@@ -42,9 +31,7 @@
 
 
 }
-/*.loginForm input, button, h2{
-    display: none;
-}*/
+
 .aDelFromKorzina{
     float: right;
     text-decoration: underline;
@@ -225,19 +212,14 @@
 .ToProducts:before{
     content: " < ";
 }
-/*#HISTORY:hover #SUBH{
-    display: block;
-}
-#HISTORY:not(:hover) #SUBH{
-    display: none;
-}*/
+
 
 #SUBH a:before{
     content: " < ";
 }
 
 .subcatHistory{
-    /*display: block*/
+
     align-self: center;
     min-width: 20%;
     max-width: 20%;
@@ -245,8 +227,7 @@
     overflow: hidden;
 }
 .subcatHistory a{/*class for subcatHistory*/
-    /*text-decoration: underline !important;
-    color: blue !important;*/
+
     text-decoration: none;
     color: black;
     font-size: 1.1em !important;

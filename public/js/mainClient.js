@@ -1,13 +1,4 @@
 window.addEventListener('DOMContentLoaded', function() {
-//3) некорректно работат при переходе в корзину без выбранной категории
-    //4) ошибка когда нет страниц
-    //5) Если пустая категория-в этой категории пока ничего нет
-    //6) Если сначала выбрать категорию, перейти в корзину, вернуться, выбрать категорию, снова перейти --- ошибка
-    //7) Дублирование a в History!!!!
-    //8) Если не возвращатьв корень каталога после перехода в корзину-ошибка
-    //--9) Переход в корзину без выбора категории, возврат обратно-ошибка
-    //--10) curSubcat
-
     var Remove=true;
     var wasTriggered=false;// Был ли запрос за настройками на сервер
     var startPoint={};
@@ -41,9 +32,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     setShowingTotalPrice();
-   /* var catForm=document.getElementById('catSearch');
-    var e=new Event('submit');
-    catForm.dispatchEvent(e);*/
+
 
     function clear(id) {
         var hasSubh=false;
@@ -114,64 +103,16 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     function renderHistoryCat(prevCat) {
-       // var topMenu=document.getElementsByClassName('topMenu')[0];
-
-        //var HISTORY=document.getElementById('HISTORY');
-
-
-
-      /*  if(historyCat.div==null){
-
-
-            var div_2=document.createElement('div');
-            div_2.classList.add('subcatHistory');
-            div_2.setAttribute('id','SUBH');
-            topMenu.insertBefore(div_2, topMenu.firstChild);
-
-             var a=document.createElement('a');
-             a.setAttribute('data-info', 'allProducts');
-             a.setAttribute('href','#');
-             a.textContent='Назад';
-
-             div_2.appendChild(a)
-
-            historyCat.div=div_2.cloneNode(true);
-            let pointer={
-                name:'allProducts',
-                div:null
-            }
-            historyCat.pointers.push(pointer);
-
-        }
-        else {
-
-
-            var a=document.createElement('a');
-            a.setAttribute('data-info', 'allProducts');
-            a.setAttribute('href','#');
-            a.textContent='Назад';
-            let pointer={
-                name:prevCat.firstChild.dataset.info,
-                div:prevCat
-            }
-            historyCat.pointers.pop();
-            var div_2=document.getElementById('SUBH');
-            div_2.remove(div_2.firstChild);
-            historyCat.pointers.push(pointer);
-            div_2.appendChild(a);
-
-        }*/
-
 
         var div=document.getElementById('categor');
         var a=document.createElement('a');
         a.setAttribute('data-info', prevCat.firstChild.dataset.info);
         a.setAttribute('href','#');
-        //a.textContent = prevCat.firstChild.textContent;
+
         a.textContent='Назад';
         if(historyCat.div==null){
                     Remove=false;
-                /*var div_2=document.getElementById('SUBH');*/
+
                 document.getElementById('SUBH').remove();
                 var div_2=document.createElement('div');
                 div_2.classList.add('subcatHistory');
@@ -199,13 +140,9 @@ window.addEventListener('DOMContentLoaded', function() {
             historyCat.div.remove( historyCat.div.firstChild);
             historyCat.div.appendChild(a);
 
-            /*if(historyCat.pointers.length!=1)
-                document.getElementById('SUBH').appendChild(a);*/
-
 
         }
 
-        //div.insertBefore(historyCat.div, div.firstChild);
         if(isMobileVersion){
             var categor= document.getElementById('categor');
             categor.insertBefore(historyCat.div, categor.firstChild)
@@ -217,7 +154,6 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
 
-        //HISTORY.appendChild(historyCat.div);
 
         let pointer={
             name:prevCat.firstChild.dataset.info,
@@ -378,26 +314,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     }
 
-/*    function SearchCat(form) {
-        form.onsubmit = function(event) {
-            event.preventDefault();
-            var a = new FormData(this);
 
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', '/searchCat', true);
-            xhr.send(new FormData(this));
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState != 4) return;
-
-                if (xhr.status == 200) {
-                    renderCat(JSON.parse(xhr.response));
-                }
-
-
-            }
-
-        }
-    }*/
 
 function getCats(needSinh) {
 
@@ -434,7 +351,7 @@ function getCats(needSinh) {
         li.textContent='Подождите, идет загрузка...';
         li.style.textAlign = "center";
         ul.appendChild(li);
-        //setTimeout(setWaitingIndecator,2000);
+
 
         var stateObj=getStateCookie();
         if(!stateObj)
@@ -488,8 +405,7 @@ function getCats(needSinh) {
             if(isMain)
                 document.getElementById('dataSearch').searchD.value=stateObj['searchText'];
 
-            /*if(f)
-                statePge=stateObj['page'];*/
+
 
 
 
@@ -531,17 +447,6 @@ function getCats(needSinh) {
                     if(targetCat=='')
                         return
 
-                    //historyCat=stateObj['historyCat'];
-
-
-                        /*var pointer=getPointerFromHistoryCat(targetCat);
-                        if(pointer=={}) return;
-                        changeCurentCat(pointer);
-                        return
-                    */
-
-
-
 
 
                     var categors=document.getElementById('categor');
@@ -580,94 +485,11 @@ function getCats(needSinh) {
         var catt=document.getElementById('categor');
         document.body.addEventListener('touchmove',function(e){
 
-          /*  var force=e.changedTouches[0].force;
-            if(force<0.3){
-                var cloneE= jQuery.extend(true, {}, e);
-                cloneE.changedTouches[0].force=0.3;
-               var ddd=cloneE.changedTouches[0].force;
-                var cat=document.getElementById('categor');
-                var newEvent=new e.constructor(e.type, cloneE);
-                cat.dispatchEvent(newEvent);
-                return
-            }*/
-
-         /*   var b=e.changedTouches[0].force;
-            if(e.changedTouches[0].force<0.1){
-                var catt=document.getElementById('categor');
-            }*/
-
-           /* var g=document.querySelectorAll('.categor-item');
-            g.forEach((elem)=>{
-                elem.style.pointerEvents='none';
-            });*/
-          /* if(e.target.id!='categor'){
-               var cat=document.getElementById('categor');
-               var event=new e.constructor(e.type, e);
-               cat.dispatchEvent(event);
-           }*/
-
-
             if(!checkForEnableScrolling(e.target))
                 e.preventDefault();
             else
                 return true
         }, false);
-
-      /*  document.body.addEventListener('touchend',(e)=>{
-            var g=document.querySelectorAll('.categor-item');
-            g.forEach((elem)=>{
-                elem.style.pointerEvents='auto';
-            });
-        });*/
-
-
-      /*  catt.addEventListener('touchmove',function(e){
-
-         var f=e;
-
-            /!*   var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
-            var catWr=document.getElementById('categor-wrapper');
-            if(e.target==cat||e.target==catWr){
-                var b=0;
-                e.target=document.getElementById('categor');
-                var event=new Event('touchmove',e);
-             document.body.dispatchEvent(event);
-             return
-            }*!/
-
-         /!*   if(!checkForEnableScrolling(e.target)){
-                e.preventDefault();
-
-            }
-            else {
-                return true
-            }*!/
-
-           /!* e.target=document.getElementById('categor');
-            var event=new Event('touchmove',e);
-            document.body.dispatchEvent(event);
-*!/
-
-            },true);*/
-
-        /*$(document).bind('touchmove', false);
-
-        $('#PR').bind('touchmove', true);*/
-        //for categories
-     /*   var catForm=document.getElementById('catSearch');
-        SearchCat(catForm);
-        catForm.search.addEventListener('keyup',function () {
-            var event = new Event("submit");
-            catForm.dispatchEvent(event);
-        });*/
-
-      /*  var INPUT=document.getElementsByTagName('input');
-        var SELECT=document.getElementsByTagName('select');
-        Array.from(INPUT).concat(Array.from(SELECT)).forEach((item)=>{
-            item.addEventListener('focus',(e)=>{
-                e.preventDefault()
-            });
-        });*/
 
 
         var photo=document.getElementById('ShowImg');
@@ -701,17 +523,6 @@ function getCats(needSinh) {
         });
 
 
-        //for userImg
-        /*try {
-            document.getElementsByClassName('userImg')[0].addEventListener('click', Show_Hide_Loginform);
-        }
-        catch (err){
-
-        }
-*/
-
-
-
 
         //for Select
         var select=document.getElementById('chooseSort');
@@ -738,14 +549,6 @@ function getCats(needSinh) {
             document.getElementById('dataSearch').searchD.placeholder='Поиск товаров';
         });
 
- /*       catForm.search.addEventListener('focus',()=>{
-            document.getElementById('catSearch').search.placeholder='';
-        });
-
-        catForm.search.addEventListener('blur',()=>{
-            document.getElementById('catSearch').search.placeholder='Поиск в категориях';
-        });*/
-
 
         var pagination=document.getElementById('light-pagination');
         pagination.addEventListener('click',SearchDataPage);
@@ -753,10 +556,7 @@ function getCats(needSinh) {
         var cat=document.getElementById('categor');
         //event is also used for working with subcats
         cat.addEventListener('click', onclick);
-        //Мобильные события
-        /*document.addEventListener('touchstart', handleTouchStart, false);
-        document.addEventListener('touchmove', handleTouchMove, false);
-*/
+
 
         var PR=document.getElementById('PR');
         PR.addEventListener('click',openNewWindow);//also delete from Cart
@@ -843,55 +643,7 @@ function getCats(needSinh) {
 
     }
 
-   /* function handleTouchStart (e){
-        if(isExecuted) return;
-        var isMobile = getComputedStyle(document.getElementsByClassName('mobile')[0]);
-        if(isMobile.display == 'none') return;
-        touchCoords.X= e.touches[0].clientX;
-        touchCoords.Y=e.touches[0].clientY;
-    }
 
-    function handleTouchMove(e) {
-        if ( ! touchCoords.X || ! touchCoords.Y ) {
-            return;
-        }
-        var isMobile = getComputedStyle(document.getElementsByClassName('mobile')[0]);
-        if(isMobile.display == 'none') return;
-
-        var xUp = e.touches[0].clientX;
-        var yUp = e.touches[0].clientY;
-
-        var xDiff = touchCoords.X - xUp;
-        var yDiff = touchCoords.Y - yUp;
-
-        if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/!*most significant*!/
-            if ( xDiff > 0 ) {
-                /!* left swipe *!/
-
-            } else {
-                /!* right swipe *!/
-                if(historyCat.pointers.length==0) return;
-                var newVisibleCat={
-                    pointer:historyCat.pointers[historyCat.pointers.length-2].div,
-                    index:historyCat.pointers.length-2
-                };
-                if(newVisibleCat=={}) return;
-                changeCurentCat(newVisibleCat);//Изменить текущую категорию и отрисовать это
-
-
-            }
-        } else {
-            if ( yDiff > 0 ) {
-                /!* up swipe *!/
-            } else {
-                /!* down swipe *!/
-            }
-        }
-        /!* reset values *!/
-        xDown = null;
-        yDown = null;
-    };
-*/
     function changeDisplay(param, elem, count, flag) {
 
         if(flag!=undefined){
@@ -916,12 +668,7 @@ function curentSubcat(subcat){
         var children=subcat.childNodes;
         children[0].classList.add('curSubcatA');
         children[1].classList.add('curSubcatImg');
-        /*try{
-            subcat.parentNode.classList.remove('curSubcat');
-        }
-        catch(e){
 
-        }*/
 
 }
 
@@ -949,8 +696,6 @@ function getPointerFromHistoryCat(name) {
         if(e.target.nodeName=='DIV'&&e.target.firstChild.classList.contains('curSubcatA'))
             return
         if(e.target.nodeName=="IMG"||e.target.nodeName=="A"&& e.target.parentNode.getElementsByTagName('IMG').length>0){//Свернуть/развернуть категории
-         /*   if(Remove==true)
-                document.getElementById('SUBH').remove();*/
 
 
             var parent=e.target.parentNode;
@@ -960,7 +705,7 @@ function getPointerFromHistoryCat(name) {
             if(histCat.id!='categor')
                 curentSubcat(parent);//Добавть класс для текущей категории
             renderHistoryCat(histCat);
-            //document.getElementsByClassName('subcatHistory')[0].style.display='block';//changing flex to block
+
             hasSubcats=true;
             if(e.target.nodeName=='IMG')
                 searchDatabyCat(e.target.previousSibling, hasSubcats);
@@ -971,8 +716,7 @@ function getPointerFromHistoryCat(name) {
         }
         var IMG=e.target.getElementsByTagName('IMG');
         if(e.target.classList.contains('categor-item')&&!e.target.classList.contains('subcatHistory')){
-           /* if(Remove==true)
-                document.getElementById('SUBH').remove();*/
+
 
             if(IMG.length>0){
                 changeDisplay('none', e.target.parentNode, 100);//Скрыть все категории
@@ -1081,17 +825,7 @@ function getPointerFromHistoryCat(name) {
     }
 
     function changeActiveCat(parrent, child) {
-        /*var cat=child||document.getElementById('categor');
-        var childs=cat.childNodes;
-        childs.forEach((item)=>{
-            let flag=f
-            if(item.classList.contains('categor-item-active')){
-                item.classList.remove('categor-item-active');
-                return;
-            }
 
-            changeActiveCat(null,item);
-        });*/
 
             if(activeCatPointer!=null)
             {
@@ -1104,7 +838,7 @@ function getPointerFromHistoryCat(name) {
             }
         if(!parrent.classList.contains('subcatHistory')){
             parrent.classList.add('categor-item-active');
-           // document.getElementById('dataSearch').searchD.value='';
+
             activeCatPointer=parrent;
 
         }
@@ -1269,16 +1003,7 @@ function getPointerFromHistoryCat(name) {
            }
 
        }
-       /* switch(item.status){
-            case 'Акция!': imgIcon.setAttribute('src','images/onSale.png');
-                break;
-            case 'В наличии': imgIcon.setAttribute('src','images/inOrder.png');
-                break;
-            case 'Ожидается': imgIcon.setAttribute('src','images/comingSoon.png');
-                break
-            case 'Новинка':imgIcon.setAttribute('src','images/New.png');
-                break;
-        }*/
+
         imgIcon.classList.add('iconAvail');
 
         var spanPrPrice=document.createElement('span');//4
@@ -1352,31 +1077,7 @@ function getPointerFromHistoryCat(name) {
             }
 
 
-        /*
 
-         var select = document.createElement('select');
-         select.setAttribute('id', `select${item._id}`);
-         spanPrPrice.classList.add('selectPrice');
-
-        var option = document.createElement('option');
-            option.textContent = "Доступные цены";
-            option.disabled = true;
-            select.appendChild(option);
-            User.price.forEach((price, i) => {
-                var option = document.createElement('option');
-                var priceName = `specialPrice${i + 1}`;
-                option.textContent = item[priceName];
-                select.appendChild(option);
-            });
-            spanPrPrice.appendChild(select);*/
-
-
-           /* var small=document.createElement('small');//5
-            if(item.status[2]!='1')
-                small.textContent=`${item.price} руб /${item.specialPrice1} руб /${item.specialPrice2} руб /${item.specialPrice3} руб/${item.specialPrice4} руб`;
-            else
-                small.innerHTML="<br> <br>";
-            spanPrPrice.appendChild(small);*/
         }
         else {
             userSettings.curPrice[item._id]={};
@@ -1424,20 +1125,6 @@ function getPointerFromHistoryCat(name) {
 
         }
 
-        /* var divPrButWrap=document.createElement('div');//2
-         divPrButWrap.classList.add('product-buttons-wrap');
-
-         var divButtons=document.createElement('div');//3
-         divButtons.classList.add('buttons');
-
-         var spanToCart=document.createElement('span');//3
-         spanToCart.classList.add('button');
-         spanToCart.classList.add('to-cart');
-
-         var spanIconTocart=document.createElement('span');//4
-         spanIconTocart.classList.add('icon');
-         spanIconTocart.classList.add('icon-cart');
-         spanIconTocart.textContent='В корзину';*/
 
         /*appending*/
         li.appendChild(a);
@@ -1463,10 +1150,7 @@ function getPointerFromHistoryCat(name) {
 
 
 
-            /*a.appendChild(divPrButWrap);
-                divPrButWrap.appendChild(divButtons);
-                    divButtons.appendChild(spanToCart);
-                        spanToCart.appendChild(spanIconTocart);*/
+
 
         return li;
     }
@@ -1577,33 +1261,13 @@ function getPointerFromHistoryCat(name) {
                 ul.style.display="none";
                 pg.style.display="none";
 
-               // document.body.style.position='static';
-
-
-                /*document.getElementsByTagName('HTML')[0].style.position='static';
-                document.getElementsByTagName('HTML')[0].style.overflowY='scroll';
-                var comp=getComputedStyle(document.getElementById('categor'));
-                document.getElementsByTagName('HTML')[0].style.maxHeight=comp.height+'px';
-                document.body.style.position='static';
-                document.body.style.overflowY='scroll';*/
-
-
-               /* document.getElementsByClassName('topMenu')[0].style.position='fixed';
-                document.getElementById('header').style.position='fixed';*/
 
             }
             else {
                 $(cat).slideToggle(300);
                 ul.style.display="block";
                 pg.style.display="block";
-                //document.getElementsByTagName('HTML')[0].style.position='fixed';
-                //document.getElementsByTagName('HTML')[0].style.overflowY='hidden';
 
-            /*    document.body.style.position='fixed';
-                document.body.style.overflowY='hidden';*/
-
-                /*document.body.style.position='fixed';
-                document.getElementsByTagName('HTML')[0].style.position='fixed';*/
             }
 
         }
@@ -1618,15 +1282,7 @@ function getPointerFromHistoryCat(name) {
             else if(e.target.parentNode.classList.contains('wrapImg'))
                 window.location=e.target.parentNode.href;
 
-           /* reg=new  RegExp('corzina');
-            var target=e.target;
-            if(e.target.nodeName=='IMG')
-                target=e.target.parentNode;
 
-            if(target&&target.href.match(reg)){///Переход в корзину
-                //window.open(target.href, '_blank');
-               window.location=target.href;
-            }*/
         }
 
 
@@ -2059,7 +1715,7 @@ function getPointerFromHistoryCat(name) {
         var totalPriceCart=document.getElementById(`PriceTotalInCart`);
 
         var corzina=document.getElementsByClassName('corzina')[0];
-        //corzina.style.display='none';
+
         corzina.style.opacity=0.2;
 
         document.getElementsByClassName('wrapImg')[0].style.width='auto';
@@ -2074,7 +1730,7 @@ function getPointerFromHistoryCat(name) {
 
         if(price==''){
             var corzina=document.getElementsByClassName('corzina')[0];
-            //corzina.style.display='inline-block';
+
             corzina.style.opacity=1;
             totalPriceCart.style.display='none';
             document.getElementsByClassName('wrapImg')[0].style.width='';
@@ -2431,7 +2087,7 @@ function getPointerFromHistoryCat(name) {
               if(isMobileVersion){
 
                   categor.insertBefore(div_2,categor.firstChild);
-                  //div_2.classList.add('categor-item');
+
               }
               else
                   topMenu.insertBefore(div_2, topMenu.firstChild);
@@ -2472,7 +2128,7 @@ function getPointerFromHistoryCat(name) {
         var check=document.createElement('input');
         check.setAttribute('id','showPtotos');
         check.setAttribute('type','checkbox');
-        //check.setAttribute('checked','true');
+
         var dataS=document.getElementsByClassName('topMenu')[0];
         dataS.insertBefore(check,dataS.firstChild);
     }
@@ -2572,58 +2228,10 @@ function getPointerFromHistoryCat(name) {
         return false;
     }
 
-  /*  function changeToLi() {
 
-        var e = document.getElementsByClassName('categor-item');
-        Array.from(e).forEach((elem)=>{
-            var d = document.createElement('li');
-            d.classList.add('categor-item');
-            d.innerHTML = elem.innerHTML;
-            elem.parentNode.replaceChild(d, elem);
-        });
-
-        var categor=document.getElementById('categor');
-        var categor2=document.createElement('ul');
-        categor2.style.listStyle='none';
-        categor2.setAttribute('id','categor');
-        categor2.innerHTML=categor.innerHTML;
-        categor.parentNode.replaceChild(categor2, categor);
-
-    }
-*/
-
-
-
-    /*  function Show_Hide_Loginform() {
-          var userImg=document.getElementsByClassName('userImg')[0];
-          var loginForm=document.getElementById('loginForm');
-         // userImg.style.display='none';
-          Array.from(loginForm.children).forEach((child)=>{
-              if(child.nodeName!='IMG')
-                  $(child).fadeToggle();
-          });
-
-      }*/
 
 
 
 });
 
 
-/*
-var discount=0;
-try {
-    if(this.discount!==undefined)
-        discount=parseFloat(this.discount);
-}
-catch (e){
-
-}
-if(select==undefined)
-    var price=this.price;
-else
-    price=select.options[select.selectedIndex].value;
-
-
-
-*/

@@ -65,14 +65,7 @@ function takeInfo(str1, str2) {
 
     return mainFile.prefixes[0]+str1
 
-    /*var str=str1.substring(str1.indexOf("http"),str1.indexOf("target")-2);
-     return str.replace(/'\'/g, "")*/
-    /*var str= str1.substring(str1.indexOf('http'),str1.indexOf("target"));
-    var index=str.indexOf("'")
-    if(index==-1)
-        return str
-    else
-        return str.substring(0,index);*/
+
 }
 
 function takeIcon(str) {
@@ -117,44 +110,8 @@ async function sortAlpha(mass) {
     });
 
 
-/*        await sortedMass.sort((a, b) => {
-            if(a.name.includes('00395')&&b.name.includes('20481')){
-                var letff=0;
-            }
-
-            if(a.name.includes('20481')){
-                var letff=0;
-            }
-            var aN=a.name.substring(firstLetter(a.name)).toUpperCase();
-            var bN=b.name.substring(firstLetter(b.name)).toUpperCase();
-
-            return compareLetters(aN,bN,0);
-        });*/
-
-    /* var mass=await sortedMass.map(async function (item) {
-        var str=await prepareForSprtAlpha(item.name);
-        return str;
-
-    });
-    var B=0;
-
-    await itogMass.sort((a,b)=>{
-        return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0;
-    });
-
-var s=0;
-*/
-   /* await sortedMass.forEach(function (item,i) {
-        item.indexSortAlp=i;
-        var a=0;
-        //itogMass[item.index].indexSortAlp=i;
-    });*/
-    /*var b=0;
-    return itogMass;*/
 }
 
-/*var indexUp=FindId(item._id, resultMass);
-resultMass[indexUp].indexSortUp = i;*/
 function FindId(id, mass) {
         var i=mass.length-1;
         var f=false;
@@ -176,31 +133,6 @@ function FindId(id, mass) {
 }
 
 function compareLetters(a,b, i) {
-   /* var aIndex=0;
-    var bIndex=0;
-    for(let j=0;j<a.length;j++)
-    {
-        var p=a[j].charCodeAt(0);
-        if(p>1039&&p<1072||p>64&&p<91||p>47&&p<58)
-            aIndex+=a[j].charCodeAt(0);
-    }
-
-    for(let j=0;j<b.length;j++)
-    {
-        var p=b[j].charCodeAt(0);
-        if(p>1039&&p<1072||p>64&&p<91||p>47&&p<58)
-            bIndex+=b[j].charCodeAt(0);
-    }
-    return aIndex-bIndex*/
-/*if(i<a.length&&i<b.length){
-    var aCHar=a[i].charCodeAt(0);
-    var bCHar=b[i].charCodeAt(0);
-    if(!(aCHar>1039&&aCHar<1072||aCHar>64&&aCHar<91)&&i<a.length)
-        i++
-
-    if(!(bCHar>1039&&bCHar<1072||bCHar>64&&bCHar<91)&&i<b.length)
-        i++
-}*/
 
 
     if(a[i]!=b[i]&&i<a.length&&i<b.length)
@@ -375,5 +307,4 @@ function prepareForSprtAlpha(str) {
 
 
 module.exports=main;
-//main();
-//Отправлять запрос н очистку кук, если были изменения в User
+

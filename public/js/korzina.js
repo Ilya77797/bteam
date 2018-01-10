@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', function() {
             return
 
         }
-        var res=getOrderProfuctsWithAmount(massCookies);
+        var res=getOrderProductsWithAmount(massCookies);
 
         let req={
             data:res[0]
@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function getOrderProfuctsWithAmount(mass){
+    function getOrderProductsWithAmount(mass){
 
         var obj={};
         mass=mass.split(';').map((item)=>{
@@ -115,7 +115,7 @@ window.addEventListener('DOMContentLoaded', function() {
                     ul.appendChild(li);
                 });
                 document.getElementsByClassName('topMenu')[0].appendChild(div);
-                //ul.parentNode.insertBefore(div,ul);
+
 
 
             }).then(()=>{
@@ -296,16 +296,7 @@ window.addEventListener('DOMContentLoaded', function() {
             imgIcon.setAttribute('src','images/inOrder.png');//Акция
             spanIcon.textContent='В наличии';
         }
-        /* switch(item.status){
-         case 'Акция!': imgIcon.setAttribute('src','images/onSale.png');
-         break;
-         case 'В наличии': imgIcon.setAttribute('src','images/inOrder.png');
-         break;
-         case 'Ожидается': imgIcon.setAttribute('src','images/comingSoon.png');
-         break
-         case 'Новинка':imgIcon.setAttribute('src','images/New.png');
-         break;
-         }*/
+
         imgIcon.classList.add('iconAvail');
 
         var spanPrPrice=document.createElement('span');//4
@@ -322,7 +313,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
         if(login) {
-           // var small1 = document.createElement('small');//5
+           //5
             if(User.useDiscount==true){
                 item.discount=User.discount
 
@@ -341,13 +332,6 @@ window.addEventListener('DOMContentLoaded', function() {
                     spanPrPrice.appendChild(b1);
                     spanPrPrice.appendChild(small1);
 
-                 /*   if(User.show==false&&User.curPrice!='0'&&User.price.length != 0){
-                        var b2 = document.createElement('b');//5
-                        b2.setAttribute('id',`BSP${item._id}`)
-                        b2.textContent = item[`specialPrice${User.curPrice}`];
-                        b2.style.display='none';
-                        spanPrPrice.appendChild(b2);
-                    }*/
 
 
 
@@ -419,7 +403,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         divPrT.appendChild(divPrN);
         divPrT.appendChild(amount);
-        //divPrDetails.appendChild(divPrT);
+
 
 
         a.appendChild(divPrT);
@@ -432,25 +416,15 @@ window.addEventListener('DOMContentLoaded', function() {
         a.appendChild(spanTotal);
 
 
-        //a.appendChild(divPrDetailsWrap);
-        //divPrDetailsWrap.appendChild(divPrDetails);
-        //divPrDetails.appendChild(divPrAvail);
+
         divPrAvail.appendChild(imgIcon);
         divPrAvail.appendChild(spanIcon);
-        //divPrDetails.appendChild(spanPrPrice);
-        //divPrDetails.appendChild(buttonM);
-        //divPrDetails.appendChild(inputZakaz);
-        //divPrDetails.appendChild(buttonP);
-        //divPrDetails.appendChild(spanTotal);
 
 
 
 
 
-        /*a.appendChild(divPrButWrap);
-         divPrButWrap.appendChild(divButtons);
-         divButtons.appendChild(spanToCart);
-         spanToCart.appendChild(spanIconTocart);*/
+
 
         //Events for buttons
         buttonM.addEventListener('click', decrementAmount.bind(item) );
@@ -599,23 +573,6 @@ window.addEventListener('DOMContentLoaded', function() {
 
             recalculatePriceCookie();
 
-            /*let id=e.target.dataset.info;
-            var mass=getCookie('itemsID').split(';');
-            var index = mass.indexOf(id);
-            if (index >= 0) {
-                mass.splice( index, 1 );
-                setCookie('itemsID',mass.join(';'));
-                e.target.parentNode.parentNode.remove();
-                setOrderCookie();
-
-            }
-            if(mass.length==0){
-                renderNoProducts();
-                document.getElementsByClassName('ZakazItogForAll')[0].remove();
-                setOrderCookie();
-            }*/
-
-
 
 
         }
@@ -698,7 +655,6 @@ window.addEventListener('DOMContentLoaded', function() {
         $(ul).slideToggle(300);
         $(form).slideToggle(300);
         document.body.style.overflowY='scroll';
-        //$('html, body').animate({ scrollTop: form[0].offsetTop}, 500);
 
     }
 
@@ -1113,68 +1069,4 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
-
-
-/*
- item.discount=User.discount;
- var small = document.createElement('small');//5
- if (item.status[2] != '1') {
-
- var select = document.createElement('select');
- select.setAttribute('id',`select${item._id}`);
- spanPrPrice.classList.add('selectPrice');
- if(User.price.length==0){
- var b=document.createElement('b');//5
- b.setAttribute('id',`BPRICE${item._id}`);
- b.textContent=item.price;
-
- var small=document.createElement('small');//5
- small.textContent='руб';
- spanPrPrice.appendChild(b);
- spanPrPrice.appendChild(small);
-
- }
- else {
- var option = document.createElement('option');
- option.textContent="Выберете цену";
- option.disabled=true;
- select.appendChild(option);
- User.price.forEach((price, i) => {
- var option = document.createElement('option');
- var priceName = `specialPrice${i+1}`;
- option.textContent = item[priceName];
- select.appendChild(option);
- });
- spanPrPrice.appendChild(select);
- }
-
- }
- else{
- small.innerHTML="<br> <br>";
- spanPrPrice.appendChild(small);
- }
-
- }
- else{
- var b=document.createElement('b');//5
- b.setAttribute('id',`BPRICE${item._id}`);
- b.textContent=item.price;
-
- var small=document.createElement('small');//5
- small.textContent='руб';
- spanPrPrice.appendChild(b);
- spanPrPrice.appendChild(small);
-*/
-
-/*
-if(login){
-    var discount=document.createElement('span');
-    discount.textContent=`Ваша персональная скидка: ${User.discount} %`;
-    discount.setAttribute('data-disc',User.discount);
-    discount.setAttribute('id','DISCOUNT');
-    discount.style.display="block";
-    div.appendChild(discount);
-}
-*/
 

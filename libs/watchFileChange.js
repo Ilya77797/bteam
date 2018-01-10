@@ -19,7 +19,7 @@ function watch(pathToFile) {
                }
            },2000);
 
-               //setTimeout(promiseChanged,2000);//Set interval???
+
         }
         else{
             promiseChanged();
@@ -85,42 +85,3 @@ function promiseChanged() {
 
 module.exports=watch;
 
-/*
-try {
-    setPendingStatus(true);
-    console.log('status:', config1.isPending);
-    require('./fixtures/create_all')();
-    var promise = new Promise((res, rej) => {
-        res();
-    });
-    promise.then(async function () {
-        new Promise((res, rej) => {
-            var int = setInterval(async function (res) {
-                var products = await Data.find().limit(9);
-                if (products.length > 0) {
-                    res(int);
-                }
-            }, 1000);
-        });
-
-    })
-        .then((int) => {
-            clearInterval(int);
-            setPendingStatus(false);
-            console.log('status:', config1.isPending);
-        });
-
-
-}
-catch (err) {
-
-}
-*/
-
-/*if (filename) {
-
-
-
-} else {
-    console.log('filename not provided');
-}*/

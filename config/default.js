@@ -5,7 +5,7 @@ module.exports = {
 
   secret:   'mysecret',
   mongoose: {
-    uri:     'mongodb://Ilya:1234567890QwEr_1@cluster0-shard-00-00-a7qcq.mongodb.net:27017,cluster0-shard-00-01-a7qcq.mongodb.net:27017,cluster0-shard-00-02-a7qcq.mongodb.net:27017/app?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin',
+    uri:     'mongodb://Ilya:bt2017eamItog_1@cluster0-shard-00-00-a7qcq.mongodb.net:27017,cluster0-shard-00-01-a7qcq.mongodb.net:27017,cluster0-shard-00-02-a7qcq.mongodb.net:27017/app?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin',
     options: {
       server: {
         socketOptions: {
@@ -29,10 +29,10 @@ module.exports = {
     })
   },
   root:     process.cwd(),
-  port: process.env.PORT || 8080,
-  emailFrom:'farrukx.val@yandex.ru',
-  emailPassword:'123456789qwer',
-  emailTo:'farrukx.val@yandex.ru',
+  port: 8080,
+  emailFrom:'bteam2017@yandex.ru',
+  emailPassword:'bt2017eamItog_1',
+  emailTo:'bteam2017@yandex.ru',
     isPending:false
 };
 

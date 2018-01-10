@@ -153,10 +153,4 @@ function prepareForSearch(str) {//Для поиска по всем комбин
     return mass;
 }
 
-/*
-var allCats=await Category.find({});
-var resMass=deepSearch(allCats,cat);
-resMass.shift();
-products=await Data.find({'category':{ $in : resMass }}).sort(sortField).skip((page-1)*LIMIT).limit(LIMIT);
 
-*/
