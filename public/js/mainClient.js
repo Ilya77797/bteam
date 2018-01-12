@@ -1159,8 +1159,8 @@ function getPointerFromHistoryCat(name) {
 
         if(e.target.nodeName=='A'&&e.target.href.includes('http')&&!e.target.href.includes('#'))
         {
-            e.preventDefault();
-            window.open(e.target.href, '_blank');
+            /*e.preventDefault();
+            window.open(e.target.href, '_blank');*/
         }
         else if(e.target.classList.contains('button')&&e.target.classList.contains('to-cart')){//Добавление товара в корзину
             var amount=document.getElementById(`inputZ${e.target.dataset.info}`).value;
