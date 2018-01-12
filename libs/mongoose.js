@@ -7,6 +7,9 @@
  * In gulpfile: in beginning
  */
 
+const  MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+
 const mongoose = require('mongoose');
 const config = require('../config/default');
 mongoose.Promise = Promise;
@@ -16,5 +19,12 @@ if (process.env.MONGOOSE_DEBUG) {
 }
 
 mongoose.connect(config.mongoose.uri, {useMongoClient:true} /*config.mongoose.options*/);
+/*MongoClient.connect(config.mongoose.uri, function(err, db) {
+    if(!err) {
+        console.log("We are connected");
+    }
+
+    //db.close();
+});*/
 
 module.exports = mongoose;

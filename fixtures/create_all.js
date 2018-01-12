@@ -11,6 +11,7 @@ var resultMass = [];
 var resultUsers=[];
 async function main(resolve) {
     mainFile=await JSON.parse(fs.readFileSync('./Price/last.json', 'utf8'));
+    //mainFile=require('../Price/last.json');
     var changeUsers=false;
     var changeData=false;
     var changeCats=false;
@@ -307,4 +308,3 @@ function prepareForSprtAlpha(str) {
 
 
 module.exports=main;
-

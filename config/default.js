@@ -5,7 +5,7 @@ module.exports = {
 
   secret:   'mysecret',
   mongoose: {
-    uri:     'mongodb://Ilya:bt2017eamItog_1@cluster0-shard-00-00-a7qcq.mongodb.net:27017,cluster0-shard-00-01-a7qcq.mongodb.net:27017,cluster0-shard-00-02-a7qcq.mongodb.net:27017/app?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin',
+    uri:  'mongodb://localhost:27017/local'   ,
     options: {
       server: {
         socketOptions: {
@@ -37,3 +37,4 @@ module.exports = {
 };
 
 
+//'mongodb://Ilya:bt2017eamItog_1@cluster0-shard-00-00-a7qcq.mongodb.net:27017,cluster0-shard-00-01-a7qcq.mongodb.net:27017,cluster0-shard-00-02-a7qcq.mongodb.net:27017/app?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin'
