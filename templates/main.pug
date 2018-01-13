@@ -27,7 +27,7 @@ html
                             a(href="http://www.bteam.ru/") BATTERY TEAM
                         h3
                             a(href="http://www.bteam.ru/") Тульский Региональный Филиал
-                        h4.time Последнее обновление #{time}
+                        h4.time Последнее обновление #{time} мин. назад
 
                     if(isLoged)
                         div.loginForm
@@ -43,11 +43,11 @@ html
                                 h2 Вход
                                 if(noUser)
                                     h4(style="color:red") Неправильное имя или пароль
-                                    input(name="username" placeholder="Имя пользователья" )
+                                    input(name="username" placeholder="Имя пользователя" )
                                     input(name="password" type="password" placeholder="Пароль" )
                                     a.submit.aButton Войти
                                 else
-                                    input(name="username" placeholder="Имя пользователья")
+                                    input(name="username" placeholder="Имя пользователя")
                                     input(name="password" type="password" placeholder="Пароль")
                                     a.submit.aButton Войти
             div(style='clear:both')

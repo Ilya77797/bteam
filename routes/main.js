@@ -11,7 +11,7 @@ const LIMIT=9;
 exports.get=async function(ctx, next) {
 
         var INFO=await Info.find({_id:0});
-        var updateTime=INFO[0].time;
+        var updateTime=Math.round((Date.now()-INFO[0].time)/60000);
         if(await isLogged(ctx)){
             var user= await getUser(ctx);
             if(user==null)

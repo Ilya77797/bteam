@@ -1516,6 +1516,7 @@ small.spPrice{
     transform: scale(1.1);
 }
 .time{
+    color: green;
     margin-top: 2px;
 }
 

@@ -1,6 +1,7 @@
 {
   "flags":[true,true,true],
     
+    
   "prefixes": ["http://img.optonoff.ru/show/","http://img.optonoff.ru/"],
 "users":[
 ["person","4d1c6d706d875e0325916dab097e2b1f50cc93fca363d04ccde3d78f3a6c2f18","Клиент","1 2 3","0.0","somewhere@hidden.net"],

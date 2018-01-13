@@ -12,7 +12,7 @@ addProto();
 exports.get=async function (ctx, next) {
     //var products=ctx.request.body.products;
     var INFO=await Info.find({_id:0});
-    var updateTime=INFO[0].time;
+    var updateTime=Math.round((Date.now()-INFO[0].time)/60000);
     if(await isLogged(ctx))
     {
         var userN= await getUser(ctx);
