@@ -10,6 +10,9 @@ const infoShema=new mongoose.Schema({
         },
     fileHash:{
             type:String
+    },
+    time:{
+            type: String
     }
     },
     {}

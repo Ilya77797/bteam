@@ -10,7 +10,8 @@ async function createInfo() {
     var info={
         _id:0,
         orderId:1,
-        fileHash:'qqq'
+        fileHash:'qqq',
+        time:''
     }
     var newInfo= new Info(info);
     await newInfo.save();

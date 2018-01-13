@@ -2,7 +2,6 @@
 if (process.env.TRACE) {
   require('./libs/trace');
 }
-
 const Koa = require('koa');
 const app = new Koa();
 

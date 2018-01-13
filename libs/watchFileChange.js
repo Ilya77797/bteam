@@ -61,7 +61,10 @@ async function isEqual(hash) {
 }
 
 async function saveHash(hash) {
+    var DATE=new Date(Date.now()).toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    console.log(`DATE: ${DATE}`);
     await Info.update({ _id: 0 }, { $set: { fileHash: hash }});
+    await Info.update({ _id: 0 }, { $set: { time: DATE }});
 }
 
 function promiseChanged() {

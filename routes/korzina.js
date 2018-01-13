@@ -2,6 +2,7 @@ require('../models/categor');
 var session=require('../libs/mongoose');
 const passport = require('koa-passport');
 const mongoose=require('../libs/mongoose');
+const Info=require('../models/info');
 var Categor=require('../models/categor');
 var Data=require('../models/data');
 var isLogged=require('../libs/isLogged');
@@ -10,16 +11,18 @@ var getUser=require('../libs/getUser');
 addProto();
 exports.get=async function (ctx, next) {
     //var products=ctx.request.body.products;
+    var INFO=await Info.find({_id:0});
+    var updateTime=INFO[0].time;
     if(await isLogged(ctx))
     {
         var userN= await getUser(ctx);
         if(userN==null)
-            ctx.body = ctx.render('korzina',{isLoged:false, email:''});
+            ctx.body = ctx.render('korzina',{isLoged:false, email:'', time:updateTime});
         else
-            ctx.body = ctx.render('korzina',{isLoged:true, name:userN.name, email:userN.email});
+            ctx.body = ctx.render('korzina',{isLoged:true, name:userN.name, email:userN.email, time:updateTime});
     }
     else
-        ctx.body = ctx.render('korzina',{isLoged:false, email:''});
+        ctx.body = ctx.render('korzina',{isLoged:false, email:'', time:updateTime});
 };
 
 exports.post=async function (ctx, next) {
