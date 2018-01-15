@@ -2183,6 +2183,8 @@ function getPointerFromHistoryCat(name) {
 
     }
     function addToProductsElementMenu() {
+        if(!isMobileVersion)
+            return
         var subh=document.getElementById('SUBH');
         var categor=document.getElementById('categor');
         var div=document.createElement('div');
