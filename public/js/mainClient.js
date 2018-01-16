@@ -1029,7 +1029,7 @@ function getPointerFromHistoryCat(name) {
 
             var small = document.createElement('small');//5
 
-            if (item.status[2] != '1') {
+            if (item.status[2] != '1'||item.amount[0]!="0") {
 
                 userSettings.curPrice[item._id]={};
                 if (User.price.length == 0||User.show==false||User.curPrice=='0') {
