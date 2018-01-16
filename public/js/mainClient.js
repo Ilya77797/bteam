@@ -1084,7 +1084,7 @@ function getPointerFromHistoryCat(name) {
             userSettings.curPrice[item._id].price=item.price;
             var b=document.createElement('b');//5
             var small=document.createElement('small');//5
-            if(item.status[2] != '1'){
+            if(item.status[2] != '1'||item.amount[0]!="0"){
                 b.textContent=item.price;
                 small.textContent='руб';
             }
