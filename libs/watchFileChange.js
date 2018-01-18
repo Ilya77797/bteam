@@ -13,12 +13,12 @@ function watch(pathToFile) {
         path=pathToFile;
         if(!fs.existsSync(pathToFile)){
 
-           TIMER=setInterval(()=>{
+         /*  TIMER=setInterval(()=>{
                if(fs.existsSync(path)){
                    clearInterval(TIMER);
                    promiseChanged();
                }
-           },2000);
+           },2000);*/
 
 
         }

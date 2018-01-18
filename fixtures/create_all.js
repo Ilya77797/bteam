@@ -37,8 +37,9 @@ async function main(resolve) {
     if(mainFile.data!=undefined)
         changeData=true;
 
+    console.log('start del');
     await clearAll(changeUsers,changeCats,changeData);
-
+    console.log('end del');
  //addUsers
  await addUsers(changeUsers);
 
@@ -164,13 +165,16 @@ async function addUsers(isNeeded) {
         return
 
     try{
+
         await session.models.Session.remove();
+        console.log('sessions deleted');
     }
     catch (err){
-
+        console.log('sessions deleting error!');
     }
 
     try{
+        console.log('start adding users');
         mainFile.users.forEach((item)=>{
             let prices=item[3].split(' ');
             let user={
@@ -188,7 +192,7 @@ async function addUsers(isNeeded) {
         });
     }
     catch (e){
-
+        console.log('adding users error!');
     }
 
     resultUsers.forEach(async function (item) {
@@ -205,6 +209,7 @@ async function addCats(isNeeded) {
 
 
     try{
+        console.log('start adding cats');
         mainFile.groups.forEach((item, i)=>{
             let cat={
                 name:item.name,
@@ -212,12 +217,14 @@ async function addCats(isNeeded) {
                 index:i
             };
             resultCat.push(cat);
-            console.log(`category ${item.name} is added to the database`);
+
         });
     }
     catch (e) {
-
+        console.log('adding cats error!');
     }
+    console.log(`resultCatLegth: ${resultMass.length}`);
+    console.log(`resultCat ${resultCat}`);
     resultCat.forEach(async function (item) {
         let cat=new Categor(item);
         await cat.save();
@@ -232,6 +239,7 @@ async function addData(isNeeded) {
 
 
     try {
+        console.log('start adding products');
         mainFile.data.forEach((item, i) => {
             var dataObj = {
                 _id: parseInt(item[0]),
@@ -265,7 +273,8 @@ async function addData(isNeeded) {
     await sortAlpha(resultMass);
     var a=0;
 
-
+    console.log(`resultDataLength ${resultMass.length}`);
+    console.log(`resultData ${resultMass}`);
     resultMass.forEach(async function (data,i) {
         var b=new Dataq(data);
         await b.save();
