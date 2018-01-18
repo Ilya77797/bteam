@@ -1,19 +1,24 @@
 //Основной файл
+const config = require('config');
+const config1 = require('./config/default');
+config1.dir=__dirname;
+require('./fixtures/Logger')();
 if (process.env.TRACE) {
   require('./libs/trace');
 }
 const Koa = require('koa');
 const app = new Koa();
 
-const config = require('config');
 const mongoose = require('./libs/mongoose');
 // keys for in-koa KeyGrip cookie signing (used in session, maybe other modules)
 app.keys = [config.secret];
 
 const path = require('path');
 const fs = require('fs');
+
+
 const middlewares = fs.readdirSync(path.join(__dirname, 'middlewares')).sort();
-const config1 = require('./config/default');
+
 middlewares.forEach(function(middleware) {
   app.use(require('./middlewares/' + middleware));
 });
@@ -61,6 +66,7 @@ app.listen(config1.port);
 
 //Путь к файлу с выгрузкой(last.json)
 var root=pathToJson();
+
 
 //Эта функция следит за изменениями в last.json. Если изменения были, происходит обновление бд.
 require('./libs/watchFileChange')(root);

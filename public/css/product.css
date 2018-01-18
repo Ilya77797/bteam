@@ -1,5 +1,6 @@
 
 
+
 #ShowPhpotoID{
     margin-left: -35px;
     height: 30px;
@@ -318,6 +319,7 @@
     list-style: none;
     padding: 0;
     min-height: 100%;
+
 
 
     /*max-height:650px ;
@@ -1518,6 +1520,11 @@ small.spPrice{
 .time{
     color: green;
     margin-top: 2px;
+}
+
+html, body{
+    overflow-y: scroll;
+    -webkit-overflow-scrolling:touch;
 }
 
 

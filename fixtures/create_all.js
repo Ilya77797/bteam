@@ -15,7 +15,7 @@ async function main(resolve) {
     var changeUsers=false;
     var changeData=false;
     var changeCats=false;
-    var flags=mainFile.flags;
+   /* var flags=mainFile.flags;
     if(flags[0]){
         changeUsers=true;
     }
@@ -26,7 +26,16 @@ async function main(resolve) {
 
     if(flags[2]){
         changeData=true;
-    }
+    }*/
+
+   if(mainFile.users!=undefined)
+       changeUsers=true;
+
+   if(mainFile.groups!=undefined)
+       changeCats=true;
+
+    if(mainFile.data!=undefined)
+        changeData=true;
 
     await clearAll(changeUsers,changeCats,changeData);
 
@@ -260,7 +269,7 @@ async function addData(isNeeded) {
     resultMass.forEach(async function (data,i) {
         var b=new Dataq(data);
         await b.save();
-        console.log('done: ', i);
+        console.log(`item added: ${i}`);
     });
 
 }

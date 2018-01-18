@@ -33,7 +33,8 @@ module.exports = {
   emailFrom:'bteam2017@yandex.ru',
   emailPassword:'bt2017eamItog_1',
   emailTo:'bteam2017@yandex.ru',
-    isPending:false
+    isPending:false,
+    dir:''
 };
 
 

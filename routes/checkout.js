@@ -93,7 +93,7 @@ async function getMessage(data,ctx, NeedTechInfo) {
     </ul>
     <h4>Информация о заказе:</h4>
     <ul>
-    <li>Дата: ${new Date(Date.now()).toISOString().replace(/T/, ' ').replace(/\..+/, '')}</li>
+    <li>Дата: ${new Date(Date.now()+10800000).toISOString().replace(/T/, ' ').replace(/\..+/, '')}</li>
     <li>Заказ номер: ${orderId}</li>
     
     </ul>

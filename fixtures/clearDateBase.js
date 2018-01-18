@@ -2,7 +2,7 @@ const mongoose=require('../libs/mongoose');
 const Dataq=require('../models/data');
 async function q1() {
     await Dataq.remove({});
-    console.log('done');
+    console.log('products deleted');
 }
 
 

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const md5File = require('md5-file');
 const Info=require('../models/info');
+//require('../fixtures/Logger')();
 var createAll=require('../fixtures/create_all');
 var path='';
 var TIMER=null;
