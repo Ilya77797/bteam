@@ -47,7 +47,10 @@ async function main(resolve) {
 await addCats(changeCats);
 
 //parcing data from JSON
-await addData(changeData);
+await addData(changeData)
+    .then(()=>{
+      deleteAfter();
+    });
 
 }
 
@@ -224,12 +227,12 @@ async function addCats(isNeeded) {
         console.log('adding cats error!');
     }
     console.log(`resultCatLegth: ${resultMass.length}`);
-    console.log(`resultCat ${resultCat}`);
     resultCat.forEach(async function (item) {
         let cat=new Categor(item);
         await cat.save();
         console.log(`category ${item.name} is added to the database`);
     });
+
 
 }
 
@@ -274,7 +277,6 @@ async function addData(isNeeded) {
     var a=0;
 
     console.log(`resultDataLength ${resultMass.length}`);
-    console.log(`resultData ${resultMass}`);
     resultMass.forEach(async function (data,i) {
         var b=new Dataq(data);
         await b.save();
@@ -321,6 +323,13 @@ function prepareForSprtAlpha(str) {
             itog+=str_1[i];
     }
     return itog;
+}
+
+function deleteAfter() {
+    resultCat=[];
+    resultMass=[];
+    resultUsers=[];
+    console.log(`cat length: ${resultCat.length}, product length: ${resultMass.length}, users length: ${resultUsers.length}`);
 }
 
 

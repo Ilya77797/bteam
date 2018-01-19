@@ -27,8 +27,10 @@ module.exports = async function(ctx, next) {
     for(const key in locals) {
       localsFull[key] = locals[key];
     }
+     // var f= config.template.root;
+      var p=__dirname.replace('middlewares','templates');
+    const templatePathResolved = path.join(p, templatePath + '.pug');
 
-    const templatePathResolved = path.join(config.template.root, templatePath + '.pug');
 
     return pug.renderFile(templatePathResolved, localsFull);
   };

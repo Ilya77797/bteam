@@ -2,7 +2,7 @@
 const config = require('config');
 const config1 = require('./config/default');
 config1.dir=__dirname;
-require('./fixtures/Logger')();
+//require('./fixtures/Logger')();
 if (process.env.TRACE) {
   require('./libs/trace');
 }
@@ -64,16 +64,12 @@ app.use(async (ctx, next) => {
 
 app.listen(config1.port);
 
-//Путь к файлу с выгрузкой(last.json)
-var root=pathToJson();
 
 
-//Эта функция следит за изменениями в last.json. Если изменения были, происходит обновление бд.
-require('./libs/watchFileChange')(root);
 
-function pathToJson() {
-    return __dirname+'/Price/last.json';
-}
+
+
+
 
 function setPendingStatus(status){
     config1.isPending=status;

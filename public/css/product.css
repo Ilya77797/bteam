@@ -1,10 +1,40 @@
 
+/*sort*/
+#selectContainer{
+    margin-left: 5px;
+    height: 30px;
+    /*position: absolute;*/
+    float: right;
+    width:30px;
+    display: inline-block;
+    z-index: 0;
+}
+#selectContainer img{
+    top: 0;
+    left: 0;
+    position: relative;
+    width:30px;
+    height: 30px;
+    z-index: 1;
+}
+#chooseSort{
 
+    position: relative;
+    top:-30px;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    opacity: 0;
+    z-index: 2;
+    /* max-width: 30%;*/
+}
 
 #ShowPhpotoID{
-    margin-left: -35px;
+    /*margin-left: -35px;*/
+    margin-left: 15px;
     height: 30px;
-    position: absolute;
+    /*position: absolute;*/
+    float: right;
     width:30px;
     display: inline-block;
     z-index: 0;
@@ -56,6 +86,7 @@
     text-align: center;
 }
 #content{
+
     height: 100%;
     overflow-x: hidden;
     overflow-y: hidden;
@@ -898,6 +929,27 @@ small.spPrice{
 }
 
 @media  only screen and (max-width: 801px) {
+
+    #ShowPhpotoID{
+        margin-left: -35px;
+
+        height: 30px;
+        position: absolute;
+
+        width:30px;
+        display: inline-block;
+        z-index: 0;
+    }
+
+    #selectContainer{
+        margin-left: 5px;
+        height: 30px;
+        position: absolute;
+
+        width:30px;
+        display: inline-block;
+        z-index: 0;
+    }
     .categor-wrapper-fix{
         position: absolute;
         display: none;
@@ -1311,33 +1363,7 @@ small.spPrice{
     margin-right: 2px;
 }
 
-/*sort*/
-#selectContainer{
-    margin-left: 5px;
-    height: 30px;
-    position: absolute;
-    width:30px;
-    display: inline-block;
-    z-index: 0;
-}
-#selectContainer img{
-    top: 0;
-    left: 0;
-    position: relative;
-    width:30px;
-    height: 30px;
-    z-index: 1;
-}
-#chooseSort{
-    position: relative;
-    top:-30px;
-    left: 0;
-    width: 30px;
-    height: 30px;
-    opacity: 0;
-    z-index: 2;
-   /* max-width: 30%;*/
-}
+
 
 .inputErr{
     border: 2px solid red;
