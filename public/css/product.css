@@ -348,13 +348,15 @@
 
 .products {
     list-style: none;
+    /*overflow-y: scroll;*/
     padding: 0;
+    /*max-height: 600px;*/
     min-height: 100%;
+    z-index: 0;
 
 
 
-    /*max-height:650px ;
-    overflow-y: scroll;*/
+
 }
 .product-name{
     position: relative;
@@ -1551,6 +1553,7 @@ small.spPrice{
 html, body{
     overflow-y: scroll;
     -webkit-overflow-scrolling:touch;
+    z-index: 100;
 }
 
 
