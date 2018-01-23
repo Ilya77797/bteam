@@ -14,6 +14,7 @@ window.addEventListener('DOMContentLoaded', function() {
             return
 
         }
+
         var res=getOrderProductsWithAmount(massCookies);
 
         let req={
@@ -38,6 +39,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
         }
+
     }
 
     function getOrderProductsWithAmount(mass){
@@ -280,7 +282,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
         var imgIcon=document.createElement('img');
-        if(item.status[2]=='1'){
+        if(item.status[2]=='1'&&item.amount[0]=="0"){
             imgIcon.setAttribute('src','images/comingSoon.png');//Ожидается
             spanIcon.textContent='Ожидается';
         }
@@ -487,9 +489,9 @@ window.addEventListener('DOMContentLoaded', function() {
     function checkout(e) {
         e.preventDefault();
         var cookies=getCookie('orderId');
+        var PR=document.getElementById('PR');
         if(cookies==''){
             clear('PR');
-            var PR=document.getElementById('PR');
             var li=document.createElement('li');
             li.textContent='Невозможно сделать заказ, так как Ваша корзина пуста';
             li.style.textAlign = "center";
@@ -499,6 +501,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
             return
         }
+
         var form=document.forms.checkout;
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/checkout', true);
@@ -644,9 +647,12 @@ window.addEventListener('DOMContentLoaded', function() {
         if(!isEverythingFilled())
             return
 
-        if(ul.style.display=='none')
+        if(ul.style.display=='none'){
             a.textContent='Оформить заказ';
+            document.getElementsByClassName('skidkaInfo')[0].style.display='none';
+        }
         else{
+            document.getElementsByClassName('skidkaInfo')[0].style.display='block';
             a.textContent='Назад в корзину';
             setOrderCookie();
             recalculatePriceCookie();

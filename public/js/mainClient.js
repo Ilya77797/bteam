@@ -483,13 +483,17 @@ function getCats(needSinh) {
     function addEvents() {
 
         var catt=document.getElementById('categor');
-        document.body.addEventListener('touchmove',function(e){
 
-            if(!checkForEnableScrolling(e.target))
-                e.preventDefault();
-            else
-                return true
-        }, false);
+        if(isMobileVersion){
+            document.body.addEventListener('touchmove',function(e){
+
+                if(!checkForEnableScrolling(e.target))
+                    e.preventDefault();
+                else
+                    return true
+            }, false);
+        }
+
 
 
         var photo=document.getElementById('ShowImg');
@@ -1478,10 +1482,12 @@ function getPointerFromHistoryCat(name) {
         if(value==null)
             return;
 
-        if(value<this.minOrder){
+        if(value<this.minOrder&&value!=0&&value>0){
             alert('Заказ должен быть кратен минимальной упаковке!');
             return;
         }
+        else if(value<0)
+            e.target.value=`${0} ${this.measure}`;
         else
             e.target.value=`${value} ${this.measure}`;
 
@@ -1539,7 +1545,7 @@ function getPointerFromHistoryCat(name) {
 
         else{
             input.value=`0 ${this.measure}`;
-            alert(`Минимальный заказ для этого товара: ${this.minOrder}`);
+            //alert(`Минимальный заказ для этого товара: ${this.minOrder}`);
 
         }
 
@@ -1555,9 +1561,11 @@ function getPointerFromHistoryCat(name) {
             return
         }
         else {
-            var event = new Event('ch');
+            setTimeout(()=>{
+                var event = new Event('ch');
+                ip.dispatchEvent(event);
+            },1000);
 
-            ip.dispatchEvent(event);
         }
 
     }
@@ -2197,6 +2205,7 @@ function getPointerFromHistoryCat(name) {
     }
 
     function checkForEnableScrolling(element) {
+
         var flag=false;
         var cat=document.getElementsByClassName('categor-wrapper-fix')[0];
         var catStyle=getComputedStyle(cat);
