@@ -278,6 +278,13 @@ window.addEventListener('DOMContentLoaded', function() {
                     ul.appendChild(li);
 
                 });
+                if(isMobileVersion){
+                    document.getElementsByClassName('products')[0].scrollTop=0;
+                }
+                else{
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                }
+
 
                 if(!f){//Запрос не по номеру страницы
                     if(pages>1){
@@ -922,6 +929,7 @@ function getPointerFromHistoryCat(name) {
                 inputZakaz.addEventListener('ch', changeZakaz.bind(item));
 
                 inputZakaz.addEventListener('keyup', checkKey.bind(item));
+                span.addEventListener('click', checkBeforeGoingToCart.bind(item));
 
 
 
@@ -1173,6 +1181,7 @@ function getPointerFromHistoryCat(name) {
             var cookies=getCookie('orderId');
             try{
                 amount=parseInt(amount);
+
                 if(cookies==undefined||cookies=="")
                     setCookie('orderId',`${e.target.dataset.info}-${amount}`);
                 else
@@ -1483,13 +1492,13 @@ function getPointerFromHistoryCat(name) {
             return;
 
         if(value<this.minOrder&&value!=0&&value>0){
-            alert('Заказ должен быть кратен минимальной упаковке!');
+            //alert('Заказ должен быть кратен минимальной упаковке!');
             return;
         }
         else if(value<0)
-            e.target.value=`${0} ${this.measure}`;
+            e.target.value=`${0} `;/*${this.measure}*/
         else
-            e.target.value=`${value} ${this.measure}`;
+            e.target.value=`${value}`; /*${this.measure}*/
 
 
     }
@@ -1561,13 +1570,19 @@ function getPointerFromHistoryCat(name) {
             return
         }
         else {
-            setTimeout(()=>{
+            /*setTimeout(()=>{
                 var event = new Event('ch');
                 ip.dispatchEvent(event);
-            },1000);
+            },3000);*/
 
         }
 
+    }
+
+    function checkBeforeGoingToCart() {
+        var ip=document.getElementById(`inputZ${this._id}`);
+        var event = new Event('ch');
+        ip.dispatchEvent(event);
     }
 
     function checkInput(input, item) {
@@ -1591,14 +1606,10 @@ function getPointerFromHistoryCat(name) {
 
         if(isNaN(value)){
             input.value=item.minOrder;
-            alert('Введите целое число');
+            //alert('Введите целое число');
             return null
         }
-        var ost=value % item.minOrder;
-        if(ost ==0)
-            return value;
-        else
-            return value-ost-(-item.minOrder)
+        return checkAmount(item, value);
 
     }
 
@@ -2239,6 +2250,13 @@ function getPointerFromHistoryCat(name) {
         return false;
     }
 
+    function checkAmount(item, value){
+        var ost=value % item.minOrder;
+        if(ost ==0)
+            return value;
+        else
+            return value-ost-(-item.minOrder)
+    }
 
 
 

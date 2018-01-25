@@ -1,4 +1,4 @@
-const mongoose=require('../libs/mongoose');
+//const mongoose=require('../libs/mongoose');
 var Categor=require('../models/categor');
 exports.get=async function(ctx, next) {
 

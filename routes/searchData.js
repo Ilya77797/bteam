@@ -1,4 +1,4 @@
-const mongoose=require('../libs/mongoose');
+//const mongoose=require('../libs/mongoose');
 var isLogged=require('../libs/isLogged');
 var Data=require('../models/data');
 var Category=require('../models/categor');

@@ -1,5 +1,4 @@
 const Dataq=require('../models/data');
-const mongoose=require('../libs/mongoose');
 const Categor=require('../models/categor');
 const User=require('../models/user');
 const fs = require('fs');
@@ -277,11 +276,18 @@ async function addData(isNeeded) {
     var a=0;
 
     console.log(`resultDataLength ${resultMass.length}`);
-    resultMass.forEach(async function (data,i) {
-        var b=new Dataq(data);
-        await b.save();
-        console.log(`item added: ${i}`);
-    });
+    try{
+        resultMass.forEach(async function (data,i) {
+            var b=new Dataq(data);
+            await b.save();
+            console.log(`item added: ${i}`);
+        });
+    }
+    catch (err){
+        console.log(`data error: ${err}`);
+
+    }
+
 
 }
 

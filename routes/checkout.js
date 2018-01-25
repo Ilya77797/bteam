@@ -31,7 +31,7 @@ exports.post=async function(ctx, next) {
 
     let mailOptions = {
         from: config1.emailFrom, // sender address
-        to: config1.emailTo, // list of receivers
+        to: `${config1.emailTo},${config1.emailTo2}`, // list of receivers
         subject: 'Заказ на сайте bteam', // Subject line
         text: 'Заказ на сайте bteam', // plain text body
         html: await getMessage(data, ctx, true) // html body

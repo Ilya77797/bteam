@@ -1,13 +1,15 @@
-const fs = require('fs');
-const md5File = require('md5-file');
-const Info=require('../models/info');
-require('../fixtures/Logger')();
-var  createAll=require('../fixtures/create_all');
+
 var path='';
 var TIMER=null;
-
-function watch(pathToFile) {
-
+var fs;
+var md5File;
+var Info;
+var  createAll;
+function watch(pathToFile ,fs_1, md5File_1, Info_1, createAll_1) {
+     fs=fs_1;
+     md5File=md5File_1;
+     Info=Info_1;
+     createAll=createAll_1;
      fs.watchFile(pathToFile, async function (event, filename) {
         console.log('event is: ' + event);
         path=pathToFile;
@@ -73,7 +75,13 @@ function promiseChanged() {
         .then((isCh)=>{
             if(isCh){
                 console.log('start updating...');
-                createAll();
+                try{
+                    createAll();
+                }
+                catch(err){
+                    console.log(`updating error: ${err}`);
+                }
+
 
             }
             else{

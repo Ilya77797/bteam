@@ -5,7 +5,7 @@ module.exports = {
 
   secret:   'mysecret',
   mongoose: {
-    uri:  'mongodb://localhost:27017/local'   ,
+    uri:  'mongodb://localhost:27017/app'   ,
     options: {
       server: {
         socketOptions: {
@@ -32,7 +32,8 @@ module.exports = {
   port: 8080,
   emailFrom:'bteam2017@yandex.ru',
   emailPassword:'bt2017eamItog_1',
-  emailTo:'bteam2017@yandex.ru',
+  emailTo:'office@bteam.ru',
+  emailTo2:'info@bteam.ru',
     isPending:false,
     dir:''
 };

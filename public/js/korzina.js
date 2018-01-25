@@ -113,7 +113,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
                 products.forEach((item)=>{
                     var li=createElements(item, login, User);
-                    res[item._id]=`${parseFloat(res[item._id])} ${item.measure}`;
+                    res[item._id]=`${parseFloat(res[item._id])} `; /*${item.measure}*/
                     ul.appendChild(li);
                 });
                 document.getElementsByClassName('topMenu')[0].appendChild(div);
@@ -245,6 +245,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         var inputZakaz=document.createElement('input');
         inputZakaz.setAttribute('placeholder',`${item.minOrder} ${item.measure}`);
+      /*  inputZakaz.setAttribute('data-minOrder',item.minOrder);*/
         inputZakaz.setAttribute('id',`inputZ${item._id}`);
         var buttonP=document.createElement('button');
         buttonP.textContent='+';
@@ -321,7 +322,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
             }
 
-            if (item.status[2] != '1') {
+            if (item.status[2] != '1'||item.amount[0]!='0') {
 
 
                 if (User.price.length == 0||User.show==false||User.curPrice=='0') {
@@ -375,7 +376,7 @@ window.addEventListener('DOMContentLoaded', function() {
         else {
             var b1=document.createElement('b');//5
             var small1=document.createElement('small');//5
-            if(item.status[2] != '1'){
+            if(item.status[2] != '1'||item.amount[0]!='0'){
                 b1.textContent=item.price;
                 b1.setAttribute('id',`BO${item._id}`);
                 small1.textContent='руб';
@@ -434,8 +435,9 @@ window.addEventListener('DOMContentLoaded', function() {
         buttonP.addEventListener('click', incrementAmount.bind(item));
 
         inputZakaz.addEventListener('ch', changeZakaz.bind(item));
+        inputZakaz.addEventListener('blur', changeZakaz.bind(item));
 
-        inputZakaz.addEventListener('keyup', checkKey.bind(item));
+        //inputZakaz.addEventListener('keyup', checkKey.bind(item));
 
 
         return li;
@@ -690,7 +692,8 @@ window.addEventListener('DOMContentLoaded', function() {
             return item.id.includes('inputZ')
         });
         inputs.forEach((item, i)=>{
-            if(item.value==''||checkInput(item,{minOrder:1})==null||parseFloat(item.value)=='0'||isInteger(item.value)){
+            /*checkInput(item,{minOrder:item.data.minOrder.value});*/
+            if(item.value==''||checkInput(item,{minOrder:1})==null||parseFloat(item.value)=='0'){
                 flag=false;
                 item.classList.add('inputErr');
                 item.value='Заполните это поле!';
@@ -783,7 +786,7 @@ window.addEventListener('DOMContentLoaded', function() {
             return;
         }
         else
-            e.target.value=`${value} ${this.measure}`;
+            e.target.value=`${value} `;/*${this.measure}*/
 
 
         var totalPrice=document.getElementById(`PriceTotal${this._id}`);
@@ -810,7 +813,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
 
-        input.value=`${value+parseInt(this.minOrder)} ${this.measure}`;
+        input.value=`${value+parseInt(this.minOrder)} `;/*${this.measure}*/
         var event = new Event('ch');
 
         input.dispatchEvent(event);
@@ -824,7 +827,7 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         let input=document.getElementById(`inputZ${this._id}`);
         if(input.value==''){
-            input.value=`${this.minOrder} ${this.measure}`;
+            input.value=`${this.minOrder} `;/*${this.measure}*/
 
         }
 
@@ -837,7 +840,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
         if(value>this.minOrder&&value-this.minOrder>0){
-            input.value=`${value-this.minOrder} ${this.measure}`;
+            input.value=`${value-this.minOrder} `;/*${this.measure}*/
             var event = new Event('ch');
             input.dispatchEvent(event);
         }
@@ -845,7 +848,7 @@ window.addEventListener('DOMContentLoaded', function() {
         else{
             var totalPrice=document.getElementById(`PriceTotal${this._id}`);
             totalPrice.textContent='0';
-            input.value=`0 ${this.measure}`;
+            input.value=`0 `;/*${this.measure}*/
             alert(`Минимальный заказ для этого товара: ${this.minOrder}`);
             calculateAll();
         }
@@ -890,7 +893,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         if(isNaN(value)){
             input.value=item.minOrder;
-            alert('Введите целое число');
+           // alert('Введите целое число');
             calculateAll();
             return null
         }

@@ -12,7 +12,7 @@ exports.post = async (ctx, next) => {
             blob:`{"cookie":{"httpOnly":true,"path":"/","overwrite":true,"signed":false,"maxAge":14400000}`,
             user:ctx.state.user._id.toString()
         };
-        var curSes=new session.models.Session(ses);
+        var curSes=new mongoose.models.Session(ses);
         try {
             await curSes.save();
         }

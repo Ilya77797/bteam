@@ -19,12 +19,12 @@ if (process.env.MONGOOSE_DEBUG) {
 }
 
 mongoose.connect(config.mongoose.uri, {useMongoClient:true} /*config.mongoose.options*/);
-/*MongoClient.connect(config.mongoose.uri, function(err, db) {
+MongoClient.connect(config.mongoose.uri, function(err, db) {
     if(!err) {
-        console.log("We are connected");
+        console.log("We are connected to db");
     }
 
     //db.close();
-});*/
+});
 
 module.exports = mongoose;
